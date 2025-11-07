@@ -506,3 +506,42 @@ textarea.form-input {
         padding: var(--spacing-xs);
     }
 }
+
+/* ==================== CONDITIONAL BRANCHES (Section 6) ==================== */
+.conditional-branch {
+    padding: var(--spacing-md);
+    border: 2px dashed var(--brand-blue);
+    border-radius: var(--radius-md);
+    background: rgba(28, 91, 217, 0.02);
+    margin-bottom: var(--spacing-lg);
+}
+
+.conditional-branch.hidden {
+    display: none;
+}
+
+.branch-title {
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-semibold);
+    color: var(--brand-blue);
+    margin: 0 0 var(--spacing-md) 0;
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 2px solid var(--brand-blue);
+}
+
+/* ==================== CHARACTER COUNTER ==================== */
+.char-counter {
+    text-align: right;
+    font-size: var(--font-size-small);
+    color: var(--color-gray-2);
+    margin-top: var(--spacing-xs);
+}
+
+.char-counter.warning {
+    color: var(--color-warning);
+}
+
+.char-counter.limit {
+    color: var(--color-error);
+    font-weight: var(--font-semibold);
+}
