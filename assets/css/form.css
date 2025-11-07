@@ -1,0 +1,508 @@
+/*
+ * RxMen Discovery Call Form - Form Component Styles
+ * Styles for sections, questions, inputs, radio buttons, checkboxes
+ */
+
+/* ==================== FORM SECTIONS ==================== */
+.form-section {
+    border: 2px solid var(--color-gray-3);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+    background: var(--bg-white);
+    transition: all var(--transition-base);
+}
+
+.form-section.expanded {
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 3px rgba(28, 91, 217, 0.1);
+}
+
+.form-section.collapsed .section-content {
+    display: none;
+}
+
+.form-section.completed {
+    border-color: var(--color-success);
+    background: rgba(40, 167, 69, 0.02);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+    cursor: pointer;
+    user-select: none;
+    transition: background var(--transition-fast);
+}
+
+.section-header:hover {
+    background: var(--bg-light-blue);
+}
+
+.section-title-wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+}
+
+.section-title {
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-semibold);
+    color: var(--brand-dark-blue);
+    margin: 0;
+}
+
+.section-status {
+    font-size: var(--font-size-small);
+    font-weight: var(--font-medium);
+    color: var(--color-gray-2);
+    padding: 4px var(--spacing-sm);
+    background: var(--bg-light-blue);
+    border-radius: var(--radius-sm);
+}
+
+.section-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-fast);
+}
+
+.section-toggle:hover {
+    transform: scale(1.1);
+}
+
+.toggle-icon {
+    font-size: var(--font-size-body);
+    color: var(--brand-blue);
+    transition: transform var(--transition-base);
+}
+
+.form-section.expanded .toggle-icon {
+    transform: rotate(0deg);
+}
+
+.form-section.collapsed .toggle-icon {
+    transform: rotate(-90deg);
+}
+
+.section-content {
+    padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
+}
+
+/* ==================== QUESTIONS ==================== */
+.question-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-question {
+    margin-bottom: var(--spacing-lg);
+    transition: all var(--transition-base);
+}
+
+.form-question.incomplete {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.01);
+    }
+}
+
+.question-label {
+    display: block;
+    font-size: var(--font-size-body);
+    font-weight: var(--font-medium);
+    color: var(--color-black);
+    margin-bottom: var(--spacing-sm);
+}
+
+.sub-question {
+    font-size: var(--font-size-base);
+    margin-left: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.conditional-question {
+    margin-left: var(--spacing-lg);
+    padding-left: var(--spacing-md);
+    border-left: 3px solid var(--brand-neutral);
+    margin-top: var(--spacing-md);
+}
+
+/* Red Flag Question Styling */
+.red-flag-question {
+    background: var(--bg-warning);
+    border: 2px solid var(--color-warning);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-lg);
+}
+
+.red-flag-question .question-label {
+    color: var(--color-warning);
+}
+
+.warning-icon {
+    font-size: 20px;
+}
+
+.red-flag-warning {
+    margin-top: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    background: #FEE;
+    border: 1px solid var(--color-error);
+    border-radius: var(--radius-sm);
+    color: var(--color-error);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-medium);
+}
+
+/* ==================== TEXT INPUTS ==================== */
+.form-input {
+    width: 100%;
+    height: var(--input-height);
+    padding: 0 var(--spacing-sm);
+    border: 2px solid var(--color-gray-3);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    color: var(--color-black);
+    background: var(--bg-white);
+    transition: all var(--transition-fast);
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 3px rgba(28, 91, 217, 0.1);
+}
+
+.form-input:hover:not(:focus) {
+    border-color: var(--color-gray-2);
+}
+
+.form-input.error {
+    border-color: var(--color-error);
+    background: rgba(255, 0, 0, 0.02);
+}
+
+.form-input.error:focus {
+    box-shadow: 0 0 0 3px rgba(255, 0, 0, 0.1);
+}
+
+.form-input::placeholder {
+    color: var(--color-gray-2);
+}
+
+.form-input:disabled {
+    background: var(--bg-light-blue);
+    color: var(--color-gray-2);
+    cursor: not-allowed;
+}
+
+/* Number Inputs */
+.number-input {
+    width: 200px;
+}
+
+/* Textarea */
+textarea.form-input {
+    height: 120px;
+    padding: var(--spacing-sm);
+    resize: vertical;
+    min-height: 80px;
+    max-height: 300px;
+}
+
+/* Error Messages */
+.error-message {
+    display: none;
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-small);
+    color: var(--color-error);
+    font-weight: var(--font-medium);
+}
+
+.error-message.visible {
+    display: block;
+    animation: fadeIn var(--transition-fast);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== TOGGLE SWITCH (Height Units) ==================== */
+.toggle-switch {
+    display: inline-flex;
+    gap: 0;
+    border: 2px solid var(--color-gray-3);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    margin-bottom: var(--spacing-sm);
+}
+
+.toggle-option {
+    padding: var(--spacing-xs) var(--spacing-md);
+    background: var(--bg-white);
+    border: none;
+    color: var(--color-gray-1);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-medium);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.toggle-option:not(:last-child) {
+    border-right: 2px solid var(--color-gray-3);
+}
+
+.toggle-option:hover {
+    background: var(--bg-light-blue);
+}
+
+.toggle-option.active {
+    background: var(--brand-blue);
+    color: var(--bg-white);
+}
+
+/* Height Input Groups */
+.height-input-group {
+    margin-top: var(--spacing-sm);
+}
+
+.input-row {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.input-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.input-label-small {
+    font-size: var(--font-size-small);
+    color: var(--color-gray-2);
+}
+
+/* ==================== RADIO BUTTONS ==================== */
+.radio-fieldset,
+.checkbox-fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.radio-fieldset legend,
+.checkbox-fieldset legend {
+    padding: 0;
+    margin-bottom: var(--spacing-sm);
+}
+
+.radio-group,
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.radio-option,
+.checkbox-option {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm);
+    border: 2px solid var(--color-gray-3);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    background: var(--bg-white);
+}
+
+.radio-option:hover,
+.checkbox-option:hover {
+    background: var(--bg-light-blue);
+    border-color: var(--brand-blue);
+}
+
+.radio-option:has(input:checked),
+.checkbox-option:has(input:checked) {
+    background: var(--bg-light-blue);
+    border-color: var(--brand-blue);
+    box-shadow: 0 0 0 2px rgba(28, 91, 217, 0.1);
+}
+
+.radio-option input[type="radio"],
+.checkbox-option input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin-top: 2px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.radio-label,
+.checkbox-label {
+    flex: 1;
+    font-size: var(--font-size-base);
+    color: var(--color-black);
+    cursor: pointer;
+    user-select: none;
+}
+
+/* ==================== CHECKBOXES WITH MUTUAL EXCLUSION ==================== */
+.checkbox-option.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.checkbox-option input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+}
+
+/* ==================== FORM ACTIONS ==================== */
+.form-actions {
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-xl);
+    border-top: 2px solid var(--color-gray-3);
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-md);
+}
+
+.btn-primary,
+.btn-secondary {
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-semibold);
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.btn-primary {
+    background: var(--brand-blue);
+    color: var(--bg-white);
+    box-shadow: var(--shadow-sm);
+    min-width: 200px;
+    justify-content: center;
+}
+
+.btn-primary:hover {
+    background: var(--brand-dark-blue);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.btn-primary:disabled {
+    background: var(--color-gray-3);
+    color: var(--color-gray-2);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.btn-secondary {
+    background: var(--bg-white);
+    color: var(--brand-blue);
+    border: 2px solid var(--brand-blue);
+}
+
+.btn-secondary:hover {
+    background: var(--bg-light-blue);
+}
+
+.btn-icon {
+    font-size: 18px;
+}
+
+/* ==================== SMART FIELD GROUPING ==================== */
+.field-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-md);
+    align-items: start;
+}
+
+.field-row .form-question {
+    margin-bottom: 0;
+}
+
+/* ==================== RESPONSIVE ADJUSTMENTS ==================== */
+@media (max-width: 768px) {
+    .section-title {
+        font-size: var(--font-size-body);
+    }
+
+    .question-label {
+        font-size: var(--font-size-base);
+    }
+
+    .form-input {
+        font-size: var(--font-size-small);
+    }
+
+    .field-row {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+
+    .number-input {
+        width: 100%;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        width: 100%;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .section-content {
+        padding: 0 var(--spacing-sm) var(--spacing-sm) var(--spacing-sm);
+    }
+
+    .form-input {
+        height: 44px;
+    }
+
+    .radio-option,
+    .checkbox-option {
+        padding: var(--spacing-xs);
+    }
+}

@@ -627,7 +627,370 @@
                         </button>
                     </div>
                     <div class="section-content">
-                        <p class="section-note">Section content to be implemented...</p>
+                        <div class="question-group">
+                            <p class="section-note">This section covers medical history and lifestyle factors that may affect ED/PE.</p>
+                        </div>
+
+                        <!-- Question 3.1: Chronic Medical Conditions -->
+                        <div class="form-question" data-question="3.1">
+                            <fieldset class="checkbox-fieldset">
+                                <legend class="question-label">
+                                    Do you have any chronic medical conditions? <span class="required">*</span>
+                                </legend>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="medical_conditions"
+                                            value="none"
+                                            data-exclusive="true"
+                                        >
+                                        <span class="checkbox-label">None</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="medical_conditions"
+                                            value="diabetes"
+                                        >
+                                        <span class="checkbox-label">Diabetes</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="medical_conditions"
+                                            value="hypertension"
+                                        >
+                                        <span class="checkbox-label">High Blood Pressure</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="medical_conditions"
+                                            value="thyroid"
+                                        >
+                                        <span class="checkbox-label">Thyroid disorder</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="medical_conditions"
+                                            value="heart_disease"
+                                        >
+                                        <span class="checkbox-label">Heart disease</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="medical_conditions"
+                                            value="depression"
+                                        >
+                                        <span class="checkbox-label">Depression</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="medical_conditions"
+                                            value="other"
+                                            id="medical-conditions-other-checkbox"
+                                        >
+                                        <span class="checkbox-label">Other (please specify)</span>
+                                    </label>
+                                </div>
+                                <input
+                                    type="text"
+                                    id="medical-conditions-other-text"
+                                    name="medical_conditions_other"
+                                    class="form-input hidden"
+                                    placeholder="Please specify other condition"
+                                    style="margin-top: 8px;"
+                                >
+                                <span class="error-message" id="medical-conditions-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                        <!-- Question 3.2: Current Medications -->
+                        <div class="form-question" data-question="3.2">
+                            <fieldset class="checkbox-fieldset">
+                                <legend class="question-label">
+                                    Are you currently taking any medications? <span class="required">*</span>
+                                </legend>
+                                <div class="checkbox-group">
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="current_medications"
+                                            value="none"
+                                            data-exclusive="true"
+                                        >
+                                        <span class="checkbox-label">None</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="current_medications"
+                                            value="psychiatric"
+                                        >
+                                        <span class="checkbox-label">Psychiatric medications</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="current_medications"
+                                            value="blood_pressure"
+                                        >
+                                        <span class="checkbox-label">Blood pressure medications</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="current_medications"
+                                            value="diabetes"
+                                        >
+                                        <span class="checkbox-label">Diabetes medications</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="current_medications"
+                                            value="blood_thinners"
+                                        >
+                                        <span class="checkbox-label">Blood thinners ⚠️</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input
+                                            type="checkbox"
+                                            name="current_medications"
+                                            value="other"
+                                            id="current-medications-other-checkbox"
+                                        >
+                                        <span class="checkbox-label">Other (please specify)</span>
+                                    </label>
+                                </div>
+                                <input
+                                    type="text"
+                                    id="current-medications-other-text"
+                                    name="current_medications_other"
+                                    class="form-input hidden"
+                                    placeholder="Please specify other medication"
+                                    style="margin-top: 8px;"
+                                >
+                                <span class="error-message" id="current-medications-error" role="alert"></span>
+                                <div class="red-flag-warning" id="blood-thinners-warning" style="display: none;">
+                                    ⚠️ BLOOD THINNERS CONTRAINDICATION: Do not offer online treatment. Refer to in-person specialist consultation.
+                                </div>
+                            </fieldset>
+                        </div>
+
+                        <!-- Question 3.3: Surgeries or Injuries -->
+                        <div class="form-question" data-question="3.3">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    Any surgeries or injuries in the spinal or genital area? <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="spinal_genital_surgery"
+                                            value="yes"
+                                            required
+                                        >
+                                        <span class="radio-label">Yes</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="spinal_genital_surgery"
+                                            value="no"
+                                        >
+                                        <span class="radio-label">No</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="spinal-genital-surgery-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                        <!-- Question 3.4: Alcohol Consumption -->
+                        <div class="form-question" data-question="3.4">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    How often do you drink alcohol? <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="alcohol_frequency"
+                                            value="none"
+                                            required
+                                        >
+                                        <span class="radio-label">No alcohol</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="alcohol_frequency"
+                                            value="monthly"
+                                        >
+                                        <span class="radio-label">Once a month or less</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="alcohol_frequency"
+                                            value="biweekly"
+                                        >
+                                        <span class="radio-label">Once every 2 weeks</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="alcohol_frequency"
+                                            value="weekly"
+                                        >
+                                        <span class="radio-label">Once a week</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="alcohol_frequency"
+                                            value="2_3_per_week"
+                                        >
+                                        <span class="radio-label">2-3 times per week</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="alcohol_frequency"
+                                            value="daily"
+                                        >
+                                        <span class="radio-label">Daily</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="alcohol-frequency-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                        <!-- Question 3.5: Smoking -->
+                        <div class="form-question" data-question="3.5">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    Do you smoke? <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="smoking_frequency"
+                                            value="none"
+                                            required
+                                        >
+                                        <span class="radio-label">No smoking</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="smoking_frequency"
+                                            value="occasional"
+                                        >
+                                        <span class="radio-label">Occasionally <span class="helper-text">(only while drinking or social events)</span></span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="smoking_frequency"
+                                            value="few_per_week"
+                                        >
+                                        <span class="radio-label">Few times per week</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="smoking_frequency"
+                                            value="daily"
+                                        >
+                                        <span class="radio-label">Daily</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="smoking-frequency-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                        <!-- Question 3.6: Sleep Quality -->
+                        <div class="form-question" data-question="3.6">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    How is your sleep quality? <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="sleep_quality"
+                                            value="good"
+                                            required
+                                        >
+                                        <span class="radio-label">Good</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="sleep_quality"
+                                            value="average"
+                                        >
+                                        <span class="radio-label">Average</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="sleep_quality"
+                                            value="poor"
+                                        >
+                                        <span class="radio-label">Poor</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="sleep-quality-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                        <!-- Question 3.7: Physical Activity -->
+                        <div class="form-question" data-question="3.7">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    How physically active are you? <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="physical_activity"
+                                            value="active"
+                                            required
+                                        >
+                                        <span class="radio-label">Active</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="physical_activity"
+                                            value="somewhat_active"
+                                        >
+                                        <span class="radio-label">Somewhat active</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="physical_activity"
+                                            value="not_active"
+                                        >
+                                        <span class="radio-label">Not active</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="physical-activity-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
                     </div>
                 </section>
 
