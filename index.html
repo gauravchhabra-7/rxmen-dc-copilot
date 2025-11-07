@@ -1005,7 +1005,179 @@
                         </button>
                     </div>
                     <div class="section-content">
-                        <p class="section-note">Section content to be implemented...</p>
+                        <div class="question-group">
+                            <p class="section-note">This section asks about masturbation and porn usage patterns (critical for PE/ED root cause analysis).</p>
+                        </div>
+
+                        <!-- Question 4.1: Masturbation Method (Gateway question) -->
+                        <div class="form-question" data-question="4.1">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    How do you usually masturbate? <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="masturbation_method"
+                                            value="none"
+                                            required
+                                        >
+                                        <span class="radio-label">No masturbation</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="masturbation_method"
+                                            value="hands"
+                                        >
+                                        <span class="radio-label">Using hands</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="masturbation_method"
+                                            value="prone"
+                                        >
+                                        <span class="radio-label">Rubbing against surface <span class="helper-text">(prone)</span></span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="masturbation_method"
+                                            value="both"
+                                        >
+                                        <span class="radio-label">Both hands and rubbing surface</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="masturbation-method-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                        <!-- Conditional Group: Questions 4.2 & 4.3 (only show if masturbation_method != "none") -->
+                        <div class="conditional-question hidden" id="masturbation-details-group" data-depends-on="masturbation_method" data-hide-when="none">
+
+                            <!-- Question 4.2: Grip Type (Conditional) -->
+                            <div class="form-question" data-question="4.2">
+                                <fieldset class="radio-fieldset">
+                                    <legend class="question-label">
+                                        Is your grip during masturbation normal or tight? <span class="required">*</span>
+                                    </legend>
+                                    <p class="question-help">Tight grip can desensitize and contribute to ED</p>
+                                    <div class="radio-group" role="radiogroup" aria-required="true">
+                                        <label class="radio-option">
+                                            <input
+                                                type="radio"
+                                                name="masturbation_grip"
+                                                value="normal"
+                                                checked
+                                            >
+                                            <span class="radio-label">Normal <span class="helper-text">(default)</span></span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input
+                                                type="radio"
+                                                name="masturbation_grip"
+                                                value="tight"
+                                            >
+                                            <span class="radio-label">Tight</span>
+                                        </label>
+                                    </div>
+                                    <span class="error-message" id="masturbation-grip-error" role="alert"></span>
+                                </fieldset>
+                            </div>
+
+                            <!-- Question 4.3: Masturbation Frequency (Conditional) -->
+                            <div class="form-question" data-question="4.3">
+                                <fieldset class="radio-fieldset">
+                                    <legend class="question-label">
+                                        How often do you masturbate per week? <span class="required">*</span>
+                                    </legend>
+                                    <div class="radio-group" role="radiogroup" aria-required="true">
+                                        <label class="radio-option">
+                                            <input
+                                                type="radio"
+                                                name="masturbation_frequency"
+                                                value="none"
+                                            >
+                                            <span class="radio-label">None</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input
+                                                type="radio"
+                                                name="masturbation_frequency"
+                                                value="less_than_3"
+                                            >
+                                            <span class="radio-label">Less than 3 times per week</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input
+                                                type="radio"
+                                                name="masturbation_frequency"
+                                                value="3_to_7"
+                                            >
+                                            <span class="radio-label">3-7 times per week</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input
+                                                type="radio"
+                                                name="masturbation_frequency"
+                                                value="8_plus"
+                                            >
+                                            <span class="radio-label">8 or more times per week</span>
+                                        </label>
+                                    </div>
+                                    <span class="error-message" id="masturbation-frequency-error" role="alert"></span>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <!-- Question 4.4: Porn Usage (Always visible - separate behavior) -->
+                        <div class="form-question" data-question="4.4">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    How often do you watch porn? <span class="required">*</span>
+                                </legend>
+                                <p class="question-help">Porn-induced ED is a real risk factor - daily use increases risk significantly</p>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="porn_frequency"
+                                            value="none"
+                                            required
+                                        >
+                                        <span class="radio-label">None</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="porn_frequency"
+                                            value="less_than_2"
+                                        >
+                                        <span class="radio-label">Less than 2 times per week</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="porn_frequency"
+                                            value="3_to_5"
+                                        >
+                                        <span class="radio-label">3-5 times per week</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="porn_frequency"
+                                            value="daily_or_more"
+                                        >
+                                        <span class="radio-label">Daily or more</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="porn-frequency-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
                     </div>
                 </section>
 
@@ -1020,7 +1192,56 @@
                         </button>
                     </div>
                     <div class="section-content">
-                        <p class="section-note">Section content to be implemented... (Conditional on relationship status)</p>
+                        <div class="question-group">
+                            <p class="section-note">This section only appears if you selected "Married" or "In a relationship" in Section 1.</p>
+                        </div>
+
+                        <!-- Question 5.1: Partner Response -->
+                        <div class="form-question" data-question="5.1">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    How would you describe your partner's response to this issue? <span class="required">*</span>
+                                </legend>
+                                <p class="question-help">Partner support impacts psychological factors and treatment outcomes</p>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="partner_response"
+                                            value="supportive"
+                                            required
+                                        >
+                                        <span class="radio-label">Supportive</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="partner_response"
+                                            value="neutral"
+                                        >
+                                        <span class="radio-label">Neutral</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="partner_response"
+                                            value="non_supportive"
+                                        >
+                                        <span class="radio-label">Non-supportive</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="partner_response"
+                                            value="unaware"
+                                        >
+                                        <span class="radio-label">Unaware <span class="helper-text">(haven't told them)</span></span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="partner-response-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
                     </div>
                 </section>
 
