@@ -183,6 +183,11 @@ function validateSection(sectionNumber) {
     const section = $(`#section-${sectionNumber}`);
     if (!section) return { isValid: true, errors: [] };
 
+    // Skip validation if section is hidden (display: none)
+    if (section.style.display === 'none' || !window.utils.isVisible(section)) {
+        return { isValid: true, errors: [] };
+    }
+
     let isValid = true;
     const errors = [];
 

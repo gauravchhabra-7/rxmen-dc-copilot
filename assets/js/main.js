@@ -25,6 +25,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Set up special interactions
     setupSpecialInteractions();
 
+    // Prevent Enter key from submitting form
+    preventEnterSubmission();
+
     // Close error banner button
     const closeBtn = $('#error-banner-close');
     if (closeBtn) {
@@ -95,6 +98,11 @@ function setupConditionalLogic() {
         // Age red flags
         if (target.name === 'age') {
             handleAgeRedFlags();
+        }
+
+        // Sync ED and PE sexual activity answers when "both" is selected
+        if (target.name === 'ed_sexual_activity') {
+            handleSexualActivitySync();
         }
 
         // Auto-save on any change
@@ -174,6 +182,17 @@ function handleMainIssueChange() {
         show(peBranch);
     } else {
         hide(peBranch);
+    }
+
+    // Hide duplicate sexual activity question in PE branch when "both" is selected
+    // (ED branch Q6A.2 and PE branch Q6B.1 ask the same question)
+    const peFirstQuestion = peBranch.querySelector('[data-question="6b.1"]');
+    if (peFirstQuestion) {
+        if (mainIssue === 'both') {
+            hide(peFirstQuestion);
+        } else if (mainIssue === 'pe') {
+            show(peFirstQuestion);
+        }
     }
 }
 
@@ -303,6 +322,23 @@ function handleAgeRedFlags() {
 }
 
 // ==================== FORM SUBMISSION ====================
+
+/**
+ * Sync ED and PE sexual activity answers when "both" is selected
+ * (Avoids duplicate question by using ED answer for both branches)
+ */
+function handleSexualActivitySync() {
+    const { $, $$, getFieldValue, setFieldValue } = window.utils;
+    const mainIssue = getFieldValue('main_issue');
+
+    // Only sync when "both" is selected
+    if (mainIssue !== 'both') return;
+
+    const edValue = getFieldValue('ed_sexual_activity');
+    if (edValue) {
+        setFieldValue('pe_sexual_activity', edValue);
+    }
+}
 
 /**
  * Set up form submission handler
@@ -447,3 +483,25 @@ function setupSpecialInteractions() {
 }
 
 console.log(' Main.js loaded');
+
+// ==================== PREVENT ENTER KEY SUBMISSION ====================
+
+/**
+ * Prevent Enter key from submitting the form
+ */
+function preventEnterSubmission() {
+    const { $ } = window.utils;
+    const form = $('#discovery-form');
+
+    if (!form) return;
+
+    form.addEventListener('keydown', function(e) {
+        // If Enter key is pressed in an input field (not textarea or submit button)
+        if (e.key === 'Enter' && e.target.type !== 'textarea' && e.target.type !== 'submit') {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    console.log('✅ Enter key submission prevented');
+}
