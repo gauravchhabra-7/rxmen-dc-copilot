@@ -101,7 +101,7 @@ function setupConditionalLogic() {
         }
 
         // Sync ED and PE sexual activity answers when "both" is selected
-        if (target.name === 'ed_sexual_activity') {
+        if (target.name === 'ed_sexual_activity_status') {
             handleSexualActivitySync();
         }
 
@@ -334,9 +334,9 @@ function handleSexualActivitySync() {
     // Only sync when "both" is selected
     if (mainIssue !== 'both') return;
 
-    const edValue = getFieldValue('ed_sexual_activity');
+    const edValue = getFieldValue('ed_sexual_activity_status');
     if (edValue) {
-        setFieldValue('pe_sexual_activity', edValue);
+        setFieldValue('pe_sexual_activity_status', edValue);
     }
 }
 

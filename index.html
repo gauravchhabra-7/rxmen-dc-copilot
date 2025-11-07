@@ -1258,35 +1258,11 @@
                         <div class="conditional-branch hidden" id="section-6a-ed-branch" data-depends-on="main_issue" data-show-when="ed,both">
                             <h3 class="branch-title">ED (Erectile Dysfunction) Questions</h3>
 
-                            <!-- Q6A.1: Sexual Activity Status (Gateway) -->
+                            <!-- Q6A.1: Gateway Question -->
                             <div class="form-question" data-question="6a.1">
                                 <fieldset class="radio-fieldset">
                                     <legend class="question-label">
-                                        Are you currently sexually active with a partner? <span class="required">*</span>
-                                    </legend>
-                                    <div class="radio-group">
-                                        <label class="radio-option">
-                                            <input type="radio" name="ed_sexual_activity" value="yes_active" required>
-                                            <span class="radio-label">Yes, active</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="ed_sexual_activity" value="avoiding_due_to_fear">
-                                            <span class="radio-label">No, avoiding due to performance anxiety</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="ed_sexual_activity" value="no_partner">
-                                            <span class="radio-label">No partner currently</span>
-                                        </label>
-                                    </div>
-                                    <span class="error-message" id="ed-sexual-activity-error"></span>
-                                </fieldset>
-                            </div>
-
-                            <!-- Q6A.2: Erection Quality -->
-                            <div class="form-question" data-question="6a.2">
-                                <fieldset class="radio-fieldset">
-                                    <legend class="question-label">
-                                        Can you get erections at all? <span class="required">*</span>
+                                        Do you get erections at all? <span class="required">*</span>
                                     </legend>
                                     <div class="radio-group">
                                         <label class="radio-option">
@@ -1295,91 +1271,162 @@
                                         </label>
                                         <label class="radio-option">
                                             <input type="radio" name="ed_gets_erections" value="no">
-                                            <span class="radio-label">No erections at all</span>
+                                            <span class="radio-label">No</span>
                                         </label>
                                     </div>
                                     <span class="error-message" id="ed-gets-erections-error"></span>
                                 </fieldset>
                             </div>
 
-                            <!-- Q6A.3: Morning Erections -->
+                            <!-- Q6A.2: Context Establishment -->
+                            <div class="form-question" data-question="6a.2">
+                                <fieldset class="radio-fieldset">
+                                    <legend class="question-label">
+                                        Do you currently have sex with a partner? <span class="required">*</span>
+                                    </legend>
+                                    <div class="radio-group">
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_sexual_activity_status" value="yes_active" required>
+                                            <span class="radio-label">Yes, I have sex with a partner</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_sexual_activity_status" value="avoiding_due_to_fear">
+                                            <span class="radio-label">I have a partner but avoid sex due to worry/fear</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_sexual_activity_status" value="no_partner">
+                                            <span class="radio-label">No, I don't have a partner</span>
+                                        </label>
+                                    </div>
+                                    <span class="error-message" id="ed-sexual-activity-status-error"></span>
+                                </fieldset>
+                            </div>
+
+                            <!-- Q6A.3: Arousal Speed (With Partner) -->
                             <div class="form-question" data-question="6a.3">
                                 <fieldset class="radio-fieldset">
                                     <legend class="question-label">
-                                        Do you get morning or night erections? <span class="required">*</span>
+                                        Does it take a long time to get erections? <span class="required">*</span>
                                     </legend>
-                                    <p class="question-help">Morning erections indicate functioning physical systems</p>
                                     <div class="radio-group">
                                         <label class="radio-option">
-                                            <input type="radio" name="ed_morning_erections" value="yes_regular" required>
-                                            <span class="radio-label">Yes, regularly</span>
+                                            <input type="radio" name="ed_partner_arousal_speed" value="always" required>
+                                            <span class="radio-label">Always</span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="ed_morning_erections" value="sometimes">
+                                            <input type="radio" name="ed_partner_arousal_speed" value="sometimes">
                                             <span class="radio-label">Sometimes</span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="ed_morning_erections" value="no">
-                                            <span class="radio-label">No</span>
+                                            <input type="radio" name="ed_partner_arousal_speed" value="rarely">
+                                            <span class="radio-label">Rarely</span>
+                                        </label>
+                                    </div>
+                                    <span class="error-message" id="ed-partner-arousal-speed-error"></span>
+                                </fieldset>
+                            </div>
+
+                            <!-- Q6A.4: Erectile Maintenance (With Partner) -->
+                            <div class="form-question" data-question="6a.4">
+                                <fieldset class="radio-fieldset">
+                                    <legend class="question-label">
+                                        Does it stay hard till penetration or completion? <span class="required">*</span>
+                                    </legend>
+                                    <div class="radio-group">
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_partner_maintenance" value="loses_before_penetration" required>
+                                            <span class="radio-label">Loses hardness before penetration</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_partner_maintenance" value="loses_during_sex">
+                                            <span class="radio-label">Stays hard till penetration, then loses it</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_partner_maintenance" value="stays_till_completion">
+                                            <span class="radio-label">Stays hard till completion</span>
+                                        </label>
+                                    </div>
+                                    <span class="error-message" id="ed-partner-maintenance-error"></span>
+                                </fieldset>
+                            </div>
+
+                            <!-- Q6A.5: Erection Quality (With Partner) -->
+                            <div class="form-question" data-question="6a.5">
+                                <fieldset class="radio-fieldset">
+                                    <legend class="question-label">
+                                        Is the erection hard enough for penetration? <span class="required">*</span>
+                                    </legend>
+                                    <div class="radio-group">
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_partner_hardness" value="always_hard" required>
+                                            <span class="radio-label">Yes, always hard enough</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_partner_hardness" value="sometimes_hard">
+                                            <span class="radio-label">Sometimes hard enough</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_partner_hardness" value="rarely_hard">
+                                            <span class="radio-label">Rarely hard enough</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_partner_hardness" value="never_hard">
+                                            <span class="radio-label">Never hard enough</span>
+                                        </label>
+                                    </div>
+                                    <span class="error-message" id="ed-partner-hardness-error"></span>
+                                </fieldset>
+                            </div>
+
+                            <!-- Q6A.6: Morning Erections - Comparison Point -->
+                            <div class="form-question" data-question="6a.6">
+                                <fieldset class="radio-fieldset">
+                                    <legend class="question-label">
+                                        Are morning erections regular, occasional, or absent? <span class="required">*</span>
+                                    </legend>
+                                    <div class="radio-group">
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_morning_erections" value="regular" required>
+                                            <span class="radio-label">Regular <span class="helper-text">(most mornings)</span></span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_morning_erections" value="occasional">
+                                            <span class="radio-label">Occasional <span class="helper-text">(sometimes)</span></span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="ed_morning_erections" value="absent">
+                                            <span class="radio-label">Absent <span class="helper-text">(rarely or never)</span></span>
                                         </label>
                                     </div>
                                     <span class="error-message" id="ed-morning-erections-error"></span>
                                 </fieldset>
                             </div>
 
-                            <!-- Q6A.4: Erection During Foreplay -->
-                            <div class="form-question" data-question="6a.4">
+                            <!-- Q6A.7: Masturbation & Imagination - Comparison Point -->
+                            <div class="form-question" data-question="6a.7">
                                 <fieldset class="radio-fieldset">
                                     <legend class="question-label">
-                                        Can you get an erection during foreplay? <span class="required">*</span>
+                                        Do you get erections during masturbation or with imagination/fantasies? <span class="required">*</span>
                                     </legend>
                                     <div class="radio-group">
                                         <label class="radio-option">
-                                            <input type="radio" name="ed_foreplay_erection" value="yes_strong" required>
-                                            <span class="radio-label">Yes, strong erection</span>
+                                            <input type="radio" name="ed_masturbation_imagination" value="both" required>
+                                            <span class="radio-label">Yes, during both masturbation and imagination</span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="ed_foreplay_erection" value="yes_weak">
-                                            <span class="radio-label">Yes, but weak</span>
+                                            <input type="radio" name="ed_masturbation_imagination" value="masturbation_only">
+                                            <span class="radio-label">Yes, during masturbation only</span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="ed_foreplay_erection" value="sometimes">
-                                            <span class="radio-label">Sometimes</span>
+                                            <input type="radio" name="ed_masturbation_imagination" value="imagination_only">
+                                            <span class="radio-label">Yes, with imagination/fantasies only</span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="ed_foreplay_erection" value="no">
-                                            <span class="radio-label">No</span>
+                                            <input type="radio" name="ed_masturbation_imagination" value="neither">
+                                            <span class="radio-label">No, neither works</span>
                                         </label>
                                     </div>
-                                    <span class="error-message" id="ed-foreplay-erection-error"></span>
-                                </fieldset>
-                            </div>
-
-                            <!-- Q6A.5: When Does Erection Fail -->
-                            <div class="form-question" data-question="6a.5">
-                                <fieldset class="radio-fieldset">
-                                    <legend class="question-label">
-                                        When exactly does the erection problem occur? <span class="required">*</span>
-                                    </legend>
-                                    <div class="radio-group">
-                                        <label class="radio-option">
-                                            <input type="radio" name="ed_when_fails" value="before_penetration" required>
-                                            <span class="radio-label">Before penetration</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="ed_when_fails" value="during_penetration">
-                                            <span class="radio-label">During penetration</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="ed_when_fails" value="after_few_minutes">
-                                            <span class="radio-label">After a few minutes of sex</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="ed_when_fails" value="no_erection_at_all">
-                                            <span class="radio-label">Can't get erection at all</span>
-                                        </label>
-                                    </div>
-                                    <span class="error-message" id="ed-when-fails-error"></span>
+                                    <span class="error-message" id="ed-masturbation-imagination-error"></span>
                                 </fieldset>
                             </div>
 
@@ -1389,141 +1436,119 @@
                         <div class="conditional-branch hidden" id="section-6b-pe-branch" data-depends-on="main_issue" data-show-when="pe,both">
                             <h3 class="branch-title">PE (Premature Ejaculation) Questions</h3>
 
-                            <!-- Q6B.1: Sexual Activity Status (Gateway) -->
+                            <!-- Q6B.1: Context Establishment -->
                             <div class="form-question" data-question="6b.1">
                                 <fieldset class="radio-fieldset">
                                     <legend class="question-label">
-                                        Are you currently sexually active with a partner? <span class="required">*</span>
+                                        Do you currently have sex with a partner? <span class="required">*</span>
                                     </legend>
                                     <div class="radio-group">
                                         <label class="radio-option">
-                                            <input type="radio" name="pe_sexual_activity" value="yes_active" required>
-                                            <span class="radio-label">Yes, active</span>
+                                            <input type="radio" name="pe_sexual_activity_status" value="yes_active" required>
+                                            <span class="radio-label">Yes, I have sex with a partner</span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="pe_sexual_activity" value="avoiding_due_to_fear">
-                                            <span class="radio-label">No, avoiding due to fear of early ejaculation</span>
+                                            <input type="radio" name="pe_sexual_activity_status" value="avoiding_due_to_fear">
+                                            <span class="radio-label">I have a partner but avoid sex due to worry/fear</span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="pe_sexual_activity" value="no_partner">
-                                            <span class="radio-label">No partner currently</span>
+                                            <input type="radio" name="pe_sexual_activity_status" value="no_partner">
+                                            <span class="radio-label">No, I don't have a partner</span>
                                         </label>
                                     </div>
-                                    <span class="error-message" id="pe-sexual-activity-error"></span>
+                                    <span class="error-message" id="pe-sexual-activity-status-error"></span>
                                 </fieldset>
                             </div>
 
-                            <!-- Q6B.2: Ejaculation Timing -->
+                            <!-- Q6B.2: Ejaculation Time (With Partner) -->
                             <div class="form-question" data-question="6b.2">
                                 <fieldset class="radio-fieldset">
                                     <legend class="question-label">
-                                        How long do you last during sex? <span class="required">*</span>
+                                        What is your ejaculation time during sex? <span class="required">*</span>
                                     </legend>
-                                    <p class="question-help">Average healthy duration is 5-7 minutes</p>
                                     <div class="radio-group">
                                         <label class="radio-option">
-                                            <input type="radio" name="pe_timing" value="before_penetration" required>
+                                            <input type="radio" name="pe_partner_ejaculation_time" value="before_penetration" required>
                                             <span class="radio-label">Before penetration</span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="pe_timing" value="less_1_min">
-                                            <span class="radio-label">Less than 1 minute</span>
+                                            <input type="radio" name="pe_partner_ejaculation_time" value="less_than_1_min">
+                                            <span class="radio-label">Less than 1 minute after penetration</span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="pe_timing" value="1_to_3_min">
-                                            <span class="radio-label">1-3 minutes</span>
+                                            <input type="radio" name="pe_partner_ejaculation_time" value="1_to_3_min">
+                                            <span class="radio-label">1-3 minutes after penetration</span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="pe_timing" value="3_to_5_min">
-                                            <span class="radio-label">3-5 minutes</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="pe_timing" value="more_5_min">
-                                            <span class="radio-label">More than 5 minutes</span>
+                                            <input type="radio" name="pe_partner_ejaculation_time" value="more_than_3_min">
+                                            <span class="radio-label">More than 3 minutes</span>
                                         </label>
                                     </div>
-                                    <span class="error-message" id="pe-timing-error"></span>
+                                    <span class="error-message" id="pe-partner-ejaculation-time-error"></span>
                                 </fieldset>
                             </div>
 
-                            <!-- Q6B.3: Control Over Ejaculation -->
+                            <!-- Q6B.3: Lifelong vs Acquired -->
                             <div class="form-question" data-question="6b.3">
                                 <fieldset class="radio-fieldset">
                                     <legend class="question-label">
-                                        Do you have control over when you ejaculate? <span class="required">*</span>
+                                        Has this been since your first sexual encounter or started later? <span class="required">*</span>
                                     </legend>
                                     <div class="radio-group">
                                         <label class="radio-option">
-                                            <input type="radio" name="pe_control" value="no_control" required>
-                                            <span class="radio-label">No control at all</span>
+                                            <input type="radio" name="pe_partner_type" value="lifelong" required>
+                                            <span class="radio-label">Since first time <span class="helper-text">(lifelong)</span></span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="pe_control" value="very_little">
-                                            <span class="radio-label">Very little control</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="pe_control" value="some_control">
-                                            <span class="radio-label">Some control</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="pe_control" value="good_control">
-                                            <span class="radio-label">Good control</span>
+                                            <input type="radio" name="pe_partner_type" value="acquired">
+                                            <span class="radio-label">Started later <span class="helper-text">(acquired)</span></span>
                                         </label>
                                     </div>
-                                    <span class="error-message" id="pe-control-error"></span>
+                                    <span class="error-message" id="pe-partner-type-error"></span>
                                 </fieldset>
                             </div>
 
-                            <!-- Q6B.4: PE Frequency -->
+                            <!-- Q6B.4: Penile Sensitivity -->
                             <div class="form-question" data-question="6b.4">
                                 <fieldset class="radio-fieldset">
                                     <legend class="question-label">
-                                        How often does this early ejaculation happen? <span class="required">*</span>
+                                        Do you feel the penis tip is very sensitive? <span class="required">*</span>
                                     </legend>
                                     <div class="radio-group">
                                         <label class="radio-option">
-                                            <input type="radio" name="pe_frequency" value="always" required>
-                                            <span class="radio-label">Always (every time)</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="pe_frequency" value="most_times">
-                                            <span class="radio-label">Most times (75%+)</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="pe_frequency" value="sometimes">
-                                            <span class="radio-label">Sometimes (50%)</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="pe_frequency" value="rarely">
-                                            <span class="radio-label">Rarely (25%)</span>
-                                        </label>
-                                    </div>
-                                    <span class="error-message" id="pe-frequency-error"></span>
-                                </fieldset>
-                            </div>
-
-                            <!-- Q6B.5: PE with Masturbation -->
-                            <div class="form-question" data-question="6b.5">
-                                <fieldset class="radio-fieldset">
-                                    <legend class="question-label">
-                                        Does early ejaculation also happen during masturbation? <span class="required">*</span>
-                                    </legend>
-                                    <p class="question-help">Helps determine if issue is physical or psychological</p>
-                                    <div class="radio-group">
-                                        <label class="radio-option">
-                                            <input type="radio" name="pe_during_masturbation" value="yes" required>
+                                            <input type="radio" name="pe_partner_penile_sensitivity" value="yes" required>
                                             <span class="radio-label">Yes</span>
                                         </label>
                                         <label class="radio-option">
-                                            <input type="radio" name="pe_during_masturbation" value="no">
-                                            <span class="radio-label">No, I last longer during masturbation</span>
-                                        </label>
-                                        <label class="radio-option">
-                                            <input type="radio" name="pe_during_masturbation" value="dont_masturbate">
-                                            <span class="radio-label">Don't masturbate</span>
+                                            <input type="radio" name="pe_partner_penile_sensitivity" value="no">
+                                            <span class="radio-label">No</span>
                                         </label>
                                     </div>
-                                    <span class="error-message" id="pe-during-masturbation-error"></span>
+                                    <span class="error-message" id="pe-partner-penile-sensitivity-error"></span>
+                                </fieldset>
+                            </div>
+
+                            <!-- Q6B.5: Control During Masturbation - Comparison Point -->
+                            <div class="form-question" data-question="6b.5">
+                                <fieldset class="radio-fieldset">
+                                    <legend class="question-label">
+                                        Can you delay or control ejaculation during masturbation? <span class="required">*</span>
+                                    </legend>
+                                    <div class="radio-group">
+                                        <label class="radio-option">
+                                            <input type="radio" name="pe_partner_masturbation_control" value="always" required>
+                                            <span class="radio-label">Always can control</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="pe_partner_masturbation_control" value="sometimes">
+                                            <span class="radio-label">Sometimes can control</span>
+                                        </label>
+                                        <label class="radio-option">
+                                            <input type="radio" name="pe_partner_masturbation_control" value="rarely">
+                                            <span class="radio-label">Rarely can control</span>
+                                        </label>
+                                    </div>
+                                    <span class="error-message" id="pe-partner-masturbation-control-error"></span>
                                 </fieldset>
                             </div>
 
