@@ -3,12 +3,10 @@
  * Conditional logic, form submission, and initialization
  */
 
-const { $, $$, show, hide, getFieldValue, saveFormState, debounce } = window.utils;
-
 // ==================== INITIALIZATION ====================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('=€ RxMen Discovery Form Initializing...');
+    console.log('=ï¿½ RxMen Discovery Form Initializing...');
 
     // Initialize modules
     window.sections.initializeSections();
@@ -44,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
  * Set up all conditional display logic
  */
 function setupConditionalLogic() {
+    const { $, $$, show, hide, getFieldValue, debounce } = window.utils;
     // Watch for changes that trigger conditional display
     document.addEventListener('change', function(e) {
         const target = e.target;
@@ -114,6 +113,7 @@ function setupConditionalLogic() {
  * Handle height unit toggle (cm vs ft-in)
  */
 function handleHeightUnitToggle(button) {
+    const { $$, show, hide } = window.utils;
     const unit = button.dataset.unit;
 
     // Update toggle buttons
@@ -138,6 +138,7 @@ function handleHeightUnitToggle(button) {
  * Handle relationship status change (Section 5 visibility)
  */
 function handleRelationshipStatusChange() {
+    const { $, getFieldValue } = window.utils;
     const status = getFieldValue('relationship_status');
     const section5 = $('#section-5');
 
@@ -154,6 +155,7 @@ function handleRelationshipStatusChange() {
  * Handle main issue change (Section 6A/6B visibility)
  */
 function handleMainIssueChange() {
+    const { $, show, hide, getFieldValue } = window.utils;
     const mainIssue = getFieldValue('main_issue');
     const edBranch = $('#section-6a-ed-branch');
     const peBranch = $('#section-6b-pe-branch');
@@ -179,6 +181,7 @@ function handleMainIssueChange() {
  * Handle masturbation method change (Q4.2 & Q4.3 visibility)
  */
 function handleMasturbationMethodChange() {
+    const { $, show, hide, getFieldValue } = window.utils;
     const method = getFieldValue('masturbation_method');
     const detailsGroup = $('#masturbation-details-group');
 
@@ -195,6 +198,7 @@ function handleMasturbationMethodChange() {
  * Handle first consultation change (previous treatments visibility)
  */
 function handleFirstConsultationChange() {
+    const { $, show, hide, getFieldValue } = window.utils;
     const firstConsult = getFieldValue('first_consultation');
     const treatmentsGroup = $('#previous-treatments-group');
 
@@ -211,6 +215,7 @@ function handleFirstConsultationChange() {
  * Handle "Other" checkbox - show/hide text input
  */
 function handleOtherCheckbox(fieldPrefix) {
+    const { $, show, hide } = window.utils;
     const checkbox = $(`#${fieldPrefix}-checkbox`);
     const textInput = $(`#${fieldPrefix}-text`);
 
@@ -229,6 +234,7 @@ function handleOtherCheckbox(fieldPrefix) {
  * Handle blood thinners warning
  */
 function handleBloodThinnersWarning() {
+    const { $ } = window.utils;
     const checkbox = $('[name="current_medications"][value="blood_thinners"]');
     const warning = $('#blood-thinners-warning');
 
@@ -245,6 +251,7 @@ function handleBloodThinnersWarning() {
  * Handle exclusive checkbox (e.g., "None" disables others)
  */
 function handleExclusiveCheckbox(exclusiveCheckbox) {
+    const { $$ } = window.utils;
     const groupName = exclusiveCheckbox.name;
     const otherCheckboxes = $$(`[name="${groupName}"]:not([data-exclusive])`);
 
@@ -268,13 +275,14 @@ function handleExclusiveCheckbox(exclusiveCheckbox) {
  * Handle age red flags
  */
 function handleAgeRedFlags() {
+    const { $, getFieldValue } = window.utils;
     const age = parseInt(getFieldValue('age'));
     const warning = $('#age-warning');
 
     if (!warning || isNaN(age)) return;
 
     if (age < 18) {
-        warning.textContent = '=¨ RED FLAG: Patient is a minor. Cannot proceed with online consultation. Decline call and document.';
+        warning.textContent = '=ï¿½ RED FLAG: Patient is a minor. Cannot proceed with online consultation. Decline call and document.';
         warning.style.display = 'block';
         warning.style.background = '#FEE';
         warning.style.padding = '12px';
@@ -282,7 +290,7 @@ function handleAgeRedFlags() {
         warning.style.color = '#FF0000';
         warning.style.fontWeight = '600';
     } else if (age > 80) {
-        warning.textContent = '  WARNING: In-person consultation required for elderly patients (age 80+). Flag for doctor review.';
+        warning.textContent = 'ï¿½ WARNING: In-person consultation required for elderly patients (age 80+). Flag for doctor review.';
         warning.style.display = 'block';
         warning.style.background = '#FFF4E6';
         warning.style.padding = '12px';
@@ -300,6 +308,7 @@ function handleAgeRedFlags() {
  * Set up form submission handler
  */
 function setupFormSubmission() {
+    const { $ } = window.utils;
     const form = $('#discovery-form');
     const submitBtn = $('#submit-btn');
 
@@ -308,7 +317,7 @@ function setupFormSubmission() {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        console.log('=Ý Form submitted');
+        console.log('=ï¿½ Form submitted');
 
         // Hide previous error banner
         window.validation.hideErrorBanner();
@@ -384,7 +393,7 @@ function setupFormSubmission() {
 
 // ==================== AUTO-SAVE ====================
 
-const debouncedSave = debounce(saveFormState, 1000);
+const debouncedSave = window.utils.debounce(window.utils.saveFormState, 1000);
 
 function setupAutoSave() {
     // Load saved form state on page load
@@ -402,6 +411,7 @@ function setupAutoSave() {
  * Set up special interactions (character counter, etc.)
  */
 function setupSpecialInteractions() {
+    const { $ } = window.utils;
     // Character counter for textarea
     const textarea = $('#additional-info');
     const charCount = $('#char-count');

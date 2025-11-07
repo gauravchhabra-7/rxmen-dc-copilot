@@ -3,8 +3,6 @@
  * Handle accordion expand/collapse and section state
  */
 
-const { $, $$, on, show, hide } = window.utils;
-
 // ==================== SECTION STATE ====================
 
 const sectionState = {
@@ -19,6 +17,7 @@ const sectionState = {
  * Initialize section accordion behavior
  */
 function initializeSections() {
+    const { $, $$ } = window.utils;
     // Add click handlers to all section headers
     $$('.section-header').forEach((header) => {
         header.addEventListener('click', function() {
@@ -57,7 +56,7 @@ function expandSection(section) {
     // Update toggle icon
     const icon = section.querySelector('.toggle-icon');
     if (icon) {
-        icon.textContent = '¼';
+        icon.textContent = 'ï¿½';
     }
 
     // Update current section
@@ -78,7 +77,7 @@ function collapseSection(section) {
     // Update toggle icon
     const icon = section.querySelector('.toggle-icon');
     if (icon) {
-        icon.textContent = '¶';
+        icon.textContent = 'ï¿½';
     }
 }
 
@@ -86,6 +85,7 @@ function collapseSection(section) {
  * Mark section as complete
  */
 function markSectionComplete(sectionNumber) {
+    const { $ } = window.utils;
     const section = $(`#section-${sectionNumber}`);
     if (!section) return;
 
@@ -121,6 +121,7 @@ function markSectionComplete(sectionNumber) {
  * Update section status text (e.g., "3/7 completed")
  */
 function updateSectionStatus(sectionNumber) {
+    const { $, $$ } = window.utils;
     const statusSpan = $(`#section-${sectionNumber}-status`);
     if (!statusSpan) return;
 
@@ -174,6 +175,7 @@ function isQuestionComplete(questionElement) {
  * Update progress indicator (bar and percentage)
  */
 function updateProgressIndicator() {
+    const { $ } = window.utils;
     const completed = sectionState.completedSections.length;
     const total = sectionState.totalSections;
     const percentage = Math.round((completed / total) * 100);
@@ -198,6 +200,7 @@ function updateProgressIndicator() {
  * Update section indicators (numbered circles at top)
  */
 function updateSectionIndicators() {
+    const { $$ } = window.utils;
     $$('.indicator').forEach((indicator, index) => {
         const sectionNum = index + 1;
 
@@ -217,6 +220,7 @@ function updateSectionIndicators() {
  * Make section indicators clickable to jump to sections
  */
 function initializeSectionIndicators() {
+    const { $ , $$ } = window.utils;
     $$('.indicator').forEach((indicator) => {
         indicator.addEventListener('click', function() {
             const sectionNum = parseInt(this.dataset.section);

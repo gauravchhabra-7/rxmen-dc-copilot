@@ -3,8 +3,6 @@
  * Handle form validation and error display
  */
 
-const { $, $$, hasValue, isRequired } = window.utils;
-
 // ==================== VALIDATION RULES ====================
 
 const validationRules = {
@@ -73,6 +71,7 @@ const validationRules = {
  * Validate a single field
  */
 function validateField(field) {
+    const { $ } = window.utils;
     const fieldName = field.name;
     const value = field.value;
 
@@ -94,6 +93,7 @@ function validateField(field) {
  * Validate a radio group
  */
 function validateRadioGroup(fieldName) {
+    const { $ } = window.utils;
     const checked = $(`[name="${fieldName}"]:checked`);
 
     if (!checked) {
@@ -111,6 +111,7 @@ function validateRadioGroup(fieldName) {
  * Validate a checkbox group
  */
 function validateCheckboxGroup(fieldName) {
+    const { $, $$ } = window.utils;
     const checked = $$(`[name="${fieldName}"]:checked`);
 
     if (checked.length === 0) {
@@ -178,6 +179,7 @@ function hideError(field) {
  * Validate entire section
  */
 function validateSection(sectionNumber) {
+    const { $ } = window.utils;
     const section = $(`#section-${sectionNumber}`);
     if (!section) return { isValid: true, errors: [] };
 
@@ -261,6 +263,7 @@ function validateForm() {
  * Set up real-time validation for all fields
  */
 function setupRealTimeValidation() {
+    const { $$ } = window.utils;
     // Validate text inputs on blur
     $$('input[type="text"], input[type="number"], textarea').forEach(field => {
         field.addEventListener('blur', function() {
@@ -309,6 +312,7 @@ function setupRealTimeValidation() {
  * Show error banner with list of incomplete fields
  */
 function showErrorBanner(errors) {
+    const { $ } = window.utils;
     const banner = $('#error-banner');
     const message = $('#error-banner-message');
     const fieldList = $('#error-field-list');
@@ -343,6 +347,7 @@ function showErrorBanner(errors) {
  * Hide error banner
  */
 function hideErrorBanner() {
+    const { $ } = window.utils;
     const banner = $('#error-banner');
     if (banner) {
         banner.style.display = 'none';
