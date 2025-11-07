@@ -1,0 +1,249 @@
+/*
+ * RxMen Discovery Call Form - Section Management
+ * Handle accordion expand/collapse and section state
+ */
+
+const { $, $$, on, show, hide } = window.utils;
+
+// ==================== SECTION STATE ====================
+
+const sectionState = {
+    currentSection: 1,
+    completedSections: [],
+    totalSections: 7
+};
+
+// ==================== ACCORDION FUNCTIONALITY ====================
+
+/**
+ * Initialize section accordion behavior
+ */
+function initializeSections() {
+    // Add click handlers to all section headers
+    $$('.section-header').forEach((header) => {
+        header.addEventListener('click', function() {
+            const section = this.closest('.form-section');
+            toggleSection(section);
+        });
+    });
+
+    // Expand first section by default
+    const firstSection = $('#section-1');
+    if (firstSection) {
+        expandSection(firstSection);
+    }
+
+    console.log(' Sections initialized');
+}
+
+/**
+ * Toggle section expand/collapse
+ */
+function toggleSection(section) {
+    if (section.classList.contains('collapsed')) {
+        expandSection(section);
+    } else {
+        collapseSection(section);
+    }
+}
+
+/**
+ * Expand a section
+ */
+function expandSection(section) {
+    section.classList.remove('collapsed');
+    section.classList.add('expanded');
+
+    // Update toggle icon
+    const icon = section.querySelector('.toggle-icon');
+    if (icon) {
+        icon.textContent = '¼';
+    }
+
+    // Update current section
+    const sectionNum = parseInt(section.dataset.section);
+    if (sectionNum) {
+        sectionState.currentSection = sectionNum;
+        updateProgressIndicator();
+    }
+}
+
+/**
+ * Collapse a section
+ */
+function collapseSection(section) {
+    section.classList.remove('expanded');
+    section.classList.add('collapsed');
+
+    // Update toggle icon
+    const icon = section.querySelector('.toggle-icon');
+    if (icon) {
+        icon.textContent = '¶';
+    }
+}
+
+/**
+ * Mark section as complete
+ */
+function markSectionComplete(sectionNumber) {
+    const section = $(`#section-${sectionNumber}`);
+    if (!section) return;
+
+    // Add completed class
+    section.classList.add('completed');
+
+    // Add to completed sections if not already there
+    if (!sectionState.completedSections.includes(sectionNumber)) {
+        sectionState.completedSections.push(sectionNumber);
+    }
+
+    // Update section status text
+    updateSectionStatus(sectionNumber);
+
+    // Update progress
+    updateProgressIndicator();
+
+    // Auto-collapse completed section
+    collapseSection(section);
+
+    // Expand next section
+    const nextSection = $(`#section-${sectionNumber + 1}`);
+    if (nextSection) {
+        setTimeout(() => {
+            expandSection(nextSection);
+            // Scroll to next section
+            window.utils.scrollTo(nextSection);
+        }, 300);
+    }
+}
+
+/**
+ * Update section status text (e.g., "3/7 completed")
+ */
+function updateSectionStatus(sectionNumber) {
+    const statusSpan = $(`#section-${sectionNumber}-status`);
+    if (!statusSpan) return;
+
+    // Count completed questions in this section
+    const section = $(`#section-${sectionNumber}`);
+    const questions = $$('.form-question', section);
+    const completed = questions.filter(q => isQuestionComplete(q)).length;
+
+    // Skip if section 7 (optional)
+    if (sectionNumber === 7) {
+        statusSpan.textContent = 'Optional';
+        return;
+    }
+
+    statusSpan.textContent = `${completed}/${questions.length} completed`;
+}
+
+/**
+ * Check if a question is complete
+ */
+function isQuestionComplete(questionElement) {
+    const inputs = questionElement.querySelectorAll('input, textarea, select');
+
+    for (let input of inputs) {
+        if (input.hasAttribute('required')) {
+            // Radio buttons
+            if (input.type === 'radio') {
+                const name = input.name;
+                const checked = questionElement.querySelector(`[name="${name}"]:checked`);
+                if (!checked) return false;
+            }
+            // Checkboxes
+            else if (input.type === 'checkbox') {
+                const name = input.name;
+                const checked = questionElement.querySelectorAll(`[name="${name}"]:checked`);
+                if (checked.length === 0) return false;
+            }
+            // Other inputs
+            else {
+                if (!input.value || input.value.trim() === '') return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+// ==================== PROGRESS INDICATOR ====================
+
+/**
+ * Update progress indicator (bar and percentage)
+ */
+function updateProgressIndicator() {
+    const completed = sectionState.completedSections.length;
+    const total = sectionState.totalSections;
+    const percentage = Math.round((completed / total) * 100);
+
+    // Update progress bar
+    const progressFill = $('#progress-fill');
+    if (progressFill) {
+        progressFill.style.width = `${percentage}%`;
+    }
+
+    // Update progress text
+    const progressText = $('#progress-text');
+    if (progressText) {
+        progressText.textContent = `Section ${sectionState.currentSection} of ${total} " ${percentage}% Complete`;
+    }
+
+    // Update section indicators
+    updateSectionIndicators();
+}
+
+/**
+ * Update section indicators (numbered circles at top)
+ */
+function updateSectionIndicators() {
+    $$('.indicator').forEach((indicator, index) => {
+        const sectionNum = index + 1;
+
+        // Remove all state classes
+        indicator.classList.remove('active', 'completed');
+
+        // Add appropriate class
+        if (sectionState.completedSections.includes(sectionNum)) {
+            indicator.classList.add('completed');
+        } else if (sectionNum === sectionState.currentSection) {
+            indicator.classList.add('active');
+        }
+    });
+}
+
+/**
+ * Make section indicators clickable to jump to sections
+ */
+function initializeSectionIndicators() {
+    $$('.indicator').forEach((indicator) => {
+        indicator.addEventListener('click', function() {
+            const sectionNum = parseInt(this.dataset.section);
+            const section = $(`#section-${sectionNum}`);
+
+            if (section) {
+                // Expand clicked section
+                expandSection(section);
+                // Scroll to it
+                window.utils.scrollTo(section);
+            }
+        });
+    });
+}
+
+// ==================== EXPORT ====================
+
+window.sections = {
+    initializeSections,
+    toggleSection,
+    expandSection,
+    collapseSection,
+    markSectionComplete,
+    updateSectionStatus,
+    updateProgressIndicator,
+    initializeSectionIndicators,
+    sectionState
+};
+
+console.log(' Sections loaded');
