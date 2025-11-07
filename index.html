@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RxMen Discovery Call Form - AI-powered ED/PE root cause analysis">
+    <title>RxMen Discovery Call Form</title>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/form.css">
+    <link rel="stylesheet" href="assets/css/output.css">
+    <link rel="stylesheet" href="assets/css/animations.css">
+
+    <!-- Geist Font (fallback to system fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Sticky Progress Header -->
+    <header class="progress-header" id="progress-header">
+        <div class="header-content">
+            <div class="brand">
+                <img src="assets/images/rxmen-logo.png" alt="RxMen" class="logo" onerror="this.style.display='none'">
+                <h1 class="header-title">Discovery Call Form</h1>
+            </div>
+            <div class="progress-info">
+                <div class="progress-text" id="progress-text">Section 1 of 7 • 0% Complete</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+                <div class="section-indicators" id="section-indicators">
+                    <span class="indicator active" data-section="1" title="Client Information">1</span>
+                    <span class="indicator" data-section="2" title="Main Concern">2</span>
+                    <span class="indicator" data-section="3" title="Medical & Lifestyle">3</span>
+                    <span class="indicator" data-section="4" title="Masturbation History">4</span>
+                    <span class="indicator" data-section="5" title="Relationship">5</span>
+                    <span class="indicator" data-section="6" title="ED/PE Branch">6</span>
+                    <span class="indicator" data-section="7" title="Other Info">7</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Error Summary Banner (Hidden by default) -->
+    <div class="error-banner" id="error-banner" style="display: none;">
+        <div class="error-banner-content">
+            <span class="error-icon">⚠️</span>
+            <span class="error-message" id="error-banner-message"></span>
+            <button class="error-banner-close" id="error-banner-close" aria-label="Close">×</button>
+        </div>
+        <div class="error-field-list" id="error-field-list"></div>
+    </div>
+
+    <!-- Main Container: 60/40 Split -->
+    <main class="main-container">
+        <!-- Left Panel: Form (60%) -->
+        <div class="form-panel">
+            <form id="discovery-form" novalidate>
+
+                <!-- ==================== SECTION 1: CLIENT INFORMATION ==================== -->
+                <section class="form-section expanded" id="section-1" data-section="1">
+                    <div class="section-header" data-section="1">
+                        <div class="section-title-wrapper">
+                            <h2 class="section-title">Section 1: Client Information</h2>
+                            <span class="section-status" id="section-1-status">0/9 completed</span>
+                        </div>
+                        <button type="button" class="section-toggle" aria-label="Toggle section">
+                            <span class="toggle-icon">▼</span>
+                        </button>
+                    </div>
+
+                    <div class="section-content">
+                        <!-- Questions will be added here -->
+                        <div class="question-group">
+                            <p class="section-note">Complete all fields to proceed to the next section.</p>
+                        </div>
+
+                        <!-- Question 1.1: Full Name -->
+                        <div class="form-question" data-question="1.1">
+                            <label for="full-name" class="question-label">
+                                Full Name <span class="required">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="full-name"
+                                name="full_name"
+                                class="form-input"
+                                required
+                                minlength="2"
+                                maxlength="100"
+                                placeholder="Enter full name"
+                                aria-describedby="full-name-error"
+                            >
+                            <span class="error-message" id="full-name-error" role="alert"></span>
+                        </div>
+
+                        <!-- Question 1.2: Age -->
+                        <div class="form-question" data-question="1.2">
+                            <label for="age" class="question-label">
+                                Age <span class="required">*</span>
+                            </label>
+                            <input
+                                type="number"
+                                id="age"
+                                name="age"
+                                class="form-input number-input"
+                                required
+                                min="11"
+                                max="99"
+                                placeholder="Enter age"
+                                aria-describedby="age-error"
+                            >
+                            <span class="error-message" id="age-error" role="alert"></span>
+                            <div class="red-flag-warning" id="age-warning" style="display: none;"></div>
+                        </div>
+
+                        <!-- Question 1.3: Height -->
+                        <div class="form-question" data-question="1.3">
+                            <label class="question-label">
+                                Height <span class="required">*</span>
+                            </label>
+
+                            <!-- Height Unit Toggle -->
+                            <div class="toggle-switch" role="radiogroup" aria-label="Height unit">
+                                <button
+                                    type="button"
+                                    class="toggle-option active"
+                                    id="height-cm-toggle"
+                                    data-unit="cm"
+                                    aria-pressed="true"
+                                >
+                                    cm
+                                </button>
+                                <button
+                                    type="button"
+                                    class="toggle-option"
+                                    id="height-ft-toggle"
+                                    data-unit="ft"
+                                    aria-pressed="false"
+                                >
+                                    ft-in
+                                </button>
+                            </div>
+
+                            <!-- Height Input: cm -->
+                            <div class="height-input-group" id="height-cm-input">
+                                <input
+                                    type="number"
+                                    id="height-cm"
+                                    name="height_cm"
+                                    class="form-input number-input"
+                                    min="140"
+                                    max="220"
+                                    placeholder="Enter height in cm"
+                                    aria-describedby="height-error"
+                                >
+                            </div>
+
+                            <!-- Height Input: ft-in -->
+                            <div class="height-input-group hidden" id="height-ft-input">
+                                <div class="input-row">
+                                    <div class="input-col">
+                                        <input
+                                            type="number"
+                                            id="height-feet"
+                                            name="height_feet"
+                                            class="form-input number-input"
+                                            min="4"
+                                            max="7"
+                                            placeholder="Feet"
+                                        >
+                                        <label for="height-feet" class="input-label-small">feet</label>
+                                    </div>
+                                    <div class="input-col">
+                                        <input
+                                            type="number"
+                                            id="height-inches"
+                                            name="height_inches"
+                                            class="form-input number-input"
+                                            min="0"
+                                            max="11"
+                                            placeholder="Inches"
+                                        >
+                                        <label for="height-inches" class="input-label-small">inches</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <span class="error-message" id="height-error" role="alert"></span>
+                        </div>
+
+                        <!-- Question 1.4: Weight -->
+                        <div class="form-question" data-question="1.4">
+                            <label for="weight" class="question-label">
+                                Weight (kg) <span class="required">*</span>
+                            </label>
+                            <input
+                                type="number"
+                                id="weight"
+                                name="weight_kg"
+                                class="form-input number-input"
+                                required
+                                min="40"
+                                max="200"
+                                step="0.1"
+                                placeholder="Enter weight in kg"
+                                aria-describedby="weight-error"
+                            >
+                            <span class="error-message" id="weight-error" role="alert"></span>
+                        </div>
+
+                        <!-- Question 1.5: City -->
+                        <div class="form-question" data-question="1.5">
+                            <label for="city" class="question-label">
+                                City <span class="required">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="city"
+                                name="city"
+                                class="form-input"
+                                required
+                                minlength="3"
+                                maxlength="50"
+                                placeholder="Enter city"
+                                aria-describedby="city-error"
+                            >
+                            <span class="error-message" id="city-error" role="alert"></span>
+                        </div>
+
+                        <!-- Question 1.6: Occupation -->
+                        <div class="form-question" data-question="1.6">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    User's occupation <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="occupation"
+                                            value="corporate"
+                                            required
+                                        >
+                                        <span class="radio-label">Corporate Employee</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="occupation"
+                                            value="business_owner"
+                                        >
+                                        <span class="radio-label">Business Owner / Self-employed</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="occupation"
+                                            value="freelancer"
+                                        >
+                                        <span class="radio-label">Freelancer</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="occupation"
+                                            value="student"
+                                        >
+                                        <span class="radio-label">Student</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="occupation"
+                                            value="retired"
+                                        >
+                                        <span class="radio-label">Retired</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="occupation"
+                                            value="unemployed"
+                                        >
+                                        <span class="radio-label">Unemployed</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="occupation-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                        <!-- Question 1.7: Relationship Status -->
+                        <div class="form-question" data-question="1.7">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    User's relationship status <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="relationship_status"
+                                            value="married"
+                                            required
+                                        >
+                                        <span class="radio-label">Married</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="relationship_status"
+                                            value="in_relationship"
+                                        >
+                                        <span class="radio-label">In a relationship</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="relationship_status"
+                                            value="single"
+                                        >
+                                        <span class="radio-label">Single</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="relationship_status"
+                                            value="divorced_widowed"
+                                        >
+                                        <span class="radio-label">Divorced / Widowed</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="relationship-status-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                        <!-- Question 1.8: First Consultation -->
+                        <div class="form-question" data-question="1.8">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    First consultation for this issue? <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="first_consultation"
+                                            value="yes"
+                                            required
+                                        >
+                                        <span class="radio-label">Yes <span class="helper-text">(first time seeking treatment)</span></span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="first_consultation"
+                                            value="no"
+                                        >
+                                        <span class="radio-label">No <span class="helper-text">(has tried treatment before)</span></span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="first-consultation-error" role="alert"></span>
+                            </fieldset>
+
+                            <!-- Conditional: Previous Treatments (shown if No) -->
+                            <div class="conditional-question hidden" id="previous-treatments-group" data-depends-on="first_consultation" data-show-when="no">
+                                <fieldset class="checkbox-fieldset">
+                                    <legend class="question-label sub-question">
+                                        What was tried earlier? <span class="required">*</span>
+                                    </legend>
+                                    <div class="checkbox-group">
+                                        <label class="checkbox-option">
+                                            <input
+                                                type="checkbox"
+                                                name="previous_treatments"
+                                                value="tablets"
+                                            >
+                                            <span class="checkbox-label">Tablets <span class="helper-text">(oral medication)</span></span>
+                                        </label>
+                                        <label class="checkbox-option">
+                                            <input
+                                                type="checkbox"
+                                                name="previous_treatments"
+                                                value="gels_sprays"
+                                            >
+                                            <span class="checkbox-label">Gels / Sprays <span class="helper-text">(topical)</span></span>
+                                        </label>
+                                        <label class="checkbox-option">
+                                            <input
+                                                type="checkbox"
+                                                name="previous_treatments"
+                                                value="ayurvedic_homeopathy"
+                                            >
+                                            <span class="checkbox-label">Ayurvedic / Homeopathy</span>
+                                        </label>
+                                        <label class="checkbox-option">
+                                            <input
+                                                type="checkbox"
+                                                name="previous_treatments"
+                                                value="therapy"
+                                            >
+                                            <span class="checkbox-label">Therapy / Counseling</span>
+                                        </label>
+                                    </div>
+                                    <span class="error-message" id="previous-treatments-error" role="alert"></span>
+                                </fieldset>
+                            </div>
+                        </div>
+
+                        <!-- Question 1.9: Safety Screening (Red Flags) -->
+                        <div class="form-question red-flag-question" data-question="1.9">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    <span class="warning-icon">⚠️</span> Does user have any of these RIGHT NOW? <span class="required">*</span>
+                                </legend>
+                                <p class="question-help">Select if patient is experiencing any emergency symptoms</p>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="emergency_red_flags"
+                                            value="severe_pain"
+                                            required
+                                        >
+                                        <span class="radio-label">Severe pain in penis/testicles <span class="helper-text">(unbearable, can't touch)</span></span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="emergency_red_flags"
+                                            value="blood"
+                                        >
+                                        <span class="radio-label">Blood in urine or semen</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="emergency_red_flags"
+                                            value="priapism"
+                                        >
+                                        <span class="radio-label">Erection lasting more than 4 hours <span class="helper-text">(priapism)</span></span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="emergency_red_flags"
+                                            value="none"
+                                        >
+                                        <span class="radio-label">None of these symptoms</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="emergency-red-flags-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- ==================== SECTION 2: MAIN CONCERN ==================== -->
+                <section class="form-section collapsed" id="section-2" data-section="2">
+                    <div class="section-header" data-section="2">
+                        <div class="section-title-wrapper">
+                            <h2 class="section-title">Section 2: Main Concern</h2>
+                            <span class="section-status" id="section-2-status">0/3 completed</span>
+                        </div>
+                        <button type="button" class="section-toggle" aria-label="Toggle section">
+                            <span class="toggle-icon">▶</span>
+                        </button>
+                    </div>
+
+                    <div class="section-content">
+                        <div class="question-group">
+                            <p class="section-note">This section determines which specific questions you'll see later.</p>
+                        </div>
+
+                        <!-- Question 2.1: Main Issue (CRITICAL - determines Section 6 flow) -->
+                        <div class="form-question" data-question="2.1">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    What is the main issue? <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="main_issue"
+                                            value="ed"
+                                            required
+                                        >
+                                        <span class="radio-label">Erectile Dysfunction (ED)</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="main_issue"
+                                            value="pe"
+                                        >
+                                        <span class="radio-label">Early Ejaculation (PE)</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="main_issue"
+                                            value="both"
+                                        >
+                                        <span class="radio-label">Both ED and PE</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="main-issue-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                        <!-- Question 2.2: Duration -->
+                        <div class="form-question" data-question="2.2">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    Since when are you facing this? <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="issue_duration"
+                                            value="lifelong"
+                                            required
+                                        >
+                                        <span class="radio-label">Since my first sexual experience <span class="helper-text">(Lifelong)</span></span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="issue_duration"
+                                            value="less_1_month"
+                                        >
+                                        <span class="radio-label">Less than 1 month ago</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="issue_duration"
+                                            value="1_to_6_months"
+                                        >
+                                        <span class="radio-label">1-6 months ago</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="issue_duration"
+                                            value="6_to_12_months"
+                                        >
+                                        <span class="radio-label">6-12 months ago</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="issue_duration"
+                                            value="1_to_3_years"
+                                        >
+                                        <span class="radio-label">1-3 years ago</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="issue_duration"
+                                            value="more_3_years"
+                                        >
+                                        <span class="radio-label">More than 3 years ago</span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="issue-duration-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                        <!-- Question 2.3: Context -->
+                        <div class="form-question" data-question="2.3">
+                            <fieldset class="radio-fieldset">
+                                <legend class="question-label">
+                                    When is the problem faced? <span class="required">*</span>
+                                </legend>
+                                <div class="radio-group" role="radiogroup" aria-required="true">
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="issue_context"
+                                            value="sex_with_partner"
+                                            required
+                                        >
+                                        <span class="radio-label">During sex with partner</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="issue_context"
+                                            value="masturbation"
+                                        >
+                                        <span class="radio-label">During masturbation</span>
+                                    </label>
+                                    <label class="radio-option">
+                                        <input
+                                            type="radio"
+                                            name="issue_context"
+                                            value="both"
+                                        >
+                                        <span class="radio-label">Both <span class="helper-text">(during sex and masturbation)</span></span>
+                                    </label>
+                                </div>
+                                <span class="error-message" id="issue-context-error" role="alert"></span>
+                            </fieldset>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- ==================== SECTION 3-7: Placeholder Headers ==================== -->
+                <!-- Note: Sections 3-7 will be implemented progressively. For now, showing structure. -->
+
+                <section class="form-section collapsed" id="section-3" data-section="3">
+                    <div class="section-header" data-section="3">
+                        <div class="section-title-wrapper">
+                            <h2 class="section-title">Section 3: Medical & Lifestyle</h2>
+                            <span class="section-status" id="section-3-status">0/7 completed</span>
+                        </div>
+                        <button type="button" class="section-toggle" aria-label="Toggle section">
+                            <span class="toggle-icon">▶</span>
+                        </button>
+                    </div>
+                    <div class="section-content">
+                        <p class="section-note">Section content to be implemented...</p>
+                    </div>
+                </section>
+
+                <section class="form-section collapsed" id="section-4" data-section="4">
+                    <div class="section-header" data-section="4">
+                        <div class="section-title-wrapper">
+                            <h2 class="section-title">Section 4: Masturbation & Behavioral History</h2>
+                            <span class="section-status" id="section-4-status">0/4 completed</span>
+                        </div>
+                        <button type="button" class="section-toggle" aria-label="Toggle section">
+                            <span class="toggle-icon">▶</span>
+                        </button>
+                    </div>
+                    <div class="section-content">
+                        <p class="section-note">Section content to be implemented...</p>
+                    </div>
+                </section>
+
+                <section class="form-section collapsed" id="section-5" data-section="5">
+                    <div class="section-header" data-section="5">
+                        <div class="section-title-wrapper">
+                            <h2 class="section-title">Section 5: Relationship Dynamics</h2>
+                            <span class="section-status" id="section-5-status">0/1 completed</span>
+                        </div>
+                        <button type="button" class="section-toggle" aria-label="Toggle section">
+                            <span class="toggle-icon">▶</span>
+                        </button>
+                    </div>
+                    <div class="section-content">
+                        <p class="section-note">Section content to be implemented... (Conditional on relationship status)</p>
+                    </div>
+                </section>
+
+                <section class="form-section collapsed" id="section-6" data-section="6">
+                    <div class="section-header" data-section="6">
+                        <div class="section-title-wrapper">
+                            <h2 class="section-title">Section 6: ED/PE Branch</h2>
+                            <span class="section-status" id="section-6-status">0/? completed</span>
+                        </div>
+                        <button type="button" class="section-toggle" aria-label="Toggle section">
+                            <span class="toggle-icon">▶</span>
+                        </button>
+                    </div>
+                    <div class="section-content">
+                        <p class="section-note">Section content to be implemented... (Conditional on main issue)</p>
+                    </div>
+                </section>
+
+                <section class="form-section collapsed" id="section-7" data-section="7">
+                    <div class="section-header" data-section="7">
+                        <div class="section-title-wrapper">
+                            <h2 class="section-title">Section 7: Other Information</h2>
+                            <span class="section-status" id="section-7-status">Optional</span>
+                        </div>
+                        <button type="button" class="section-toggle" aria-label="Toggle section">
+                            <span class="toggle-icon">▶</span>
+                        </button>
+                    </div>
+                    <div class="section-content">
+                        <p class="section-note">Section content to be implemented...</p>
+                    </div>
+                </section>
+
+                <!-- Submit Button -->
+                <div class="form-actions">
+                    <button type="submit" id="submit-btn" class="btn-primary">
+                        Submit Form
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Right Panel: AI Output (40%) -->
+        <aside class="output-panel" id="output-panel">
+            <div class="output-container">
+                <div class="output-header">
+                    <h3 class="output-title">AI Analysis</h3>
+                    <span class="output-status" id="output-status">Waiting for form submission...</span>
+                </div>
+
+                <div class="output-content" id="output-content">
+                    <div class="output-placeholder">
+                        <div class="placeholder-icon">📋</div>
+                        <p class="placeholder-text">Complete the form and click Submit to see AI analysis</p>
+                    </div>
+                </div>
+
+                <div class="output-actions hidden" id="output-actions">
+                    <button type="button" class="btn-secondary" id="copy-output-btn">
+                        <span class="btn-icon">📋</span> Copy Output
+                    </button>
+                    <button type="button" class="btn-secondary" id="download-output-btn">
+                        <span class="btn-icon">⬇️</span> Download PDF
+                    </button>
+                    <button type="button" class="btn-primary" id="resubmit-btn">
+                        <span class="btn-icon">🔄</span> Re-submit Form
+                    </button>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Auto-save Indicator -->
+    <div class="autosave-indicator" id="autosave-indicator" style="opacity: 0;">
+        Saved
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="assets/js/utils.js"></script>
+    <script src="assets/js/validation.js"></script>
+    <script src="assets/js/sections.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/api.js"></script>
+</body>
+</html>
