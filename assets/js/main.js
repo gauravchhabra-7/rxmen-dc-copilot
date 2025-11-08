@@ -75,6 +75,11 @@ function setupConditionalLogic() {
             handleFirstConsultationChange();
         }
 
+        // ED gateway question (triggers Q6A.2-Q6A.7 visibility)
+        if (target.name === 'ed_gets_erections') {
+            handleEDGatewayChange();
+        }
+
         // Medical conditions "Other" checkbox
         if (target.id === 'medical-conditions-other-checkbox') {
             handleOtherCheckbox('medical-conditions-other');
@@ -88,6 +93,11 @@ function setupConditionalLogic() {
         // Blood thinners red flag
         if (target.name === 'current_medications' && target.value === 'blood_thinners') {
             handleBloodThinnersWarning();
+        }
+
+        // Surgery/injury red flag
+        if (target.name === 'spinal_genital_surgery') {
+            handleSurgeryInjuryWarning();
         }
 
         // Exclusive checkbox logic (None option)
@@ -118,6 +128,7 @@ function setupConditionalLogic() {
     handleRelationshipStatusChange();
     handleMainIssueChange();
     handleMasturbationMethodChange();
+    handleEDGatewayChange();
 
     console.log(' Conditional logic set up');
 }
@@ -247,6 +258,24 @@ function handleFirstConsultationChange() {
 }
 
 /**
+ * Handle ED gateway question (Q6A.1)
+ */
+function handleEDGatewayChange() {
+    const { $, show, hide, getFieldValue } = window.utils;
+    const getsErections = getFieldValue('ed_gets_erections');
+    const followupGroup = $('#ed-followup-questions-group');
+
+    if (!followupGroup) return;
+
+    // Show ED follow-up questions only if user gets erections
+    if (getsErections === 'yes') {
+        show(followupGroup);
+    } else {
+        hide(followupGroup);
+    }
+}
+
+/**
  * Handle "Other" checkbox - show/hide text input
  */
 function handleOtherCheckbox(fieldPrefix) {
@@ -276,6 +305,23 @@ function handleBloodThinnersWarning() {
     if (!checkbox || !warning) return;
 
     if (checkbox.checked) {
+        warning.style.display = 'block';
+    } else {
+        warning.style.display = 'none';
+    }
+}
+
+/**
+ * Handle surgery/injury warning
+ */
+function handleSurgeryInjuryWarning() {
+    const { $, getFieldValue } = window.utils;
+    const value = getFieldValue('spinal_genital_surgery');
+    const warning = $('#surgery-injury-warning');
+
+    if (!warning) return;
+
+    if (value === 'yes') {
         warning.style.display = 'block';
     } else {
         warning.style.display = 'none';

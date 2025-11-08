@@ -807,6 +807,9 @@
                                     </label>
                                 </div>
                                 <span class="error-message" id="spinal-genital-surgery-error" role="alert"></span>
+                                <div class="red-flag-warning" id="surgery-injury-warning" style="display: none;">
+                                    ⚠️ Recommend Andrologist for offline consultation for genital or spinal surgery or injury
+                                </div>
                             </fieldset>
                         </div>
 
@@ -1277,6 +1280,9 @@
                                 </fieldset>
                             </div>
 
+                            <!-- Conditional Group: Q6A.2-Q6A.7 (only show if ed_gets_erections = "yes") -->
+                            <div class="conditional-question hidden" id="ed-followup-questions-group" data-depends-on="ed_gets_erections">
+
                             <!-- Q6A.2: Context Establishment -->
                             <div class="form-question" data-question="6a.2">
                                 <fieldset class="radio-fieldset">
@@ -1358,19 +1364,19 @@
                                     <div class="radio-group">
                                         <label class="radio-option">
                                             <input type="radio" name="ed_partner_hardness" value="always_hard" required>
-                                            <span class="radio-label">Yes, always hard enough</span>
+                                            <span class="radio-label">Always</span>
                                         </label>
                                         <label class="radio-option">
                                             <input type="radio" name="ed_partner_hardness" value="sometimes_hard">
-                                            <span class="radio-label">Sometimes hard enough</span>
+                                            <span class="radio-label">Sometimes</span>
                                         </label>
                                         <label class="radio-option">
                                             <input type="radio" name="ed_partner_hardness" value="rarely_hard">
-                                            <span class="radio-label">Rarely hard enough</span>
+                                            <span class="radio-label">Rarely</span>
                                         </label>
                                         <label class="radio-option">
                                             <input type="radio" name="ed_partner_hardness" value="never_hard">
-                                            <span class="radio-label">Never hard enough</span>
+                                            <span class="radio-label">Never</span>
                                         </label>
                                     </div>
                                     <span class="error-message" id="ed-partner-hardness-error"></span>
@@ -1428,6 +1434,9 @@
                                     <span class="error-message" id="ed-masturbation-imagination-error"></span>
                                 </fieldset>
                             </div>
+
+                            </div>
+                            <!-- End of conditional group for ED follow-up questions -->
 
                         </div>
 

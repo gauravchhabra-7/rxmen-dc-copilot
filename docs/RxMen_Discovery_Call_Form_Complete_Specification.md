@@ -1,8 +1,8 @@
 # RxMen Discovery Call Form - Complete Specification
 
-**Version:** 2.1
+**Version:** 2.2
 **Date:** January 8, 2025
-**Status:** Updated - Additional refinements and question updates
+**Status:** Updated - UI improvements and red flag enhancements
 **Purpose:** AI-powered root cause analysis form for ED/PE discovery calls
 
 ---
@@ -28,6 +28,38 @@
 ---
 
 ## Changelog
+
+### Version 2.2 (January 8, 2025)
+
+**UI Improvements and Red Flag Enhancements:**
+
+1. **ED Branch Q5A.5 Options Simplified:**
+   - Question: "Is the erection hard enough for penetration?"
+   - **Old options**: "Yes, always hard enough", "Sometimes hard enough", "Rarely hard enough", "Never hard enough"
+   - **New options**: "Always", "Sometimes", "Rarely", "Never"
+   - Cleaner, more concise labeling for consistency across form
+
+2. **ED Branch Conditional Logic Added (Q5A.1 Gateway):**
+   - Q5A.1: "Do you get erections at all?"
+   - **New behavior**: If user selects "No", questions Q5A.2 through Q5A.7 are hidden
+   - Questions Q5A.2-Q5A.7 only relevant if user gets erections
+   - Reduces cognitive load and form length for users with complete ED
+   - Field name: `ed_gets_erections`
+
+3. **Surgery/Injury Red Flag Warning Added:**
+   - Q3.3: "Any surgeries or injuries in the spinal or genital area?"
+   - **New behavior**: When "Yes" is selected, inline warning displays:
+     - "⚠️ Recommend Andrologist for offline consultation for genital or spinal surgery or injury"
+   - Similar to blood thinners warning pattern
+   - Alerts agent to recommend specialist consultation
+   - Field name: `spinal_genital_surgery`
+
+**No Breaking Changes:**
+- All field names remain unchanged
+- All validation logic remains the same
+- Data structure compatible with Version 2.1
+
+---
 
 ### Version 2.1 (January 8, 2025)
 
@@ -1038,6 +1070,11 @@ if (noneCheckbox.checked) {
 
 **Doctor Routing:** If "Yes" â†’ Flag for Andrologist routing (in-person evaluation needed)
 
+**Inline Warning (v2.2):** When "Yes" is selected, displays:
+- "⚠️ Recommend Andrologist for offline consultation for genital or spinal surgery or injury"
+- Similar to blood thinners warning pattern
+- Alerts agent immediately to recommend specialist consultation
+
 ---
 
 ### Question 3.4: Alcohol Consumption
@@ -1346,8 +1383,8 @@ if (noneCheckbox.checked) {
 **Conditional Logic - CRITICAL:**
 
 **If "No" is selected:**
-1. Hide/collapse ALL remaining ED questions (Q6A.2 through Q6A.10)
-2. Mark Q6A.2-Q6A.10 as `"N/A - No erections in any situation"` in backend
+1. Hide/collapse ALL remaining ED questions (Q6A.2 through Q6A.7)
+2. Mark Q6A.2-Q6A.7 as `"N/A - No erections in any situation"` in backend
 3. Set routing flag: `andrologist_complete_ed: true`
 4. Display in **final AI output only**: "âš ï¸ Route to Andrologist - Complete erectile failure"
 5. If user also has PE (Section 2.1 = "Both"), proceed to Section 6B
@@ -1467,10 +1504,10 @@ if (noneCheckbox.checked) {
 **UI Component:** Radio buttons (vertical list)
 
 **Options:**
-1. â—‹ Yes, always hard enough
-2. â—‹ Sometimes hard enough
-3. â—‹ Rarely hard enough
-4. â—‹ Never hard enough
+1. â—‹ Always
+2. â—‹ Sometimes
+3. â—‹ Rarely
+4. â—‹ Never
 
 **Validation:**
 - Required: Yes
