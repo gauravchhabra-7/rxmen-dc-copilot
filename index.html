@@ -450,6 +450,9 @@
                                     </label>
                                 </div>
                                 <span class="error-message" id="emergency-red-flags-error" role="alert"></span>
+                                <div class="red-flag-alert hidden" id="red-flag-alert" style="margin-top: 16px; padding: 16px; background: #FEE; border: 2px solid #FF0000; border-radius: 8px; color: #FF0000; font-weight: 600;">
+                                    <p id="red-flag-message"></p>
+                                </div>
                             </fieldset>
                         </div>
 
@@ -494,7 +497,7 @@
                                             name="main_issue"
                                             value="pe"
                                         >
-                                        <span class="radio-label">Early Ejaculation (PE)</span>
+                                        <span class="radio-label">Premature Ejaculation (PE)</span>
                                     </label>
                                     <label class="radio-option">
                                         <input
@@ -994,7 +997,7 @@
                     <div class="section-header" data-section="4">
                         <div class="section-title-wrapper">
                             <h2 class="section-title">Section 4: Masturbation & Behavioral History</h2>
-                            <span class="section-status" id="section-4-status">0/4 completed</span>
+                            <span class="section-status" id="section-4-status">0/5 completed</span>
                         </div>
                         <button type="button" class="section-toggle" aria-label="Toggle section">
                             <span class="toggle-icon">▶</span>
@@ -1171,25 +1174,8 @@
                             </fieldset>
                         </div>
 
-                    </div>
-                </section>
-
-                <section class="form-section collapsed" id="section-5" data-section="5">
-                    <div class="section-header" data-section="5">
-                        <div class="section-title-wrapper">
-                            <h2 class="section-title">Section 5: Relationship Dynamics</h2>
-                            <span class="section-status" id="section-5-status">0/1 completed</span>
-                        </div>
-                        <button type="button" class="section-toggle" aria-label="Toggle section">
-                            <span class="toggle-icon">▶</span>
-                        </button>
-                    </div>
-                    <div class="section-content">
-                        <div class="question-group">
-                        </div>
-
-                        <!-- Question 5.1: Partner Response -->
-                        <div class="form-question" data-question="5.1">
+                        <!-- Question 4.5: Partner Response (Conditional - only if in relationship) -->
+                        <div class="form-question conditional-question hidden" id="partner-response-group" data-question="4.5">
                             <fieldset class="radio-fieldset">
                                 <legend class="question-label">
                                     How would you describe your partner's response to this issue? <span class="required">*</span>
@@ -1200,7 +1186,6 @@
                                             type="radio"
                                             name="partner_response"
                                             value="supportive"
-                                            required
                                         >
                                         <span class="radio-label">Supportive</span>
                                     </label>
@@ -1236,11 +1221,11 @@
                     </div>
                 </section>
 
-                <section class="form-section collapsed" id="section-6" data-section="6">
-                    <div class="section-header" data-section="6">
+                <section class="form-section collapsed" id="section-5" data-section="5">
+                    <div class="section-header" data-section="5">
                         <div class="section-title-wrapper">
-                            <h2 class="section-title">Section 6: ED/PE Branch</h2>
-                            <span class="section-status" id="section-6-status">0/? completed</span>
+                            <h2 class="section-title">Section 5: ED/PE Branch</h2>
+                            <span class="section-status" id="section-5-status">0/? completed</span>
                         </div>
                         <button type="button" class="section-toggle" aria-label="Toggle section">
                             <span class="toggle-icon">▶</span>
@@ -1553,23 +1538,20 @@
                     </div>
                 </section>
 
-                <!-- ==================== SECTION 7: OTHER INFORMATION ==================== -->
-                <section class="form-section collapsed" id="section-7" data-section="7">
-                    <div class="section-header" data-section="7">
+                <!-- ==================== SECTION 6: OTHER INFORMATION ==================== -->
+                <section class="form-section expanded" id="section-6" data-section="6" data-always-open="true">
+                    <div class="section-header" data-section="6">
                         <div class="section-title-wrapper">
-                            <h2 class="section-title">Section 7: Other Information</h2>
-                            <span class="section-status" id="section-7-status">Optional</span>
+                            <h2 class="section-title">Section 6: Other Information</h2>
+                            <span class="section-status" id="section-6-status">Optional</span>
                         </div>
-                        <button type="button" class="section-toggle" aria-label="Toggle section">
-                            <span class="toggle-icon">▶</span>
-                        </button>
                     </div>
                     <div class="section-content">
                         <div class="question-group">
                         </div>
 
-                        <!-- Question 7.1: Additional Information (Optional Textarea) -->
-                        <div class="form-question" data-question="7.1">
+                        <!-- Question 6.1: Additional Information (Optional Textarea) -->
+                        <div class="form-question" data-question="6.1">
                             <label for="additional-info" class="question-label">
                                 Other Information <span class="optional-text">(Optional)</span>
                             </label>

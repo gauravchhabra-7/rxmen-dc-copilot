@@ -100,6 +100,11 @@ function setupConditionalLogic() {
             handleAgeRedFlags();
         }
 
+        // Emergency red flags
+        if (target.name === 'emergency_red_flags') {
+            handleEmergencyRedFlags();
+        }
+
         // Sync ED and PE sexual activity answers when "both" is selected
         if (target.name === 'ed_sexual_activity_status') {
             handleSexualActivitySync();
@@ -143,19 +148,19 @@ function handleHeightUnitToggle(button) {
 }
 
 /**
- * Handle relationship status change (Section 5 visibility)
+ * Handle relationship status change (Q4.5 visibility)
  */
 function handleRelationshipStatusChange() {
-    const { $, getFieldValue } = window.utils;
+    const { $, show, hide, getFieldValue } = window.utils;
     const status = getFieldValue('relationship_status');
-    const section5 = $('#section-5');
+    const partnerResponseGroup = $('#partner-response-group');
 
-    if (!section5) return;
+    if (!partnerResponseGroup) return;
 
     if (status === 'married' || status === 'in_relationship') {
-        section5.style.display = 'block';
+        show(partnerResponseGroup);
     } else {
-        section5.style.display = 'none';
+        hide(partnerResponseGroup);
     }
 }
 
@@ -318,6 +323,65 @@ function handleAgeRedFlags() {
         warning.style.fontWeight = '600';
     } else {
         warning.style.display = 'none';
+    }
+}
+
+/**
+ * Handle emergency red flags - show inline alert and disable form
+ */
+function handleEmergencyRedFlags() {
+    const { $, $$, getFieldValue } = window.utils;
+    const value = getFieldValue('emergency_red_flags');
+    const alert = $('#red-flag-alert');
+    const message = $('#red-flag-message');
+    const form = $('#discovery-form');
+
+    if (!alert || !message || !form) return;
+
+    // Define red flag messages
+    const redFlagMessages = {
+        'severe_pain': '⚠️ IMMEDIATE ESCALATION REQUIRED: Severe pain in penis/testicles may indicate testicular torsion or infection. Advise patient to seek emergency in-person consultation immediately. Do not proceed with this form.',
+        'blood': '⚠️ STOP CONSULTATION: Blood in urine or semen requires immediate urologist/andrologist referral. Instruct patient to see a physician as soon as possible. Do not proceed with this form.',
+        'priapism': '⚠️ MEDICAL EMERGENCY: Erection lasting more than 4 hours (priapism) requires urgent medical treatment. Tell patient to go to the nearest hospital IMMEDIATELY. Do not proceed with this form.'
+    };
+
+    if (value && value !== 'none' && redFlagMessages[value]) {
+        // Show alert
+        message.textContent = redFlagMessages[value];
+        alert.classList.remove('hidden');
+        alert.style.display = 'block';
+
+        // Disable all form sections except Section 1
+        $$('.form-section').forEach((section) => {
+            const sectionNum = parseInt(section.dataset.section);
+            if (sectionNum > 1) {
+                // Disable all inputs in this section
+                section.querySelectorAll('input, textarea, select, button').forEach(input => {
+                    input.disabled = true;
+                    input.style.opacity = '0.5';
+                    input.style.cursor = 'not-allowed';
+                });
+            }
+        });
+
+        // Disable submit button
+        const submitBtn = $('#submit-btn');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.opacity = '0.5';
+            submitBtn.style.cursor = 'not-allowed';
+        }
+    } else {
+        // Hide alert and re-enable form
+        alert.classList.add('hidden');
+        alert.style.display = 'none';
+
+        // Re-enable all form elements
+        $$('input, textarea, select, button').forEach(input => {
+            input.disabled = false;
+            input.style.opacity = '';
+            input.style.cursor = '';
+        });
     }
 }
 

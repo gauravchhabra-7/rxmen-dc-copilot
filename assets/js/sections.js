@@ -8,7 +8,7 @@
 const sectionState = {
     currentSection: 1,
     completedSections: [],
-    totalSections: 7
+    totalSections: 6
 };
 
 // ==================== ACCORDION FUNCTIONALITY ====================
@@ -39,6 +39,11 @@ function initializeSections() {
  * Toggle section expand/collapse
  */
 function toggleSection(section) {
+    // Don't toggle sections marked as always-open
+    if (section.dataset.alwaysOpen === 'true') {
+        return;
+    }
+
     if (section.classList.contains('collapsed')) {
         expandSection(section);
     } else {
@@ -130,8 +135,8 @@ function updateSectionStatus(sectionNumber) {
     const questions = $$('.form-question', section);
     const completed = questions.filter(q => isQuestionComplete(q)).length;
 
-    // Skip if section 7 (optional)
-    if (sectionNumber === 7) {
+    // Skip if section 6 (optional)
+    if (sectionNumber === 6) {
         statusSpan.textContent = 'Optional';
         return;
     }
