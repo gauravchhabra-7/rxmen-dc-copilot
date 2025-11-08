@@ -285,6 +285,12 @@ function setupRealTimeValidation() {
             if (this.classList.contains('error')) {
                 hideError(this);
             }
+            // Update section status count
+            const section = this.closest('.form-section');
+            if (section && typeof updateSectionStatus === 'function') {
+                const sectionNum = parseInt(section.dataset.section);
+                if (sectionNum) updateSectionStatus(sectionNum);
+            }
         });
     });
 
@@ -295,6 +301,12 @@ function setupRealTimeValidation() {
             if (!error) {
                 hideError(this);
             }
+            // Update section status count
+            const section = this.closest('.form-section');
+            if (section && typeof updateSectionStatus === 'function') {
+                const sectionNum = parseInt(section.dataset.section);
+                if (sectionNum) updateSectionStatus(sectionNum);
+            }
         });
     });
 
@@ -304,6 +316,12 @@ function setupRealTimeValidation() {
             const error = validateCheckboxGroup(this.name);
             if (!error) {
                 hideError(this);
+            }
+            // Update section status count
+            const section = this.closest('.form-section');
+            if (section && typeof updateSectionStatus === 'function') {
+                const sectionNum = parseInt(section.dataset.section);
+                if (sectionNum) updateSectionStatus(sectionNum);
             }
         });
     });

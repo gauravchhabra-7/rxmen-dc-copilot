@@ -56,7 +56,7 @@ function expandSection(section) {
     // Update toggle icon
     const icon = section.querySelector('.toggle-icon');
     if (icon) {
-        icon.textContent = '�';
+        icon.textContent = '\u25BC'; // ▼ Down arrow
     }
 
     // Update current section
@@ -77,7 +77,7 @@ function collapseSection(section) {
     // Update toggle icon
     const icon = section.querySelector('.toggle-icon');
     if (icon) {
-        icon.textContent = '�';
+        icon.textContent = '\u25B6'; // ▶ Right arrow
     }
 }
 
