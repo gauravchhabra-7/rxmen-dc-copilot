@@ -5,12 +5,12 @@
 
 /* ==================== FORM SECTIONS ==================== */
 .form-section {
-    border: 2px solid var(--color-gray-3);
-    border-radius: var(--radius-lg);
-    margin-bottom: var(--spacing-xl);
+    border: 1px solid var(--color-gray-3);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
     background: var(--bg-white);
     transition: all var(--transition-base);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-sm);
 }
 
 .form-section.expanded {
@@ -31,7 +31,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-lg) var(--spacing-xl);
+    padding: var(--spacing-md) var(--spacing-lg);
     cursor: pointer;
     user-select: none;
     transition: background var(--transition-fast);
@@ -48,11 +48,10 @@
 }
 
 .section-title {
-    font-size: var(--font-size-h2);
-    font-weight: var(--font-bold);
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-semibold);
     color: var(--brand-dark-blue);
     margin: 0;
-    letter-spacing: -0.5px;
 }
 
 .section-status {
@@ -94,7 +93,7 @@
 }
 
 .section-content {
-    padding: 0 var(--spacing-xl) var(--spacing-xl) var(--spacing-xl);
+    padding: 0 var(--spacing-lg) var(--spacing-lg) var(--spacing-lg);
 }
 
 /* ==================== QUESTIONS ==================== */
@@ -103,11 +102,11 @@
 }
 
 .form-question {
-    margin-bottom: var(--spacing-xl);
-    padding: var(--spacing-md);
-    background: var(--bg-white);
-    border: 1px solid var(--color-gray-3);
-    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-sm);
+    background: transparent;
+    border: none;
+    border-radius: 0;
     transition: all var(--transition-base);
 }
 
@@ -126,11 +125,11 @@
 
 .question-label {
     display: block;
-    font-size: 18px;
-    font-weight: var(--font-semibold);
+    font-size: var(--font-size-body);
+    font-weight: var(--font-medium);
     color: var(--color-black);
-    margin-bottom: var(--spacing-md);
-    line-height: 1.4;
+    margin-bottom: var(--spacing-sm);
+    line-height: 1.5;
 }
 
 .sub-question {
@@ -179,14 +178,13 @@
     width: 100%;
     height: var(--input-height);
     padding: 0 var(--spacing-sm);
-    border: 2px solid var(--color-gray-3);
-    border-radius: var(--radius-md);
+    border: 1px solid var(--color-gray-3);
+    border-radius: var(--radius-sm);
     font-family: var(--font-family);
     font-size: var(--font-size-base);
     color: var(--color-black);
     background: var(--bg-white);
     transition: all var(--transition-fast);
-    box-shadow: var(--shadow-sm);
 }
 
 .form-input:focus {
@@ -340,13 +338,12 @@ textarea.form-input {
     display: flex;
     align-items: flex-start;
     gap: var(--spacing-sm);
-    padding: var(--spacing-md);
-    border: 2px solid var(--color-gray-3);
-    border-radius: var(--radius-md);
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-gray-3);
+    border-radius: var(--radius-sm);
     cursor: pointer;
     transition: all var(--transition-fast);
     background: var(--bg-white);
-    box-shadow: var(--shadow-sm);
 }
 
 .radio-option:hover,
