@@ -1,8 +1,8 @@
 # RxMen Discovery Call Form - Complete Specification
 
-**Version:** 2.0
+**Version:** 2.1
 **Date:** January 8, 2025
-**Status:** Updated - Section restructuring and red flag logic changes
+**Status:** Updated - Additional refinements and question updates
 **Purpose:** AI-powered root cause analysis form for ED/PE discovery calls
 
 ---
@@ -28,6 +28,42 @@
 ---
 
 ## Changelog
+
+### Version 2.1 (January 8, 2025)
+
+**Refinements and Question Updates:**
+
+1. **Section 3 Expanded:**
+   - Added Q3.6: "Any other substance being consumed?" (text input, optional)
+   - Field name: `substance_consumption`
+   - Placeholder: "Specify substance and frequency"
+   - Renumbered former Q3.6 (Sleep Quality) to Q3.7
+   - Renumbered former Q3.7 (Physical Activity) to Q3.8
+   - Section 3 now has 8 questions (was 7)
+
+2. **Q4.1 Conditional Logic Updated:**
+   - **Old behavior**: Q4.2 & Q4.3 hidden only if "No masturbation" selected
+   - **New behavior**: Q4.2 & Q4.3 hidden if "No masturbation" OR "Rubbing against surface (prone)" selected
+   - Show details only for "Using hands" OR "Both hands and rubbing surface"
+   - Rationale: Grip type question not applicable for prone masturbation
+
+3. **Q4.2 Default Selection Removed:**
+   - Removed pre-selected "Normal" option
+   - Removed "(default)" helper text
+   - Now requires explicit user selection like all other questions
+
+4. **PE Branch Q5B.5 Simplified:**
+   - Question: "Can you delay or control ejaculation during masturbation?"
+   - **Old options**: "Always can control", "Sometimes can control", "Rarely can control"
+   - **New options**: "Always", "Sometimes", "Rarely"
+   - Cleaner, more concise labeling
+
+**No Breaking Changes:**
+- All field names remain unchanged
+- All validation logic remains the same
+- Data structure compatible with Version 2.0
+
+---
 
 ### Version 2.0 (January 8, 2025)
 

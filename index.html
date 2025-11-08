@@ -620,7 +620,7 @@
                     <div class="section-header" data-section="3">
                         <div class="section-title-wrapper">
                             <h2 class="section-title">Section 3: Medical & Lifestyle</h2>
-                            <span class="section-status" id="section-3-status">0/7 completed</span>
+                            <span class="section-status" id="section-3-status">0/8 completed</span>
                         </div>
                         <button type="button" class="section-toggle" aria-label="Toggle section">
                             <span class="toggle-icon">▶</span>
@@ -916,8 +916,23 @@
                             </fieldset>
                         </div>
 
-                        <!-- Question 3.6: Sleep Quality -->
+                        <!-- Question 3.6: Other Substance Consumption (Optional) -->
                         <div class="form-question" data-question="3.6">
+                            <label for="substance-consumption" class="question-label">
+                                Any other substance being consumed?
+                            </label>
+                            <input
+                                type="text"
+                                id="substance-consumption"
+                                name="substance_consumption"
+                                class="form-input"
+                                placeholder="Specify substance and frequency"
+                            >
+                            <span class="error-message" id="substance-consumption-error" role="alert"></span>
+                        </div>
+
+                        <!-- Question 3.7: Sleep Quality -->
+                        <div class="form-question" data-question="3.7">
                             <fieldset class="radio-fieldset">
                                 <legend class="question-label">
                                     How is your sleep quality? <span class="required">*</span>
@@ -953,8 +968,8 @@
                             </fieldset>
                         </div>
 
-                        <!-- Question 3.7: Physical Activity -->
-                        <div class="form-question" data-question="3.7">
+                        <!-- Question 3.8: Physical Activity -->
+                        <div class="form-question" data-question="3.8">
                             <fieldset class="radio-fieldset">
                                 <legend class="question-label">
                                     How physically active are you? <span class="required">*</span>
@@ -1067,9 +1082,8 @@
                                                 type="radio"
                                                 name="masturbation_grip"
                                                 value="normal"
-                                                checked
                                             >
-                                            <span class="radio-label">Normal <span class="helper-text">(default)</span></span>
+                                            <span class="radio-label">Normal</span>
                                         </label>
                                         <label class="radio-option">
                                             <input
@@ -1518,15 +1532,15 @@
                                     <div class="radio-group">
                                         <label class="radio-option">
                                             <input type="radio" name="pe_partner_masturbation_control" value="always" required>
-                                            <span class="radio-label">Always can control</span>
+                                            <span class="radio-label">Always</span>
                                         </label>
                                         <label class="radio-option">
                                             <input type="radio" name="pe_partner_masturbation_control" value="sometimes">
-                                            <span class="radio-label">Sometimes can control</span>
+                                            <span class="radio-label">Sometimes</span>
                                         </label>
                                         <label class="radio-option">
                                             <input type="radio" name="pe_partner_masturbation_control" value="rarely">
-                                            <span class="radio-label">Rarely can control</span>
+                                            <span class="radio-label">Rarely</span>
                                         </label>
                                     </div>
                                     <span class="error-message" id="pe-partner-masturbation-control-error"></span>

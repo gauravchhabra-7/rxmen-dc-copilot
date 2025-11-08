@@ -211,7 +211,9 @@ function handleMasturbationMethodChange() {
 
     if (!detailsGroup) return;
 
-    if (method === 'none') {
+    // Hide details if "No masturbation" OR "Rubbing against surface (prone)"
+    // Show details only for "Using hands" OR "Both hands and rubbing surface"
+    if (method === 'none' || method === 'prone') {
         hide(detailsGroup);
     } else {
         show(detailsGroup);
