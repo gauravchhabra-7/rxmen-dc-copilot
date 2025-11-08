@@ -1,8 +1,8 @@
 # RxMen Discovery Call Form - Complete Specification
 
-**Version:** 1.0  
-**Date:** November 6, 2025  
-**Status:** Finalized for Development  
+**Version:** 2.0
+**Date:** January 8, 2025
+**Status:** Updated - Section restructuring and red flag logic changes
 **Purpose:** AI-powered root cause analysis form for ED/PE discovery calls
 
 ---
@@ -17,13 +17,56 @@
 6. [Section 2: Main Concern](#section-2-main-concern)
 7. [Section 3: Medical & Lifestyle](#section-3-medical--lifestyle)
 8. [Section 4: Masturbation & Behavioral History](#section-4-masturbation--behavioral-history)
-9. [Section 5: Relationship Dynamics](#section-5-relationship-dynamics)
-10. [Section 6A: ED Branch](#section-6a-ed-branch)
-11. [Section 6B: PE Branch](#section-6b-pe-branch)
-12. [Section 7: Other Information](#section-7-other-information-open-box)
+9. [Section 5: ED/PE Branch](#section-5-edpe-branch)
+10. [Section 5A: ED Branch](#section-5a-ed-branch)
+11. [Section 5B: PE Branch](#section-5b-pe-branch)
+12. [Section 6: Other Information (Always Open)](#section-6-other-information-always-open)
 13. [Data Structure Reference](#data-structure-reference)
 14. [Red Flag Logic](#red-flag-logic)
 15. [Agent Training Notes](#agent-training-notes)
+
+---
+
+## Changelog
+
+### Version 2.0 (January 8, 2025)
+
+**Major Changes:**
+
+1. **Section Restructuring:**
+   - Removed Section 5 (Relationship Dynamics) as a standalone section
+   - Moved Q5.1 (Partner Response) to Section 4 as Q4.5 (conditional question)
+   - Renumbered former Section 6 (ED/PE Branch) to Section 5
+   - Renumbered former Section 7 (Other Information) to Section 6
+   - Total sections reduced from 7 to 6
+
+2. **Section 6 (Other Information) Always Open:**
+   - Section 6 now remains permanently expanded
+   - Cannot be collapsed by user
+   - Provides easy access to optional notes field at all times
+
+3. **Red Flag Logic Changed:**
+   - **Old behavior**: Red flags only shown in AI output panel
+   - **New behavior**: Red flags show inline alerts and disable form
+   - When severe symptoms selected:
+     - Inline alert appears with emergency instructions
+     - All sections after Section 1 become disabled
+     - Submit button disabled
+     - Form cannot proceed
+   - Agent must escalate to in-person care immediately
+
+4. **Label Updates:**
+   - Q2.2 Option changed from "Early Ejaculation (PE)" to "Premature Ejaculation (PE)"
+
+5. **Question Renumbering:**
+   - Section 4 now has 5 questions (was 4)
+   - Former Section 6A/6B now Section 5A/5B
+   - Former Section 7.1 now Section 6.1
+
+**Behavioral Changes:**
+- Q4.5 (Partner Response) visibility still controlled by relationship status (married/in relationship)
+- All other conditional logic remains unchanged
+- Form completion tracking updated to reflect 6 sections instead of 7
 
 ---
 
