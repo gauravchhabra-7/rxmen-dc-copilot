@@ -1067,8 +1067,8 @@
                             </fieldset>
                         </div>
 
-                        <!-- Conditional Group: Questions 4.2 & 4.3 (only show if masturbation_method != "none") -->
-                        <div class="conditional-question hidden" id="masturbation-details-group" data-depends-on="masturbation_method" data-hide-when="none">
+                        <!-- Conditional Group: Question 4.2 (show only for "hands" or "both") -->
+                        <div class="conditional-question hidden" id="masturbation-grip-group" data-depends-on="masturbation_method">
 
                             <!-- Question 4.2: Grip Type (Conditional) -->
                             <div class="form-question" data-question="4.2">
@@ -1097,6 +1097,10 @@
                                     <span class="error-message" id="masturbation-grip-error" role="alert"></span>
                                 </fieldset>
                             </div>
+                        </div>
+
+                        <!-- Conditional Group: Question 4.3 (show for all except "none") -->
+                        <div class="conditional-question hidden" id="masturbation-frequency-group" data-depends-on="masturbation_method">
 
                             <!-- Question 4.3: Masturbation Frequency (Conditional) -->
                             <div class="form-question" data-question="4.3">

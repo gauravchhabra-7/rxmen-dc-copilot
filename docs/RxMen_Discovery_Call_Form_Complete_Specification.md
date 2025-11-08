@@ -41,11 +41,15 @@
    - Renumbered former Q3.7 (Physical Activity) to Q3.8
    - Section 3 now has 8 questions (was 7)
 
-2. **Q4.1 Conditional Logic Updated:**
-   - **Old behavior**: Q4.2 & Q4.3 hidden only if "No masturbation" selected
-   - **New behavior**: Q4.2 & Q4.3 hidden if "No masturbation" OR "Rubbing against surface (prone)" selected
-   - Show details only for "Using hands" OR "Both hands and rubbing surface"
-   - Rationale: Grip type question not applicable for prone masturbation
+2. **Q4.1 Conditional Logic Corrected (Independent Q4.2 and Q4.3 Visibility):**
+   - **Previous behavior**: Q4.2 & Q4.3 treated as single group
+   - **New behavior**: Q4.2 and Q4.3 have independent visibility logic
+   - **Q4.2 (Grip)**: Shows only for "Using hands" OR "Both hands and rubbing surface"
+     - Hidden for "No masturbation" and "Rubbing against surface (prone)"
+     - Rationale: Grip type question not applicable without hands
+   - **Q4.3 (Frequency)**: Shows for all methods EXCEPT "No masturbation"
+     - Visible for "Using hands", "Rubbing against surface (prone)", and "Both hands and rubbing surface"
+     - Rationale: Frequency is relevant even for prone masturbation
 
 3. **Q4.2 Default Selection Removed:**
    - Removed pre-selected "Normal" option
@@ -1170,32 +1174,42 @@ if (noneCheckbox.checked) {
 
 **Conditional Logic:**
 
-**If Option 1 ("No masturbation") is selected:**
-- Skip Questions 4.2 and 4.3
-- Mark them as "N/A" in backend
+**Option 1: "No masturbation"**
+- Hide Questions 4.2 AND 4.3
+- Mark both as "N/A" in backend
 - Question 4.4 (porn usage) still shows (separate behavior)
 
-**If Option 2, 3, or 4 is selected:**
-- Show Questions 4.2 and 4.3 in an expanded dropdown/section
+**Option 2: "Using hands"**
+- Show Question 4.2 (Grip Type)
+- Show Question 4.3 (Frequency)
+
+**Option 3: "Rubbing against surface (prone)"**
+- Hide Question 4.2 (grip not applicable without hands)
+- Show Question 4.3 (Frequency) - still relevant for prone masturbation
+
+**Option 4: "Both hands and rubbing surface"**
+- Show Question 4.2 (Grip Type)
+- Show Question 4.3 (Frequency)
+
+**Summary:** Q4.2 shows only for "hands" or "both". Q4.3 shows for all methods except "none".
 
 ---
 
 ### Question 4.2: Grip Type (Conditional)
 
-**Display Condition:** Only shown if Q4.1 â‰  "No masturbation"
+**Display Condition:** Only shown if Q4.1 = "Using hands" OR "Both hands and rubbing surface"
 
 **Question Text:** Is your grip during masturbation normal or tight?
 
 **UI Component:** Radio buttons (vertical list)
 
 **Options:**
-1. â¦¿ Normal **(DEFAULT - pre-selected)**
+1. ○ Normal
 2. â—‹ Tight
 
 **Validation:**
 - Required: Yes (if shown)
 - Single selection only
-- Normal is pre-selected by default
 
 **Backend Field:** `masturbation_grip`
 
@@ -1203,15 +1217,13 @@ if (noneCheckbox.checked) {
 
 **Possible Values:** `"normal"` | `"tight"` | `"N/A"`
 
-**Default Value:** `"normal"` (if Q4.1 â‰  "No masturbation")
 
 **Clinical Significance:** Tight grip can desensitize penis, contributing to ED during partnered sex
 
 ---
 
 ### Question 4.3: Masturbation Frequency (Conditional)
-
-**Display Condition:** Only shown if Q4.1 â‰  "No masturbation"
+**Display Condition:** Only shown if Q4.1 = "Using hands", "Rubbing against surface (prone)", OR "Both hands and rubbing surface"
 
 **Question Text:** How often do you masturbate per week?
 

@@ -207,16 +207,25 @@ function handleMainIssueChange() {
 function handleMasturbationMethodChange() {
     const { $, show, hide, getFieldValue } = window.utils;
     const method = getFieldValue('masturbation_method');
-    const detailsGroup = $('#masturbation-details-group');
+    const gripGroup = $('#masturbation-grip-group');      // Q4.2
+    const frequencyGroup = $('#masturbation-frequency-group');  // Q4.3
 
-    if (!detailsGroup) return;
+    if (!gripGroup || !frequencyGroup) return;
 
-    // Hide details if "No masturbation" OR "Rubbing against surface (prone)"
-    // Show details only for "Using hands" OR "Both hands and rubbing surface"
-    if (method === 'none' || method === 'prone') {
-        hide(detailsGroup);
+    // Q4.2 (Grip) logic: show only for "hands" or "both"
+    // Hide for "none" and "prone" (grip not applicable without hands)
+    if (method === 'hands' || method === 'both') {
+        show(gripGroup);
     } else {
-        show(detailsGroup);
+        hide(gripGroup);
+    }
+
+    // Q4.3 (Frequency) logic: show for all methods except "none"
+    // Show for "hands", "prone", and "both"
+    if (method === 'none') {
+        hide(frequencyGroup);
+    } else {
+        show(frequencyGroup);
     }
 }
 
