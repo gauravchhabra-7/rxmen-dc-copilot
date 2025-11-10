@@ -154,22 +154,22 @@ def test_pinecone_api():
     print_info(f"Index Name: {index_name}")
 
     try:
-        from pinecone import Pinecone
+        import pinecone
 
         # Initialize Pinecone
         print_info("Connecting to Pinecone...")
-        pc = Pinecone(api_key=api_key)
+        pinecone.init(api_key=api_key, environment=environment)
 
         # List indexes
-        indexes = pc.list_indexes()
-        print_info(f"Available indexes: {[idx.name for idx in indexes]}")
+        indexes = pinecone.list_indexes()
+        print_info(f"Available indexes: {indexes}")
 
         # Check if target index exists
-        if index_name in [idx.name for idx in indexes]:
+        if index_name in indexes:
             print_success(f"Index '{index_name}' exists!")
 
             # Get index stats
-            index = pc.Index(index_name)
+            index = pinecone.Index(index_name)
             stats = index.describe_index_stats()
             print_info(f"Index stats: {stats}")
 
