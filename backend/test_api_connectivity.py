@@ -81,7 +81,7 @@ def test_anthropic_api():
         # Test with a simple message
         print_info("Sending test message to Claude...")
         message = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
+            model="claude-3-sonnet-20240229",
             max_tokens=50,
             messages=[
                 {"role": "user", "content": "Respond with only: API test successful"}
@@ -154,22 +154,23 @@ def test_pinecone_api():
     print_info(f"Index Name: {index_name}")
 
     try:
-        import pinecone
+        from pinecone import Pinecone
 
         # Initialize Pinecone
         print_info("Connecting to Pinecone...")
-        pinecone.init(api_key=api_key, environment=environment)
+        pc = Pinecone(api_key=api_key)
 
         # List indexes
-        indexes = pinecone.list_indexes()
-        print_info(f"Available indexes: {indexes}")
+        indexes = pc.list_indexes()
+        index_names = [idx.name for idx in indexes]
+        print_info(f"Available indexes: {index_names}")
 
         # Check if target index exists
-        if index_name in indexes:
+        if index_name in index_names:
             print_success(f"Index '{index_name}' exists!")
 
             # Get index stats
-            index = pinecone.Index(index_name)
+            index = pc.Index(index_name)
             stats = index.describe_index_stats()
             print_info(f"Index stats: {stats}")
 
