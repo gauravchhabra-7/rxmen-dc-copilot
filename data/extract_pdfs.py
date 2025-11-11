@@ -106,7 +106,8 @@ def main():
         "ED_PE_DSM.pdf",
         "ED_training_Module.pdf",
         "PE_Training_module.pdf",
-        "Red_Flags_Checklist_RxMen_Discovery_Call_Copilot.pdf"
+        "Red_Flags_Checklist_RxMen_Discovery_Call_Copilot.pdf",
+        "Treatment Explanation and linking it with root cause.pdf"
     ]
 
     print("\n" + "="*80)
