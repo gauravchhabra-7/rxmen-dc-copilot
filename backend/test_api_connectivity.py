@@ -72,17 +72,22 @@ def test_anthropic_api():
         return False
 
     print_info(f"API Key: {mask_key(api_key)}")
+    print_info(f"API Key length: {len(api_key)} characters")
+    print_info(f"API Key format: {api_key[:15]}...{api_key[-10:]}")
 
     try:
         from anthropic import Anthropic
+        print_info("Anthropic library imported successfully")
 
         client = Anthropic(api_key=api_key)
+        print_info("Anthropic client initialized")
 
         # Test with a simple message
         print_info("Sending test message to Claude...")
 
-        # Try multiple model names in case some are deprecated
+        # Try the latest Claude model first, then fallbacks
         models_to_try = [
+            "claude-sonnet-4-20250514",      # Latest model (try first)
             "claude-3-5-sonnet-20241022",
             "claude-3-5-sonnet-20240620",
             "claude-3-opus-20240229",
@@ -102,16 +107,21 @@ def test_anthropic_api():
                         {"role": "user", "content": "Respond with only: API test successful"}
                     ]
                 )
-                print_info(f"Success with model: {model_name}")
+                print_info(f"✓ Success with model: {model_name}")
                 break
             except Exception as e:
+                error_str = str(e)
+                print_warning(f"  Model {model_name} failed: {error_str[:100]}")
                 last_error = e
-                if "not_found_error" in str(e):
-                    continue
+                if "not_found_error" in error_str or "404" in error_str:
+                    continue  # Try next model
                 else:
+                    # If it's not a model error, stop trying
+                    print_error(f"  Non-model error encountered, stopping: {error_str}")
                     raise
 
         if message is None:
+            print_error("All models failed!")
             raise last_error
 
         response_text = message.content[0].text
@@ -137,18 +147,23 @@ def test_openai_api():
         return False
 
     print_info(f"API Key: {mask_key(api_key)}")
+    print_info(f"API Key length: {len(api_key)} characters")
+    print_info(f"API Key format: {api_key[:12]}...{api_key[-10:]}")
 
     try:
         from openai import OpenAI
+        print_info("OpenAI library imported successfully")
 
         client = OpenAI(api_key=api_key)
+        print_info("OpenAI client initialized")
 
         # Test with a simple embedding
-        print_info("Generating test embedding...")
+        print_info("Generating test embedding with model: text-embedding-3-small")
         response = client.embeddings.create(
             model="text-embedding-3-small",
             input="This is a test sentence for embedding generation."
         )
+        print_info("Embedding request completed successfully")
 
         embedding = response.data[0].embedding
         print_info(f"Embedding dimensions: {len(embedding)}")
@@ -216,6 +231,17 @@ def test_pinecone_api():
 def main():
     """Run all API connectivity tests."""
     print_header(f"API Connectivity Test Suite - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+
+    # Check .env file loading
+    print_info("Checking environment configuration...")
+    anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+    openai_key = os.getenv("OPENAI_API_KEY")
+    pinecone_key = os.getenv("PINECONE_API_KEY")
+
+    print_info(f"ANTHROPIC_API_KEY loaded: {'Yes' if anthropic_key else 'No'}")
+    print_info(f"OPENAI_API_KEY loaded: {'Yes' if openai_key else 'No'}")
+    print_info(f"PINECONE_API_KEY loaded: {'Yes' if pinecone_key else 'No'}")
+    print()
 
     results = {
         "anthropic": test_anthropic_api(),
