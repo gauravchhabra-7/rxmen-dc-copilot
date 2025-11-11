@@ -8,17 +8,17 @@ Common Wrong Explanations - DO NOT USE
 Purpose: Train AI to avoid phrases that harm conversion, medical accuracy, or user trust. 
 INSTRUCTIONS FOR TEAM 
 How to Fill: 
-1.​ Root Cause Column: With which root causes are these phrases being linked to?(enter 
-multiple if that’s the case). ​
+1. Root Cause Column: With which root causes are these phrases being linked to?(enter 
+multiple if that’s the case).  
 Add any other comments/observations/feedbacks if any  
-2.​ Wrong Explanation Column: Exact words you've heard agents say that DON'T work 
-○​ Use actual Hinglish/English phrases 
-○​ Include objection responses that failed 
-3.​ Correct Replacement Column: What should be said instead 
-○​ Medically accurate 
-○​ Simple language 
-○​ Builds trust 
-○​ Boosts Sales 
+2. Wrong Explanation Column: Exact words you've heard agents say that DON'T work 
+○ Use actual Hinglish/English phrases 
+○ Include objection responses that failed 
+3. Correct Replacement Column: What should be said instead 
+○ Medically accurate 
+○ Simple language 
+○ Builds trust 
+○ Boosts Sales 
 Goal: entries covering most common mistakes
  
  
@@ -420,10 +420,10 @@ PAGE 9
  
 HOW AI WILL USE THIS 
 During Explanation Generation: 
-1.​ AI identifies root cause (e.g., Performance Anxiety) 
-2.​ AI checks table for that root cause 
-3.​ AI avoids all ❌ phrases for that condition 
-4.​ AI uses patterns from ✅ replacements 
+1. AI identifies root cause (e.g., Performance Anxiety) 
+2. AI checks table for that root cause 
+3. AI avoids all ❌ phrases for that condition 
+4. AI uses patterns from ✅ replacements 
 Example: 
 Root Cause Identified: Performance Anxiety 
  
@@ -436,10 +436,10 @@ AI checks table:
  
 VALIDATION 
 Before submitting, ensure: 
-●​ [ ] At least 25-30 wrong explanations documented 
-●​ [ ] Mix of all root cause types (ED, PE, hormonal, etc.) 
-●​ [ ] Includes objection handling mistakes 
-●​ [ ] Correct replacements are medically accurate 
+● [ ] At least 25-30 wrong explanations documented 
+● [ ] Mix of all root cause types (ED, PE, hormonal, etc.) 
+● [ ] Includes objection handling mistakes 
+● [ ] Correct replacements are medically accurate 
  
 
 ============================================================
@@ -447,8 +447,8 @@ PAGE 10
 ============================================================
 
  
-Document Version: 1.0​
- Created: October 27, 2025​
- For: AI Training - Forbidden Phrases​
+Document Version: 1.0 
+ Created: October 27, 2025 
+ For: AI Training - Forbidden Phrases 
  Update: Add new mistakes monthly as discovered 
  

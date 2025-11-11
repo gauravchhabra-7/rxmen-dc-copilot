@@ -7,13 +7,13 @@ RxMen Discovery Call Copilot
 Red Flags Checklist  
 Purpose: List of symptoms/conditions requiring immediate medical escalation (NOT standard 
 discovery call) 
-Instructions:​
+Instructions: 
 Please review and: 
-1.​ ✅ Confirm each red flag is correct 
-2.​ ✅ Inform the action for each 
-3.​ ➕ Add any missing red flags  
-4.​ ✏️ Modify actions if incorrect 
-5.​ 📝 Add notes if needed for specific cases 
+1. ✅ Confirm each red flag is correct 
+2. ✅ Inform the action for each 
+3. ➕ Add any missing red flags  
+4. ✏ Modify actions if incorrect 
+5. 📝 Add notes if needed for specific cases 
  
 RED FLAGS TABLE 
 # 
@@ -272,10 +272,10 @@ PAGE 4
 NOTES SECTION (Add Context) 
 Add any important notes here: 
 Example: 
-●​ "If user had heart attack >6 months ago AND has cardiologist clearance → can proceed 
+● "If user had heart attack >6 months ago AND has cardiologist clearance → can proceed 
 normally" 
-●​ "Nitrate medications: Specifically ask about nitroglycerin, isosorbide, etc." 
-●​ [Add your notes] 
+● "Nitrate medications: Specifically ask about nitroglycerin, isosorbide, etc." 
+● [Add your notes] 
  
  
  
@@ -301,17 +301,17 @@ PAGE 5
 
 HOW AI WILL USE THIS 
 During Discovery Call: 
-1.​ Agent fills form with user's symptoms/history 
-2.​ AI scans responses against this red flag list 
-3.​ If match found → AI immediately alerts agent: 
-○​ ⚠️ "RED FLAG DETECTED: [Condition]" 
-○​ "ACTION: [What to do]" 
-○​ "DO NOT proceed with standard root cause analysis" 
+1. Agent fills form with user's symptoms/history 
+2. AI scans responses against this red flag list 
+3. If match found → AI immediately alerts agent: 
+○ ⚠ "RED FLAG DETECTED: [Condition]" 
+○ "ACTION: [What to do]" 
+○ "DO NOT proceed with standard root cause analysis" 
 Agent then: 
-●​ Follows the action specified 
-●​ Escalates to appropriate doctor/department 
-●​ Does NOT give any treatment advice 
-Document Version: 1.0​
- Created: October 27, 2025​
+● Follows the action specified 
+● Escalates to appropriate doctor/department 
+● Does NOT give any treatment advice 
+Document Version: 1.0 
+ Created: October 27, 2025 
  For Review By: RxMen Team
  
