@@ -5,6 +5,7 @@ Handles patient form data submission and returns AI-generated diagnosis.
 """
 
 from fastapi import APIRouter, HTTPException, status
+import time
 from app.models.requests import FormDataRequest
 from app.models.responses import AnalysisResponse, ErrorResponse
 from app.services.rag_service import rag_service
@@ -30,9 +31,10 @@ async def analyze_patient_case(form_data: FormDataRequest):
 
     This endpoint:
     1. Receives form data from the discovery call
-    2. Retrieves relevant medical knowledge using RAG
-    3. Sends data + context to Claude API
-    4. Returns structured diagnosis with root causes
+    2. Retrieves relevant medical knowledge using RAG (Pinecone + OpenAI embeddings)
+    3. Loads system prompt (4 documents: red flags, analogies, wrong explanations, treatment)
+    4. Sends data + context + system prompt to Claude API
+    5. Returns structured diagnosis with 2 root causes + treatment recommendations
 
     Args:
         form_data: Complete patient form data from frontend
@@ -43,34 +45,72 @@ async def analyze_patient_case(form_data: FormDataRequest):
     Raises:
         HTTPException: If analysis fails or form data is invalid
     """
+    start_time = time.time()
 
     try:
-        logger.info(f"Received analysis request for patient age {form_data.age}, issue: {form_data.main_issue}")
+        logger.info("="*80)
+        logger.info(f"NEW ANALYSIS REQUEST")
+        logger.info(f"Patient: Age {form_data.age}, Issue: {form_data.main_issue.upper()}")
+        logger.info("="*80)
 
-        # Step 1: Check for emergency red flags
+        # Step 1: Check for emergency red flags in form data
         if form_data.emergency_red_flags and form_data.emergency_red_flags != "none":
-            logger.warning(f"Emergency red flag detected: {form_data.emergency_red_flags}")
-            # Red flags are handled by frontend, but we log for audit
-            pass
+            logger.warning(f"⚠️ Emergency red flag in form: {form_data.emergency_red_flags}")
+            # Note: Red flags will also be checked by Claude using system prompt
 
         # Step 2: Retrieve relevant medical knowledge using RAG
-        logger.info("Retrieving relevant medical context...")
-        medical_context = await rag_service.retrieve_context_for_diagnosis(
+        logger.info("Step 1: Retrieving relevant medical context (RAG)...")
+        rag_start = time.time()
+
+        rag_result = await rag_service.retrieve_context_for_diagnosis(
             form_data.model_dump()
         )
 
-        # Step 3: Analyze using Claude API
-        logger.info("Analyzing case with Claude API...")
+        rag_time = time.time() - rag_start
+        logger.info(f"✓ RAG retrieval completed in {rag_time:.2f}s")
+        logger.info(f"  - Query: {rag_result.get('query_used', '')[:100]}...")
+        logger.info(f"  - Chunks retrieved: {rag_result.get('chunks_retrieved', 0)}")
+
+        if rag_result.get('chunks'):
+            top_chunk = rag_result['chunks'][0]
+            logger.info(f"  - Top match: {top_chunk.get('chunk_id')} (score: {top_chunk.get('relevance_score', 0):.4f})")
+
+        # Step 3: Analyze using Claude API with system prompt + RAG context
+        logger.info("Step 2: Analyzing with Claude API...")
+        claude_start = time.time()
+
         analysis = await claude_service.analyze_case(
             form_data=form_data.model_dump(),
-            medical_context=medical_context
+            medical_context=rag_result.get('formatted_context', '')
         )
 
-        logger.info(f"Analysis completed successfully: {analysis.primary_diagnosis}")
+        claude_time = time.time() - claude_start
+        logger.info(f"✓ Claude analysis completed in {claude_time:.2f}s")
+
+        # Step 4: Log results
+        total_time = time.time() - start_time
+
+        logger.info("="*80)
+        logger.info("ANALYSIS COMPLETE")
+        logger.info(f"Primary Diagnosis: {analysis.primary_diagnosis}")
+        logger.info(f"Root Causes Found: {len(analysis.root_causes)}")
+
+        for i, cause in enumerate(analysis.root_causes, 1):
+            logger.info(f"  {i}. {cause.category} (confidence: {cause.confidence})")
+
+        logger.info(f"Red Flags: {len(analysis.red_flags)}")
+        logger.info(f"Requires Specialist: {analysis.requires_specialist}")
+
+        logger.info(f"\nPerformance:")
+        logger.info(f"  - RAG retrieval: {rag_time:.2f}s")
+        logger.info(f"  - Claude analysis: {claude_time:.2f}s")
+        logger.info(f"  - Total time: {total_time:.2f}s")
+        logger.info("="*80)
+
         return analysis
 
     except ValueError as e:
-        logger.error(f"Validation error during analysis: {str(e)}")
+        logger.error(f"❌ Validation error: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail={
@@ -81,7 +121,7 @@ async def analyze_patient_case(form_data: FormDataRequest):
         )
 
     except Exception as e:
-        logger.error(f"Unexpected error during analysis: {str(e)}", exc_info=True)
+        logger.error(f"❌ Unexpected error during analysis: {str(e)}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail={
@@ -100,8 +140,16 @@ async def test_analyze_endpoint():
     Returns:
         Test message confirming endpoint is accessible
     """
+    # Check service initialization
+    rag_status = "initialized" if rag_service.initialized else "not initialized"
+    claude_status = "initialized" if claude_service.client is not None else "not initialized"
+
     return {
-        "message": "Analyze endpoint is working",
+        "message": "Analyze endpoint is operational",
         "status": "ready",
-        "note": "Send POST request with FormDataRequest to /analyze for actual analysis"
+        "services": {
+            "rag_service": rag_status,
+            "claude_service": claude_status
+        },
+        "note": "Send POST request with FormDataRequest to /api/v1/analyze for actual analysis"
     }
