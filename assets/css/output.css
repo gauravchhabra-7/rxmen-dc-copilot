@@ -371,3 +371,449 @@
         flex-direction: column;
     }
 }
+/* ==================== NEW STYLES FOR BACKEND INTEGRATION ==================== */
+
+/* Loading State with Steps */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    min-height: 300px;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--brand-blue, #0066CC);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.loading-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--brand-dark-blue, #003366);
+    margin-bottom: 8px;
+}
+
+.loading-subtext {
+    font-size: 14px;
+    color: var(--color-gray-2, #666);
+    margin-bottom: 24px;
+}
+
+.loading-steps {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 16px;
+}
+
+.loading-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+.loading-step.active {
+    opacity: 1;
+    background: rgba(0, 102, 204, 0.1);
+}
+
+.step-icon {
+    font-size: 20px;
+}
+
+.step-text {
+    font-size: 14px;
+    color: var(--color-gray-1, #333);
+}
+
+/* Diagnosis Result */
+.diagnosis-result {
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+}
+
+.diagnosis-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #eee;
+}
+
+.diagnosis-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--brand-dark-blue, #003366);
+    margin-bottom: 12px;
+}
+
+.diagnosis-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-gray-2, #666);
+}
+
+.meta-icon {
+    font-size: 16px;
+}
+
+/* Root Causes */
+.root-causes {
+    margin-bottom: 24px;
+}
+
+.root-cause {
+    padding: 20px;
+    margin-bottom: 16px;
+    border-radius: 10px;
+    background: #f8f9fa;
+}
+
+.root-cause.primary {
+    border-left: 5px solid #28a745;
+    background: rgba(40, 167, 69, 0.05);
+}
+
+.root-cause.secondary {
+    border-left: 5px solid #0066CC;
+    background: rgba(0, 102, 204, 0.05);
+}
+
+.root-cause-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.root-cause-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-gray-1, #333);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-primary {
+    background: #28a745;
+    color: white;
+}
+
+.badge-secondary {
+    background: #0066CC;
+    color: white;
+}
+
+.confidence-badge {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.confidence-badge.high {
+    background: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+}
+
+.confidence-badge.medium {
+    background: rgba(0, 102, 204, 0.15);
+    color: #0066CC;
+}
+
+.medical-term {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--brand-dark-blue, #003366);
+    margin: 12px 0;
+}
+
+.simple-explanation {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-gray-1, #333);
+    margin: 12px 0;
+}
+
+.analogy-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    margin-top: 12px;
+    background: rgba(255, 193, 7, 0.1);
+    border-left: 3px solid #ffc107;
+    border-radius: 6px;
+}
+
+.analogy-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.analogy-text {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--color-gray-1, #333);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Treatment Section */
+.treatment-section {
+    padding: 20px;
+    background: rgba(0, 102, 204, 0.05);
+    border-radius: 10px;
+    margin-bottom: 16px;
+}
+
+.treatment-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--brand-dark-blue, #003366);
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.treatment-icon {
+    font-size: 22px;
+}
+
+.treatment-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-gray-1, #333);
+    margin: 0;
+}
+
+/* Diagnosis Footer */
+.diagnosis-footer {
+    display: flex;
+    gap: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+    flex-wrap: wrap;
+}
+
+.footer-item {
+    font-size: 12px;
+    color: var(--color-gray-2, #666);
+}
+
+/* Red Flag Alert */
+.red-flag-alert {
+    padding: 24px;
+    background: #fff4f4;
+    border: 3px solid #dc3545;
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.red-flag-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.red-flag-icon {
+    font-size: 32px;
+}
+
+.red-flag-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #dc3545;
+    margin: 0;
+}
+
+.red-flag-content {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.red-flag-message {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-gray-1, #333);
+    margin-bottom: 16px;
+    line-height: 1.6;
+}
+
+.red-flag-action {
+    padding: 12px;
+    background: rgba(220, 53, 69, 0.1);
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.red-flag-action strong {
+    display: block;
+    font-size: 14px;
+    color: #dc3545;
+    margin-bottom: 8px;
+}
+
+.red-flag-action p {
+    font-size: 14px;
+    color: var(--color-gray-1, #333);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.red-flag-severity {
+    font-size: 13px;
+}
+
+.severity-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.severity-badge.high {
+    background: #dc3545;
+    color: white;
+}
+
+.severity-badge.critical {
+    background: #c82333;
+    color: white;
+}
+
+/* Error State */
+.error-state {
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.error-icon {
+    font-size: 56px;
+    margin-bottom: 16px;
+}
+
+.error-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #dc3545;
+    margin-bottom: 12px;
+}
+
+.error-message {
+    font-size: 15px;
+    color: var(--color-gray-1, #333);
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.btn-retry {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--brand-blue, #0066CC);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-retry:hover {
+    background: #0052a3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 102, 204, 0.2);
+}
+
+.error-help {
+    margin-top: 24px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.error-help-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-gray-1, #333);
+    margin-bottom: 12px;
+}
+
+.error-help-list {
+    margin: 0;
+    padding-left: 24px;
+    font-size: 13px;
+    color: var(--color-gray-2, #666);
+    line-height: 1.7;
+}
+
+.error-help-list li {
+    margin-bottom: 6px;
+}
+
+.error-help-list code {
+    background: #e9ecef;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .diagnosis-title {
+        font-size: 20px;
+    }
+
+    .medical-term {
+        font-size: 18px;
+    }
+
+    .root-cause-header {
+        flex-direction: column;
+    }
+
+    .diagnosis-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+}

@@ -6,7 +6,7 @@
 // ==================== INITIALIZATION ====================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('=� RxMen Discovery Form Initializing...');
+    console.log('🚀 RxMen Discovery Form Initializing...');
 
     // Initialize modules
     window.sections.initializeSections();
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    console.log(' Form initialized successfully');
+    console.log('✅ Form initialized successfully');
 });
 
 // ==================== CONDITIONAL LOGIC ====================
@@ -130,7 +130,7 @@ function setupConditionalLogic() {
     handleMasturbationMethodChange();
     handleEDGatewayChange();
 
-    console.log(' Conditional logic set up');
+    console.log('✅ Conditional logic set up');
 }
 
 /**
@@ -363,7 +363,7 @@ function handleAgeRedFlags() {
     if (!warning || isNaN(age)) return;
 
     if (age < 18) {
-        warning.textContent = '=� RED FLAG: Patient is a minor. Cannot proceed with online consultation. Decline call and document.';
+        warning.textContent = '⚠️ RED FLAG: Patient is a minor. Cannot proceed with online consultation. Decline call and document.';
         warning.style.display = 'block';
         warning.style.background = '#FEE';
         warning.style.padding = '12px';
@@ -371,7 +371,7 @@ function handleAgeRedFlags() {
         warning.style.color = '#FF0000';
         warning.style.fontWeight = '600';
     } else if (age > 80) {
-        warning.textContent = '� WARNING: In-person consultation required for elderly patients (age 80+). Flag for doctor review.';
+        warning.textContent = '⚠️ WARNING: In-person consultation required for elderly patients (age 80+). Flag for doctor review.';
         warning.style.display = 'block';
         warning.style.background = '#FFF4E6';
         warning.style.padding = '12px';
@@ -474,7 +474,7 @@ function setupFormSubmission() {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        console.log('=� Form submitted');
+        console.log('📋 Form submitted');
 
         // Hide previous error banner
         window.validation.hideErrorBanner();
@@ -507,45 +507,43 @@ function setupFormSubmission() {
         }
 
         // All valid - proceed with submission
-        console.log(' Form is valid, submitting...');
+        console.log('✅ Form is valid, submitting...');
 
-        // Disable submit button
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Submitting...';
-        submitBtn.classList.add('loading');
+        // Show loading state
+        window.api.showLoadingState();
 
         // Get form data
         const formData = window.utils.getFormData(form);
 
         try {
-            // TODO: Integrate with Claude API + Google Sheets
-            // For now, just log the data
-            console.log('Form Data:', formData);
+            // Call backend API
+            console.log('📡 Calling backend API...');
+            const result = await window.api.analyzePatientCase(formData);
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            // Display diagnosis result
+            window.api.displayDiagnosis(result);
 
-            // Show success message
-            alert('Form submitted successfully!\\n\\nNext step: Integrate with Claude API for AI analysis.');
+            console.log('✅ Analysis complete');
 
-            // Clear form state
+            // Clear form state (auto-save data)
             window.utils.clearFormState();
 
-            // Reset form
-            //form.reset();
-
         } catch (error) {
-            console.error('Submission error:', error);
-            alert('Submission failed. Please try again.');
+            console.error('❌ Analysis failed:', error);
+
+            // Get user-friendly error message
+            const errorMessage = window.api.getErrorMessage(error);
+
+            // Display error
+            window.api.displayError(errorMessage);
+
         } finally {
-            // Re-enable submit button
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Submit Form';
-            submitBtn.classList.remove('loading');
+            // Hide loading state
+            window.api.hideLoadingState();
         }
     });
 
-    console.log(' Form submission handler set up');
+    console.log('✅ Form submission handler set up');
 }
 
 // ==================== AUTO-SAVE ====================
@@ -559,7 +557,7 @@ function setupAutoSave() {
     // Save on form changes (debounced)
     // Already handled by conditional logic listener
 
-    console.log(' Auto-save enabled');
+    console.log('✅ Auto-save enabled');
 }
 
 // ==================== SPECIAL INTERACTIONS ====================
@@ -600,10 +598,10 @@ function setupSpecialInteractions() {
         ftToggle.addEventListener('click', () => handleHeightUnitToggle(ftToggle));
     }
 
-    console.log(' Special interactions set up');
+    console.log('✅ Special interactions set up');
 }
 
-console.log(' Main.js loaded');
+console.log('✅ Main.js loaded');
 
 // ==================== PREVENT ENTER KEY SUBMISSION ====================
 
