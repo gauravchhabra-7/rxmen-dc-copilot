@@ -25,7 +25,8 @@ class Settings(BaseSettings):
     port: int = 8000
 
     # CORS Settings (frontend URLs that can access this API)
-    cors_origins: str = "http://localhost:3000,http://localhost:8080,http://127.0.0.1:3000,http://127.0.0.1:8080"
+    # NOTE: "null" allows file:// protocol for local HTML testing
+    cors_origins: str = "http://localhost:3000,http://localhost:8080,http://127.0.0.1:3000,http://127.0.0.1:8080,null"
 
     @property
     def cors_origins_list(self) -> list[str]:
