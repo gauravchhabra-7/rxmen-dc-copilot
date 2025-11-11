@@ -55,6 +55,9 @@ class Settings(BaseSettings):
     # Data Paths
     medical_knowledge_path: str = "../data/extracted_text"
 
+    # Logging
+    log_level: str = "INFO"
+
     class Config:
         """Pydantic configuration."""
         env_file = ".env"
