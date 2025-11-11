@@ -80,13 +80,39 @@ def test_anthropic_api():
 
         # Test with a simple message
         print_info("Sending test message to Claude...")
-        message = client.messages.create(
-            model="claude-3-sonnet-20240229",
-            max_tokens=50,
-            messages=[
-                {"role": "user", "content": "Respond with only: API test successful"}
-            ]
-        )
+
+        # Try multiple model names in case some are deprecated
+        models_to_try = [
+            "claude-3-5-sonnet-20241022",
+            "claude-3-5-sonnet-20240620",
+            "claude-3-opus-20240229",
+            "claude-3-sonnet-20240229"
+        ]
+
+        message = None
+        last_error = None
+
+        for model_name in models_to_try:
+            try:
+                print_info(f"Trying model: {model_name}")
+                message = client.messages.create(
+                    model=model_name,
+                    max_tokens=50,
+                    messages=[
+                        {"role": "user", "content": "Respond with only: API test successful"}
+                    ]
+                )
+                print_info(f"Success with model: {model_name}")
+                break
+            except Exception as e:
+                last_error = e
+                if "not_found_error" in str(e):
+                    continue
+                else:
+                    raise
+
+        if message is None:
+            raise last_error
 
         response_text = message.content[0].text
         print_info(f"Response: {response_text}")
