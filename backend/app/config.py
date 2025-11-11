@@ -48,9 +48,9 @@ class Settings(BaseSettings):
     pinecone_index_name: str = "rxmen-medical-knowledge"
 
     # RAG Settings
-    rag_top_k: int = 5  # Number of relevant chunks to retrieve
-    rag_chunk_size: int = 800  # Tokens per chunk
-    rag_chunk_overlap: int = 100  # Overlap between chunks
+    rag_top_k: int = 8  # Number of chunks to retrieve (per handoff doc specification)
+    rag_chunk_size: int = 800  # Target tokens per chunk (actual avg: 731 tokens)
+    rag_chunk_overlap: int = 75  # Overlap between chunks (as implemented)
 
     # Data Paths
     medical_knowledge_path: str = "../data/extracted_text"
