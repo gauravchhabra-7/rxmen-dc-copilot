@@ -21,6 +21,82 @@
     // ==================== API CLIENT ====================
 
     /**
+     * Transform frontend form data to match backend API schema
+     * @param {Object} formData - Raw form data from frontend
+     * @returns {Object} Transformed data matching backend schema
+     */
+    function transformFormDataForBackend(formData) {
+        const transformed = {};
+
+        // Field name mappings (frontend_name -> backend_name)
+        const fieldMappings = {
+            'weight_kg': 'weight',
+            'height_feet': 'height_ft',
+            'height_inches': 'height_in',
+            'alcohol_frequency': 'alcohol_consumption',
+            'smoking_frequency': 'smoking_status',
+            'substance_consumption': 'substance_consumption', // Keep as-is
+            'additional_information': 'additional_info'
+        };
+
+        // Fields to exclude (not in backend model)
+        const excludeFields = [
+            'full_name',
+            'city',
+            'occupation',
+            'issue_duration',
+            'issue_context',
+            'medical_conditions_other',
+            'current_medications_other'
+        ];
+
+        // Process all form fields
+        for (const [key, value] of Object.entries(formData)) {
+            // Skip excluded fields
+            if (excludeFields.includes(key)) {
+                continue;
+            }
+
+            // Map field name or keep original
+            const backendKey = fieldMappings[key] || key;
+
+            // Handle checkbox arrays that need to remain arrays
+            if (Array.isArray(value)) {
+                transformed[backendKey] = value;
+            }
+            // Handle numeric fields
+            else if (key === 'age' || key === 'weight_kg') {
+                transformed[backendKey] = parseFloat(value);
+            }
+            else if (key === 'height_cm' || key === 'height_feet' || key === 'height_inches') {
+                // Only include if not empty
+                if (value !== '' && value !== null) {
+                    transformed[backendKey] = parseFloat(value);
+                }
+            }
+            // Handle all other fields
+            else {
+                transformed[backendKey] = value;
+            }
+        }
+
+        // Ensure required array fields exist
+        if (!transformed.medical_conditions) {
+            transformed.medical_conditions = [];
+        }
+        if (!transformed.current_medications) {
+            transformed.current_medications = [];
+        }
+
+        // Set defaults for optional fields if not present
+        if (!transformed.substance_consumption) {
+            transformed.substance_consumption = null;
+        }
+
+        return transformed;
+    }
+
+    /**
      * Call backend /analyze endpoint
      * @param {Object} formData - Patient form data
      * @returns {Promise<Object>} Analysis result
@@ -28,8 +104,12 @@
     async function analyzePatientCase(formData) {
         const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ANALYZE}`;
 
-        console.log('=á Calling backend API:', url);
-        console.log('=ä Request payload:', formData);
+        // Transform form data to match backend schema
+        const transformedData = transformFormDataForBackend(formData);
+
+        console.log('=ï¿½ Calling backend API:', url);
+        console.log('=ï¿½ Original form data:', formData);
+        console.log('=ï¿½ Transformed payload:', transformedData);
 
         try {
             const controller = new AbortController();
@@ -41,13 +121,13 @@
                     'Content-Type': 'application/json',
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify(formData),
+                body: JSON.stringify(transformedData),
                 signal: controller.signal
             });
 
             clearTimeout(timeoutId);
 
-            console.log('=å Response status:', response.status);
+            console.log('=ï¿½ Response status:', response.status);
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
@@ -178,11 +258,11 @@
                             <span class="step-text">Retrieving medical knowledge...</span>
                         </div>
                         <div class="loading-step" id="step-2">
-                            <span class="step-icon">>à</span>
+                            <span class="step-icon">>ï¿½</span>
                             <span class="step-text">AI analysis in progress...</span>
                         </div>
                         <div class="loading-step" id="step-3">
-                            <span class="step-icon">=Ë</span>
+                            <span class="step-icon">=ï¿½</span>
                             <span class="step-text">Generating diagnosis...</span>
                         </div>
                     </div>
@@ -245,11 +325,11 @@
                     <h3 class="diagnosis-title"> Diagnosis Complete</h3>
                     <div class="diagnosis-meta">
                         <span class="meta-item">
-                            <span class="meta-icon">ñ</span>
+                            <span class="meta-icon">ï¿½</span>
                             ${(result.processing_time_ms / 1000).toFixed(2)}s
                         </span>
                         <span class="meta-item">
-                            <span class="meta-icon">=Ú</span>
+                            <span class="meta-icon">=ï¿½</span>
                             ${result.retrieval_chunks_used || 0} knowledge chunks
                         </span>
                     </div>
@@ -271,7 +351,7 @@
                         <p class="simple-explanation">${escapeHtml(result.primary_root_cause.simple_explanation)}</p>
                         ${result.primary_root_cause.analogy ? `
                             <div class="analogy-box">
-                                <span class="analogy-icon">=¡</span>
+                                <span class="analogy-icon">=ï¿½</span>
                                 <p class="analogy-text">${escapeHtml(result.primary_root_cause.analogy)}</p>
                             </div>
                         ` : ''}
@@ -292,7 +372,7 @@
                         <p class="simple-explanation">${escapeHtml(result.secondary_root_cause.simple_explanation)}</p>
                         ${result.secondary_root_cause.analogy ? `
                             <div class="analogy-box">
-                                <span class="analogy-icon">=¡</span>
+                                <span class="analogy-icon">=ï¿½</span>
                                 <p class="analogy-text">${escapeHtml(result.secondary_root_cause.analogy)}</p>
                             </div>
                         ` : ''}
@@ -302,7 +382,7 @@
                 <!-- Treatment Recommendation -->
                 <div class="treatment-section">
                     <h4 class="treatment-title">
-                        <span class="treatment-icon">=Š</span>
+                        <span class="treatment-icon">=ï¿½</span>
                         Treatment Recommendation
                     </h4>
                     <p class="treatment-text">${escapeHtml(result.treatment_recommendation)}</p>
@@ -340,7 +420,7 @@
         const html = `
             <div class="red-flag-alert">
                 <div class="red-flag-header">
-                    <span class="red-flag-icon"> </span>
+                    <span class="red-flag-icon">ï¿½</span>
                     <h3 class="red-flag-title">Red Flag Detected</h3>
                 </div>
                 <div class="red-flag-content">
