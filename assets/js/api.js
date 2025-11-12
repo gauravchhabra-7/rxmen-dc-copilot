@@ -18,83 +18,81 @@
         LANGUAGE: 'hinglish' // default language
     };
 
-    // ==================== API CLIENT ====================
+    // ==================== DATA TRANSFORMATION ====================
 
     /**
      * Transform frontend form data to match backend API schema
+     * Handles field name mapping, type conversion, and data cleanup
      * @param {Object} formData - Raw form data from frontend
      * @returns {Object} Transformed data matching backend schema
      */
     function transformFormDataForBackend(formData) {
         const transformed = {};
 
-        // Field name mappings (frontend_name -> backend_name)
+        // Field name mappings (frontend → backend)
         const fieldMappings = {
             'weight_kg': 'weight',
             'height_feet': 'height_ft',
             'height_inches': 'height_in',
             'alcohol_frequency': 'alcohol_consumption',
             'smoking_frequency': 'smoking_status',
-            'substance_consumption': 'substance_consumption', // Keep as-is
             'additional_information': 'additional_info'
         };
 
-        // Fields to exclude (not in backend model)
+        // Fields to convert to integers
+        const intFields = ['age', 'height_ft', 'height_in'];
+
+        // Fields to convert to floats
+        const floatFields = ['weight', 'height_cm'];
+
+        // Fields to ensure are arrays
+        const arrayFields = ['medical_conditions', 'current_medications', 'previous_treatments'];
+
+        // Fields to exclude (not in backend schema)
         const excludeFields = [
-            'full_name',
-            'city',
-            'occupation',
-            'issue_duration',
-            'issue_context',
-            'medical_conditions_other',
-            'current_medications_other'
+            'full_name', 'city', 'occupation', 'issue_context', 'issue_duration',
+            'pe_partner_type', 'pe_partner_ejaculation_time', 'pe_partner_penile_sensitivity',
+            'medical_conditions_other', 'current_medications_other'
         ];
 
-        // Process all form fields
-        for (const [key, value] of Object.entries(formData)) {
+        // Process each field
+        for (let [key, value] of Object.entries(formData)) {
             // Skip excluded fields
             if (excludeFields.includes(key)) {
                 continue;
             }
 
-            // Map field name or keep original
-            const backendKey = fieldMappings[key] || key;
+            // Map field name if needed
+            const mappedKey = fieldMappings[key] || key;
 
-            // Handle checkbox arrays that need to remain arrays
-            if (Array.isArray(value)) {
-                transformed[backendKey] = value;
+            // Handle empty values
+            if (value === '' || value === null || value === undefined) {
+                // For optional fields, set to null
+                transformed[mappedKey] = null;
+                continue;
             }
-            // Handle numeric fields
-            else if (key === 'age' || key === 'weight_kg') {
-                transformed[backendKey] = parseFloat(value);
-            }
-            else if (key === 'height_cm' || key === 'height_feet' || key === 'height_inches') {
-                // Only include if not empty
-                if (value !== '' && value !== null) {
-                    transformed[backendKey] = parseFloat(value);
-                }
-            }
-            // Handle all other fields
-            else {
-                transformed[backendKey] = value;
-            }
-        }
 
-        // Ensure required array fields exist
-        if (!transformed.medical_conditions) {
-            transformed.medical_conditions = [];
-        }
-        if (!transformed.current_medications) {
-            transformed.current_medications = [];
+            // Convert to appropriate type
+            if (intFields.includes(mappedKey)) {
+                transformed[mappedKey] = parseInt(value, 10);
+            } else if (floatFields.includes(mappedKey)) {
+                transformed[mappedKey] = parseFloat(value);
+            } else if (arrayFields.includes(mappedKey)) {
+                // Ensure it's an array
+                transformed[mappedKey] = Array.isArray(value) ? value : [value];
+            } else {
+                transformed[mappedKey] = value;
+            }
         }
 
-        // Set defaults for optional fields if not present
-        if (!transformed.substance_consumption) {
-            transformed.substance_consumption = null;
-        }
+        // Add metadata
+        transformed.form_version = '2.2';
+        transformed.submitted_at = new Date().toISOString();
 
         return transformed;
     }
+
+    // ==================== API CLIENT ====================
 
     /**
      * Call backend /analyze endpoint
@@ -104,12 +102,12 @@
     async function analyzePatientCase(formData) {
         const url = `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.ANALYZE}`;
 
-        // Transform form data to match backend schema
-        const transformedData = transformFormDataForBackend(formData);
+        console.log('📡 Calling backend API:', url);
+        console.log('📦 Raw form data:', formData);
 
-        console.log('=� Calling backend API:', url);
-        console.log('=� Original form data:', formData);
-        console.log('=� Transformed payload:', transformedData);
+        // Transform data to match backend schema
+        const transformedData = transformFormDataForBackend(formData);
+        console.log('✨ Transformed payload:', transformedData);
 
         try {
             const controller = new AbortController();

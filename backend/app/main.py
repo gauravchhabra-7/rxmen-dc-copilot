@@ -5,9 +5,10 @@ Main application entry point. Configures FastAPI app with routes, middleware,
 and dependencies.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 from app.config import settings
 from app.api.routes import health, analyze
 from app.utils.logger import setup_logger
@@ -52,7 +53,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,
-    allow_credentials=False,
+    allow_credentials=False,  # Set to False to allow null origin (file:// protocol)
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -104,6 +105,38 @@ async def shutdown_event():
     """
     logger.info("Shutting down application...")
     # Add cleanup logic here if needed
+
+
+# Validation error handler (for 422 errors)
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    """
+    Handle validation errors (422) and log details.
+
+    Args:
+        request: The request that caused the validation error
+        exc: The validation exception with error details
+
+    Returns:
+        JSON response with detailed validation errors
+    """
+    logger.error("❌ Validation Error (422):")
+    logger.error(f"Request URL: {request.url}")
+    logger.error(f"Validation errors: {exc.errors()}")
+
+    # Log each error in detail
+    for error in exc.errors():
+        logger.error(f"  - Field: {error.get('loc')}, Type: {error.get('type')}, Message: {error.get('msg')}")
+
+    return JSONResponse(
+        status_code=422,
+        content={
+            "success": False,
+            "error": "ValidationError",
+            "message": "Request validation failed",
+            "details": exc.errors()
+        }
+    )
 
 
 # Global exception handler

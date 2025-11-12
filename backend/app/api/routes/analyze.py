@@ -21,6 +21,7 @@ router = APIRouter()
     response_model=AnalysisResponse,
     responses={
         400: {"model": ErrorResponse, "description": "Invalid form data"},
+        422: {"model": ErrorResponse, "description": "Validation error"},
         500: {"model": ErrorResponse, "description": "Server error"}
     },
     tags=["Analysis"]
