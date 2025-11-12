@@ -65,7 +65,21 @@
             // Map field name if needed
             const mappedKey = fieldMappings[key] || key;
 
-            // Handle empty values
+            // SPECIAL HANDLING: Array fields must always be arrays (even for single values)
+            if (arrayFields.includes(mappedKey)) {
+                // Convert to array if not already
+                if (Array.isArray(value)) {
+                    transformed[mappedKey] = value;
+                } else if (value === '' || value === null || value === undefined) {
+                    transformed[mappedKey] = [];
+                } else {
+                    // Single value -> wrap in array
+                    transformed[mappedKey] = [value];
+                }
+                continue;
+            }
+
+            // Handle empty values for non-array fields
             if (value === '' || value === null || value === undefined) {
                 // For optional fields, set to null
                 transformed[mappedKey] = null;
@@ -77,9 +91,6 @@
                 transformed[mappedKey] = parseInt(value, 10);
             } else if (floatFields.includes(mappedKey)) {
                 transformed[mappedKey] = parseFloat(value);
-            } else if (arrayFields.includes(mappedKey)) {
-                // Ensure it's an array
-                transformed[mappedKey] = Array.isArray(value) ? value : [value];
             } else {
                 transformed[mappedKey] = value;
             }
