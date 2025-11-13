@@ -327,19 +327,59 @@
             return;
         }
 
+        // Helper: Convert confidence string to score
+        const confidenceToScore = (confidence) => {
+            const map = { 'high': 0.9, 'medium': 0.7, 'low': 0.5 };
+            return map[confidence?.toLowerCase()] || 0.7;
+        };
+
+        // Helper: Get confidence badge class
+        const getConfidenceBadgeClass = (confidence) => {
+            const lower = confidence?.toLowerCase();
+            if (lower === 'high') return 'high';
+            if (lower === 'low') return 'low';
+            return 'medium';
+        };
+
+        // Extract root causes (handle both old and new response formats)
+        const primaryCause = result.root_causes?.[0] || result.primary_root_cause;
+        const secondaryCause = result.root_causes?.[1] || result.secondary_root_cause;
+
+        // Calculate metadata
+        const sourcesCount = result.sources_used?.length || result.retrieval_chunks_used || 0;
+        const processingTime = result.processing_time_ms || 0;
+
+        // Format treatment recommendations
+        let treatmentHtml = '';
+        if (result.recommended_actions && result.recommended_actions.length > 0) {
+            treatmentHtml = result.recommended_actions
+                .map(action => `
+                    <div class="treatment-action">
+                        <strong>${action.action_type}:</strong> ${escapeHtml(action.description)}
+                        <span class="priority-badge ${action.priority}">${action.priority}</span>
+                    </div>
+                `).join('');
+        } else if (result.treatment_recommendation) {
+            treatmentHtml = `<p class="treatment-text">${escapeHtml(result.treatment_recommendation)}</p>`;
+        } else if (result.summary) {
+            treatmentHtml = `<p class="treatment-text">${escapeHtml(result.summary)}</p>`;
+        }
+
         // Display normal diagnosis
         const html = `
             <div class="diagnosis-result">
                 <div class="diagnosis-header">
-                    <h3 class="diagnosis-title"> Diagnosis Complete</h3>
+                    <h3 class="diagnosis-title">✅ ${escapeHtml(result.primary_diagnosis || 'Diagnosis Complete')}</h3>
                     <div class="diagnosis-meta">
+                        ${processingTime > 0 ? `
                         <span class="meta-item">
-                            <span class="meta-icon">�</span>
-                            ${(result.processing_time_ms / 1000).toFixed(2)}s
+                            <span class="meta-icon">⏱️</span>
+                            ${(processingTime / 1000).toFixed(2)}s
                         </span>
+                        ` : ''}
                         <span class="meta-item">
-                            <span class="meta-icon">=�</span>
-                            ${result.retrieval_chunks_used || 0} knowledge chunks
+                            <span class="meta-icon">📚</span>
+                            ${sourcesCount} knowledge chunks
                         </span>
                     </div>
                 </div>
@@ -352,16 +392,16 @@
                                 <span class="badge badge-primary">PRIMARY</span>
                                 Root Cause #1
                             </h4>
-                            <span class="confidence-badge high">
-                                ${Math.round((result.primary_root_cause.confidence_score || 0) * 100)}% Confidence
+                            <span class="confidence-badge ${getConfidenceBadgeClass(primaryCause.confidence)}">
+                                ${Math.round(confidenceToScore(primaryCause.confidence) * 100)}% Confidence
                             </span>
                         </div>
-                        <p class="medical-term">${escapeHtml(result.primary_root_cause.medical_term)}</p>
-                        <p class="simple-explanation">${escapeHtml(result.primary_root_cause.simple_explanation)}</p>
-                        ${result.primary_root_cause.analogy ? `
+                        <p class="medical-term">${escapeHtml(primaryCause.category || primaryCause.medical_term)}</p>
+                        <p class="simple-explanation">${escapeHtml(primaryCause.explanation || primaryCause.simple_explanation)}</p>
+                        ${primaryCause.analogy ? `
                             <div class="analogy-box">
                                 <span class="analogy-icon">=�</span>
-                                <p class="analogy-text">${escapeHtml(result.primary_root_cause.analogy)}</p>
+                                <p class="analogy-text">${escapeHtml(primaryCause.analogy)}</p>
                             </div>
                         ` : ''}
                     </div>
@@ -373,28 +413,28 @@
                                 <span class="badge badge-secondary">SECONDARY</span>
                                 Root Cause #2
                             </h4>
-                            <span class="confidence-badge medium">
-                                ${Math.round((result.secondary_root_cause.confidence_score || 0) * 100)}% Confidence
+                            <span class="confidence-badge ${getConfidenceBadgeClass(secondaryCause.confidence)}">
+                                ${Math.round(confidenceToScore(secondaryCause.confidence) * 100)}% Confidence
                             </span>
                         </div>
-                        <p class="medical-term">${escapeHtml(result.secondary_root_cause.medical_term)}</p>
-                        <p class="simple-explanation">${escapeHtml(result.secondary_root_cause.simple_explanation)}</p>
-                        ${result.secondary_root_cause.analogy ? `
+                        <p class="medical-term">${escapeHtml(secondaryCause.category || secondaryCause.medical_term)}</p>
+                        <p class="simple-explanation">${escapeHtml(secondaryCause.explanation || secondaryCause.simple_explanation)}</p>
+                        ${secondaryCause.analogy ? `
                             <div class="analogy-box">
                                 <span class="analogy-icon">=�</span>
-                                <p class="analogy-text">${escapeHtml(result.secondary_root_cause.analogy)}</p>
+                                <p class="analogy-text">${escapeHtml(secondaryCause.analogy)}</p>
                             </div>
                         ` : ''}
                     </div>
                 </div>
 
-                <!-- Treatment Recommendation -->
+                <!-- Treatment Recommendations -->
                 <div class="treatment-section">
                     <h4 class="treatment-title">
                         <span class="treatment-icon">=�</span>
-                        Treatment Recommendation
+                        Treatment Recommendations
                     </h4>
-                    <p class="treatment-text">${escapeHtml(result.treatment_recommendation)}</p>
+                    ${treatmentHtml}
                 </div>
 
                 <!-- Additional Info -->
