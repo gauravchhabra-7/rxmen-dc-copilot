@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RxMen Discovery Call Copilot</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="app-header">
+        <div class="container">
+            <div class="header-content">
+                <img src="rxmen-logo.png" alt="RxMen" class="logo">
+                <h1>Discovery Call Copilot</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container main-container">
+        <div class="layout-wrapper">
+
+            <!-- Left: Form Section (60%) -->
+            <section class="form-section">
+                <div class="form-container">
+                    <h2>Patient Information</h2>
+
+                    <form id="discoveryForm">
+                        <!-- Demographics -->
+                        <div class="form-group">
+                            <label for="age">Age *</label>
+                            <input type="number" id="age" name="age" min="18" max="120" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="height_cm">Height (cm) *</label>
+                                <input type="number" id="height_cm" name="height_cm" min="100" max="250" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="weight">Weight (kg) *</label>
+                                <input type="number" id="weight" name="weight" min="30" max="200" required>
+                            </div>
+                        </div>
+
+                        <!-- Main Concern -->
+                        <div class="form-group">
+                            <label>Main Concern *</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="main_issue" value="ed" required>
+                                    <span>Erectile Dysfunction (ED)</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="main_issue" value="pe">
+                                    <span>Premature Ejaculation (PE)</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="main_issue" value="both">
+                                    <span>Both ED and PE</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Emergency Red Flags -->
+                        <div class="form-group">
+                            <label>Emergency Red Flags *</label>
+                            <select id="emergency_red_flags" name="emergency_red_flags" required>
+                                <option value="">Select...</option>
+                                <option value="none">None</option>
+                                <option value="severe_pain">Severe genital pain</option>
+                                <option value="blood">Blood in urine/semen</option>
+                                <option value="priapism">Prolonged erection (4+ hours)</option>
+                            </select>
+                        </div>
+
+                        <!-- Medical History -->
+                        <div class="form-group">
+                            <label>Medical Conditions</label>
+                            <div class="checkbox-group">
+                                <label><input type="checkbox" name="medical_conditions" value="diabetes"> Diabetes</label>
+                                <label><input type="checkbox" name="medical_conditions" value="hypertension"> High Blood Pressure</label>
+                                <label><input type="checkbox" name="medical_conditions" value="heart_disease"> Heart Disease</label>
+                                <label><input type="checkbox" name="medical_conditions" value="none"> None</label>
+                            </div>
+                        </div>
+
+                        <!-- Lifestyle -->
+                        <div class="form-group">
+                            <label>Smoking Status *</label>
+                            <select name="smoking_status" required>
+                                <option value="">Select...</option>
+                                <option value="never">Never</option>
+                                <option value="former">Former smoker</option>
+                                <option value="current">Current smoker</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Alcohol Consumption *</label>
+                            <select name="alcohol_consumption" required>
+                                <option value="">Select...</option>
+                                <option value="never">Never</option>
+                                <option value="once_week">Once a week</option>
+                                <option value="2_3_week">2-3 times a week</option>
+                                <option value="daily">Daily</option>
+                            </select>
+                        </div>
+
+                        <!-- Behavioral -->
+                        <div class="form-group">
+                            <label>Relationship Status *</label>
+                            <select name="relationship_status" required>
+                                <option value="">Select...</option>
+                                <option value="single">Single</option>
+                                <option value="in_relationship">In a relationship</option>
+                                <option value="married">Married</option>
+                                <option value="divorced">Divorced</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Masturbation Grip *</label>
+                            <select name="masturbation_grip" required>
+                                <option value="">Select...</option>
+                                <option value="normal">Normal</option>
+                                <option value="tight">Tight</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Pornography Usage *</label>
+                            <select name="porn_frequency" required>
+                                <option value="">Select...</option>
+                                <option value="never">Never</option>
+                                <option value="1_2_week">1-2 times per week</option>
+                                <option value="3_5_week">3-5 times per week</option>
+                                <option value="daily">Daily</option>
+                            </select>
+                        </div>
+
+                        <!-- PE Specific (conditional) -->
+                        <div id="peSection" class="conditional-section" style="display: none;">
+                            <h3>PE-Specific Questions</h3>
+
+                            <div class="form-group">
+                                <label>Time to Ejaculation with Partner *</label>
+                                <select name="pe_partner_time_to_ejaculation">
+                                    <option value="">Select...</option>
+                                    <option value="less_1_min">Less than 1 minute</option>
+                                    <option value="1_2_min">1-2 minutes</option>
+                                    <option value="2_5_min">2-5 minutes</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Control During Partnered Sex *</label>
+                                <select name="pe_partner_control">
+                                    <option value="">Select...</option>
+                                    <option value="no_control">No control</option>
+                                    <option value="little_control">Little control</option>
+                                    <option value="moderate_control">Moderate control</option>
+                                    <option value="good_control">Good control</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Control During Masturbation *</label>
+                                <select name="pe_partner_masturbation_control">
+                                    <option value="">Select...</option>
+                                    <option value="no_control">No control</option>
+                                    <option value="little_control">Little control</option>
+                                    <option value="moderate_control">Moderate control</option>
+                                    <option value="good_control">Good control</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- ED Specific (conditional) -->
+                        <div id="edSection" class="conditional-section" style="display: none;">
+                            <h3>ED-Specific Questions</h3>
+
+                            <div class="form-group">
+                                <label>Morning Erections *</label>
+                                <select name="ed_morning_erections">
+                                    <option value="">Select...</option>
+                                    <option value="yes">Yes, regularly</option>
+                                    <option value="sometimes">Sometimes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Erections During Masturbation *</label>
+                                <select name="ed_masturbation_imagination">
+                                    <option value="">Select...</option>
+                                    <option value="yes">Yes</option>
+                                    <option value="sometimes">Sometimes</option>
+                                    <option value="no">No</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Erection Maintenance with Partner *</label>
+                                <select name="ed_partner_maintenance">
+                                    <option value="">Select...</option>
+                                    <option value="easy">Easy to maintain</option>
+                                    <option value="difficult">Difficult to maintain</option>
+                                    <option value="impossible">Cannot maintain</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Other Fields (simplified for MVP) -->
+                        <input type="hidden" name="current_medications" value="none">
+                        <input type="hidden" name="spinal_genital_surgery" value="no">
+                        <input type="hidden" name="sleep_quality" value="good">
+                        <input type="hidden" name="physical_activity" value="moderate">
+                        <input type="hidden" name="masturbation_method" value="hands">
+                        <input type="hidden" name="masturbation_frequency" value="3_to_7">
+                        <input type="hidden" name="first_consultation" value="yes">
+                        <input type="hidden" name="pe_sexual_activity_status" value="yes">
+                        <input type="hidden" name="ed_sexual_activity_status" value="yes">
+                        <input type="hidden" name="ed_gets_erections" value="yes">
+                        <input type="hidden" name="pe_partner_satisfaction" value="no">
+
+                        <!-- Submit Button -->
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary" id="analyzeBtn">
+                                Analyze Patient Case
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Loading State -->
+                    <div id="loadingState" class="loading-state" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Analyzing patient data...</p>
+                        <small>This may take 30-90 seconds</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right: Results Section (40%) -->
+            <section class="results-section">
+                <div class="results-container">
+                    <!-- Empty State -->
+                    <div id="emptyState" class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <h3>Ready to Analyze</h3>
+                        <p>Fill in the patient information and click "Analyze Patient Case" to get AI-powered root cause diagnosis.</p>
+                    </div>
+
+                    <!-- Results Display -->
+                    <div id="resultsDisplay" class="results-display" style="display: none;">
+                        <!-- Root Causes -->
+                        <div class="result-section">
+                            <h3 class="section-title">ROOT CAUSES</h3>
+                            <div class="divider"></div>
+
+                            <div class="root-cause-item">
+                                <label class="cause-label">PRIMARY ROOT CAUSE</label>
+                                <p class="cause-value" id="primaryCause">-</p>
+                            </div>
+
+                            <div class="root-cause-item">
+                                <label class="cause-label">SECONDARY ROOT CAUSE</label>
+                                <p class="cause-value" id="secondaryCause">-</p>
+                            </div>
+                        </div>
+
+                        <div class="divider-thick"></div>
+
+                        <!-- Agent Script -->
+                        <div class="result-section">
+                            <h3 class="section-title">AGENT SCRIPT</h3>
+                            <div class="divider"></div>
+                            <div class="script-box" id="agentScript">
+                                Loading...
+                            </div>
+                        </div>
+
+                        <div class="divider-thick"></div>
+
+                        <!-- Treatment Plan -->
+                        <div class="result-section">
+                            <h3 class="section-title">TREATMENT PLAN</h3>
+                            <div class="divider"></div>
+                            <div class="treatment-box" id="treatmentPlan">
+                                Loading...
+                            </div>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="result-actions">
+                            <button class="btn-secondary" id="copyBtn">Copy Script</button>
+                            <button class="btn-secondary" id="resetBtn">New Analysis</button>
+                        </div>
+                    </div>
+
+                    <!-- Error State -->
+                    <div id="errorState" class="error-state" style="display: none;">
+                        <div class="error-icon">⚠️</div>
+                        <h3>Analysis Failed</h3>
+                        <p id="errorMessage">An error occurred. Please try again.</p>
+                        <button class="btn-secondary" id="retryBtn">Retry</button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="assets/js/main.js"></script>
+</body>
+</html>
