@@ -332,9 +332,32 @@
         const primaryCause = result.root_causes?.[0];
         const secondaryCause = result.root_causes?.[1];
 
-        // Primary & Secondary root causes (medical terms only)
-        const primaryTerm = primaryCause?.category || 'Unknown';
-        const secondaryTerm = secondaryCause?.category || 'Unknown';
+        // Helper: Extract first sentence from explanation (up to 50 words or first period)
+        const getSimpleExplanation = (explanation) => {
+            if (!explanation) return '';
+            // Get first sentence (up to first period or 50 words)
+            const firstSentence = explanation.split(/\.\s+/)[0];
+            const words = firstSentence.split(/\s+/);
+            if (words.length > 50) {
+                return words.slice(0, 50).join(' ') + '...';
+            }
+            return firstSentence;
+        };
+
+        // Format root causes: [Simple explanation] ([Medical Term])
+        const formatRootCause = (cause) => {
+            if (!cause) return 'Unknown';
+            const medicalTerm = cause.category || 'Unknown';
+            const simpleExplanation = getSimpleExplanation(cause.explanation);
+
+            if (simpleExplanation) {
+                return `${simpleExplanation} (${medicalTerm})`;
+            }
+            return medicalTerm;
+        };
+
+        const primaryDisplay = formatRootCause(primaryCause);
+        const secondaryDisplay = formatRootCause(secondaryCause);
 
         // Agent script: Combine both explanations
         const agentScript = [
@@ -350,12 +373,12 @@
             <div class="clean-diagnosis-result">
                 <div class="cause-section">
                     <h4 class="cause-label">PRIMARY ROOT CAUSE</h4>
-                    <p class="medical-term">${escapeHtml(primaryTerm)}</p>
+                    <p class="medical-term">${escapeHtml(primaryDisplay)}</p>
                 </div>
 
                 <div class="cause-section">
                     <h4 class="cause-label">SECONDARY ROOT CAUSE</h4>
-                    <p class="medical-term">${escapeHtml(secondaryTerm)}</p>
+                    <p class="medical-term">${escapeHtml(secondaryDisplay)}</p>
                 </div>
 
                 <div class="divider">═══════════════════════════════════</div>

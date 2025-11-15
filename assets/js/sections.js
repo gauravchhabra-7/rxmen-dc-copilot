@@ -181,9 +181,12 @@ function isQuestionComplete(questionElement) {
  */
 function updateProgressIndicator() {
     const { $ } = window.utils;
-    const completed = sectionState.completedSections.length;
+    const current = sectionState.currentSection;
     const total = sectionState.totalSections;
-    const percentage = Math.round((completed / total) * 100);
+
+    // Calculate progress based on current section (not completed sections)
+    // Section 1 = 0%, Section 2 = 17%, Section 3 = 33%, etc.
+    const percentage = Math.round(((current - 1) / total) * 100);
 
     // Update progress bar
     const progressFill = $('#progress-fill');
@@ -194,7 +197,7 @@ function updateProgressIndicator() {
     // Update progress text
     const progressText = $('#progress-text');
     if (progressText) {
-        progressText.textContent = `Section ${sectionState.currentSection} of ${total} " ${percentage}% Complete`;
+        progressText.textContent = `Section ${current} of ${total} • ${percentage}% Complete`;
     }
 
     // Update section indicators
