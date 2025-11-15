@@ -332,52 +332,15 @@
         const primaryCause = result.root_causes?.[0];
         const secondaryCause = result.root_causes?.[1];
 
-        // Helper: Create simple 2-4 word label from medical term
-        const getSimpleLabel = (medicalTerm) => {
-            if (!medicalTerm) return 'Unknown';
-
-            // Common simplifications for medical terms
-            const simplifications = {
-                'Performance Anxiety': 'Performance anxiety',
-                'Performance Anxiety with Anticipatory Stress': 'Performance anxiety',
-                'Performance Anxiety with Porn-Induced Arousal Pattern Disruption': 'Performance anxiety',
-                'Weak Pelvic Floor Muscles': 'Weak pelvic muscles',
-                'Sympathetic Nervous System Hyperactivation': 'Overactive stress response',
-                'Diabetes-Related Nerve Sensitivity': 'Diabetes nerve issue',
-                'Venous Leak': 'Venous leak',
-                'Hormonal Imbalance': 'Hormonal imbalance',
-                'Porn-Induced Erectile Dysfunction': 'Porn-related issue',
-                'Death Grip Syndrome': 'Death grip syndrome',
-                'Premature Ejaculation': 'Premature ejaculation',
-                'Delayed Ejaculation': 'Delayed ejaculation',
-                'Low Testosterone': 'Low testosterone',
-                'High Prolactin': 'High prolactin',
-                'Relationship Anxiety': 'Relationship anxiety',
-                'Depression': 'Depression',
-                'Stress': 'Stress',
-                'Fatigue': 'Fatigue'
-            };
-
-            // Check for exact match
-            if (simplifications[medicalTerm]) {
-                return simplifications[medicalTerm];
-            }
-
-            // Extract first 3-4 meaningful words as fallback
-            const words = medicalTerm.split(/\s+/);
-            if (words.length <= 4) {
-                return medicalTerm.toLowerCase();
-            }
-            return words.slice(0, 3).join(' ').toLowerCase();
-        };
-
-        // Format root causes: [Simple label] ([Full Medical Term])
+        // Format root causes: Simple term [Medical Term]
+        // Use AI-generated simple_term from backend, fallback to category if not available
         const formatRootCause = (cause) => {
             if (!cause) return 'Unknown';
-            const medicalTerm = cause.category || 'Unknown';
-            const simpleLabel = getSimpleLabel(medicalTerm);
 
-            return `${simpleLabel} (${medicalTerm})`;
+            const medicalTerm = cause.category || 'Unknown';
+            const simpleTerm = cause.simple_term || medicalTerm;
+
+            return `${simpleTerm} [${medicalTerm}]`;
         };
 
         const primaryDisplay = formatRootCause(primaryCause);
