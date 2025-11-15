@@ -332,28 +332,52 @@
         const primaryCause = result.root_causes?.[0];
         const secondaryCause = result.root_causes?.[1];
 
-        // Helper: Extract first sentence from explanation (up to 50 words or first period)
-        const getSimpleExplanation = (explanation) => {
-            if (!explanation) return '';
-            // Get first sentence (up to first period or 50 words)
-            const firstSentence = explanation.split(/\.\s+/)[0];
-            const words = firstSentence.split(/\s+/);
-            if (words.length > 50) {
-                return words.slice(0, 50).join(' ') + '...';
+        // Helper: Create simple 2-4 word label from medical term
+        const getSimpleLabel = (medicalTerm) => {
+            if (!medicalTerm) return 'Unknown';
+
+            // Common simplifications for medical terms
+            const simplifications = {
+                'Performance Anxiety': 'Performance anxiety',
+                'Performance Anxiety with Anticipatory Stress': 'Performance anxiety',
+                'Performance Anxiety with Porn-Induced Arousal Pattern Disruption': 'Performance anxiety',
+                'Weak Pelvic Floor Muscles': 'Weak pelvic muscles',
+                'Sympathetic Nervous System Hyperactivation': 'Overactive stress response',
+                'Diabetes-Related Nerve Sensitivity': 'Diabetes nerve issue',
+                'Venous Leak': 'Venous leak',
+                'Hormonal Imbalance': 'Hormonal imbalance',
+                'Porn-Induced Erectile Dysfunction': 'Porn-related issue',
+                'Death Grip Syndrome': 'Death grip syndrome',
+                'Premature Ejaculation': 'Premature ejaculation',
+                'Delayed Ejaculation': 'Delayed ejaculation',
+                'Low Testosterone': 'Low testosterone',
+                'High Prolactin': 'High prolactin',
+                'Relationship Anxiety': 'Relationship anxiety',
+                'Depression': 'Depression',
+                'Stress': 'Stress',
+                'Fatigue': 'Fatigue'
+            };
+
+            // Check for exact match
+            if (simplifications[medicalTerm]) {
+                return simplifications[medicalTerm];
             }
-            return firstSentence;
+
+            // Extract first 3-4 meaningful words as fallback
+            const words = medicalTerm.split(/\s+/);
+            if (words.length <= 4) {
+                return medicalTerm.toLowerCase();
+            }
+            return words.slice(0, 3).join(' ').toLowerCase();
         };
 
-        // Format root causes: [Simple explanation] ([Medical Term])
+        // Format root causes: [Simple label] ([Full Medical Term])
         const formatRootCause = (cause) => {
             if (!cause) return 'Unknown';
             const medicalTerm = cause.category || 'Unknown';
-            const simpleExplanation = getSimpleExplanation(cause.explanation);
+            const simpleLabel = getSimpleLabel(medicalTerm);
 
-            if (simpleExplanation) {
-                return `${simpleExplanation} (${medicalTerm})`;
-            }
-            return medicalTerm;
+            return `${simpleLabel} (${medicalTerm})`;
         };
 
         const primaryDisplay = formatRootCause(primaryCause);
