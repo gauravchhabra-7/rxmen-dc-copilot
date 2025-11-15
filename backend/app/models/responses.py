@@ -14,6 +14,7 @@ class RootCause(BaseModel):
     Individual root cause identified by the AI.
     """
     category: str = Field(..., description="Root cause category (e.g., 'Performance Anxiety', 'Venous Leak')")
+    simple_term: Optional[str] = Field(None, description="2-4 word simple label in plain language (e.g., 'Performance anxiety', 'Weak pelvic muscles')")
     confidence: str = Field(..., description="Confidence level: high, medium, low")
     explanation: str = Field(..., description="Patient-friendly explanation of this root cause")
     contributing_factors: List[str] = Field(default_factory=list, description="Specific factors from form data")

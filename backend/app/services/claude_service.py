@@ -245,6 +245,7 @@ class ClaudeService:
             if primary_cause:
                 root_causes.append(RootCause(
                     category=primary_cause.get("medical_term", "Unknown"),
+                    simple_term=primary_cause.get("simple_term"),
                     confidence="high" if primary_cause.get("confidence", 0) > 0.75 else "medium",
                     explanation=primary_cause.get("simple_explanation", ""),
                     contributing_factors=primary_cause.get("supporting_symptoms", []),
@@ -254,6 +255,7 @@ class ClaudeService:
             if secondary_cause:
                 root_causes.append(RootCause(
                     category=secondary_cause.get("medical_term", "Unknown"),
+                    simple_term=secondary_cause.get("simple_term"),
                     confidence="medium" if secondary_cause.get("confidence", 0) > 0.60 else "low",
                     explanation=secondary_cause.get("simple_explanation", ""),
                     contributing_factors=secondary_cause.get("supporting_symptoms", []),
