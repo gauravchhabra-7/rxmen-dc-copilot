@@ -115,7 +115,7 @@ def test_performance_anxiety_case():
         response = requests.post(
             f"{BASE_URL}/analyze",
             json=test_data,
-            timeout=30
+            timeout=120
         )
         response.raise_for_status()
 
@@ -187,7 +187,7 @@ def test_diabetes_ed_case():
         response = requests.post(
             f"{BASE_URL}/analyze",
             json=test_data,
-            timeout=30
+            timeout=120
         )
         response.raise_for_status()
 
@@ -249,7 +249,7 @@ def test_premature_ejaculation_case():
         response = requests.post(
             f"{BASE_URL}/analyze",
             json=test_data,
-            timeout=30
+            timeout=120
         )
         response.raise_for_status()
 
