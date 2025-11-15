@@ -1,0 +1,317 @@
+
+============================================================
+PAGE 1
+============================================================
+
+RxMen Discovery Call Copilot 
+Red Flags Checklist  
+Purpose: List of symptoms/conditions requiring immediate medical escalation (NOT standard 
+discovery call) 
+Instructions: 
+Please review and: 
+1. ✅ Confirm each red flag is correct 
+2. ✅ Inform the action for each 
+3. ➕ Add any missing red flags  
+4. ✏ Modify actions if incorrect 
+5. 📝 Add notes if needed for specific cases 
+ 
+RED FLAGS TABLE 
+# 
+Red Flag 
+Condition 
+How User Might 
+Describe 
+Action Required(what 
+to do in that case by 
+DC agents)2 
+Added/Modified 
+By 
+1 
+Blood in semen 
+"Semen mein khoon 
+aa raha hai", "Blood 
+in ejaculation" 
+Immediate escalation - 
+do not proceed with 
+call and advice urgent 
+uro/andro consult 
+ 
+2 
+Blood in urine 
+"Pee mein khoon", 
+"Urine red color" 
+Immediate escalation. 
+STOP DC and ask to 
+head to nearest 
+physician or uro/andro 
+ 
+3 
+Severe genital 
+pain 
+"Bahut zyada dard", 
+"Unbearable pain", 
+"Touching nahi kar 
+sakta" 
+Escalate - Advice 
+emergency consult in 
+person, probable 
+torsion or infection 
+ 
+
+============================================================
+PAGE 2
+============================================================
+
+4 
+Priapism 
+(erection >4 
+hours with pain) 
+"4 hours se erection 
+hai aur dard ho raha", 
+"Erection ja nahi rahi" 
+Emergency - Tell 
+patient to go to nearest 
+hospital immediately 
+ 
+5 
+Genital 
+discharge/pus 
+"Paani nikal raha 
+hai", "White/yellow 
+discharge", "Pus aa 
+raha" 
+Escalate to venero. 
+Probable STI, needs 
+doctor evaluation. Do 
+not promise single 
+consult cure 
+ 
+6 
+Genital 
+sores/ulcers/wou
+nds 
+"Chhale hain", 
+"Wound hai", 
+"Rashes/lesions" 
+Escalate- venero triage 
+required 
+ 
+7 
+Painful/swollen 
+testicles 
+"Testicles mein dard", 
+"Swelling hai", "Ek 
+side bada ho gaya" 
+Escalate immediatelt - 
+possible 
+torsion/epididymitis, 
+doctor consult in 
+person on same day 
+needed 
+ 
+8 
+Recent heart 
+attack (<6 
+months) 
+"Heart attack hua 
+tha", "Cardiac event", 
+"Bypass surgery" 
+Do not proceed. 
+Cardiology clearance 
+needed before RxMen 
+plans 
+ 
+9 
+Active cancer 
+treatment 
+"Chemotherapy chal 
+rahi", "Cancer 
+treatment ongoing" 
+Do not proceed- 
+escalate to doctor 
+review, needs co 
+consult with oncologist 
+ 
+10 
+Recent stroke 
+"Stroke hua tha", 
+"Brain hemorrhage" 
+Do not proceed - 
+needs neurologist 
+clearance before any 
+plan 
+ 
+11 
+Taking nitrate 
+medications 
+"Sorbitrate", 
+"Isosorbide", "Heart ki 
+medicine for angina" 
+Contraindicated with 
+ED meds - escalate to 
+doctor, do not 
+prescribe anything 
+online 
+ 
+12 
+Severe 
+uncontrolled 
+"Sugar 400-500 rehti 
+hai", "Uncontrolled 
+diabetes" 
+Escalate - needs 
+physician management 
+ 
+
+============================================================
+PAGE 3
+============================================================
+
+diabetes (very 
+high sugar) 
+before any ED/PE 
+treatment 
+13 
+Severe 
+depression/suici
+dal thoughts 
+"Zindagi se thak 
+gaya", "Suicide soch 
+raha hun", "Jeene ka 
+mann nahi" 
+Immediate referral to 
+nearest emergency or 
+mental health clinic. Or 
+Tele Manas number 
+14416 
+ 
+14 
+Under 18 years 
+old 
+"Main 17 saal ka 
+hun", "Minor hun" 
+Cannot proceed 
+decline and document 
+ 
+15 
+Burning 
+sensation while 
+urinating 
+"Pee karte waqt 
+jalan", "Burning while 
+passing urine" 
+Probable infection- 
+escalate to venero 
+ 
+16 
+Severe 
+hypertension 
+(uncontrolled) 
+"BP 200/120 type", 
+"Very high BP", 
+"Uncontrolled 
+hypertension" 
+Do not proceed. Needs 
+stabilisation with a 
+physician first. In 
+person 
+ 
+17 
+Sudden loss of 
+libido + fatigue + 
+hair loss 
+“Bilkul desire nahi 
+hai”, “Body weak lagti 
+hai” 
+Escalate to doctor for 
+evaluation 
+ 
+18 
+Groin lump/mass 
+“Ek side mein gola 
+hai”, “Testicle ke paas 
+kuch hard lagta hai” 
+Escalate - in person 
+urologist 
+ 
+19 
+Pain or swelling 
+after injury 
+“Maar lag gayi thi”, 
+“Injury ke baad 
+pain/swelling hai” 
+Escalate - doctor triage 
+- in person evaluation 
+required 
+ 
+20 
+Rapid 
+unexplained 
+weight loss 
+“Bahut wajan ghat 
+gaya bina wajah ke” 
+Escalate - could 
+indicate systemic 
+illness, physician 
+referral needed 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+============================================================
+PAGE 4
+============================================================
+
+NOTES SECTION (Add Context) 
+Add any important notes here: 
+Example: 
+● "If user had heart attack >6 months ago AND has cardiologist clearance → can proceed 
+normally" 
+● "Nitrate medications: Specifically ask about nitroglycerin, isosorbide, etc." 
+● [Add your notes] 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+============================================================
+PAGE 5
+============================================================
+
+HOW AI WILL USE THIS 
+During Discovery Call: 
+1. Agent fills form with user's symptoms/history 
+2. AI scans responses against this red flag list 
+3. If match found → AI immediately alerts agent: 
+○ ⚠ "RED FLAG DETECTED: [Condition]" 
+○ "ACTION: [What to do]" 
+○ "DO NOT proceed with standard root cause analysis" 
+Agent then: 
+● Follows the action specified 
+● Escalates to appropriate doctor/department 
+● Does NOT give any treatment advice 
+Document Version: 1.0 
+ Created: October 27, 2025 
+ For Review By: RxMen Team
+ 
