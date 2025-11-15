@@ -199,6 +199,10 @@ function validateSection(sectionNumber) {
         const branch = question.closest('.conditional-branch');
         if (branch && branch.classList.contains('hidden')) return;
 
+        // Skip if question is in a hidden conditional question wrapper
+        const condQuestion = question.closest('.conditional-question');
+        if (condQuestion && condQuestion.classList.contains('hidden')) return;
+
         // Get field name from first input
         const firstInput = question.querySelector('input, textarea, select');
         if (!firstInput) return;
@@ -243,7 +247,7 @@ function validateForm() {
     let firstInvalidSection = null;
     const allErrors = [];
 
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= 6; i++) {
         const result = validateSection(i);
 
         if (!result.isValid) {
