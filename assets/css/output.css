@@ -812,20 +812,22 @@
     gap: var(--spacing-sm);
 }
 
+/* Section headers - smaller, more elegant */
 .cause-label {
-    font-size: var(--font-size-small);
-    font-weight: var(--font-semibold);
-    color: var(--color-gray-1);
+    font-size: 0.75rem;  /* 12px - more elegant than 13px */
+    font-weight: 600;
+    color: #666;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin: 0;
+    margin: 0 0 0.5rem 0;
 }
 
+/* Root cause display - main text */
 .cause-section .medical-term {
-    font-size: var(--font-size-h2);
-    font-weight: var(--font-semibold);
-    color: var(--brand-dark-blue);
-    line-height: 1.4;
+    font-size: 1rem;  /* 16px - reduced from 20px for elegance */
+    font-weight: 500;  /* Slightly lighter weight */
+    color: #1a1a1a;
+    line-height: 1.5;  /* Increased for better readability */
     margin: 0;
 }
 
@@ -833,7 +835,7 @@
     width: 100%;
     text-align: center;
     color: var(--color-gray-3);
-    font-size: var(--font-size-small);
+    font-size: 0.75rem;  /* 12px */
     letter-spacing: 2px;
     margin: var(--spacing-md) 0;
 }
@@ -845,21 +847,23 @@
     gap: var(--spacing-md);
 }
 
+/* Section labels for Agent Script and Treatment Plan */
 .section-label {
-    font-size: var(--font-size-base);
-    font-weight: var(--font-semibold);
+    font-size: 0.75rem;  /* 12px - smaller, more elegant */
+    font-weight: 600;
     color: var(--brand-dark-blue);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin: 0;
+    margin: 0 0 0.5rem 0;
 }
 
+/* Agent script and treatment text */
 .script-text,
 .treatment-text {
-    font-size: var(--font-size-body);
-    font-weight: var(--font-regular);
-    color: var(--color-black);
-    line-height: 1.8;
+    font-size: 0.95rem;  /* 15.2px - slightly smaller than before */
+    font-weight: 400;
+    color: #333;
+    line-height: 1.7;  /* Increased from 1.8 for better readability */
     white-space: pre-wrap;
     margin: 0;
 }
@@ -883,12 +887,19 @@
         gap: 8px;
     }
 
+    /* Mobile font adjustments for clean diagnosis */
     .cause-section .medical-term {
-        font-size: var(--font-size-h3);
+        font-size: 0.95rem;  /* 15.2px on mobile */
     }
 
     .script-text,
     .treatment-text {
-        font-size: var(--font-size-base);
+        font-size: 0.9rem;  /* 14.4px on mobile */
+        line-height: 1.6;
+    }
+
+    .cause-label,
+    .section-label {
+        font-size: 0.7rem;  /* 11.2px on mobile */
     }
 }
