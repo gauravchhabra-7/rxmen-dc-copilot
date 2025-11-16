@@ -26,10 +26,7 @@
                 <h1 class="header-title">Discovery Call Form</h1>
             </div>
             <div class="progress-info">
-                <div class="progress-text" id="progress-text">Section 1 of 6 • 0% Complete</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-                </div>
+                <div class="progress-text" id="progress-text">Section 1 of 6</div>
                 <div class="section-indicators" id="section-indicators">
                     <span class="indicator active" data-section="1" title="Client Information">1</span>
                     <span class="indicator" data-section="2" title="Main Concern">2</span>
@@ -149,6 +146,7 @@
                                     id="height-cm"
                                     name="height_cm"
                                     class="form-input number-input"
+                                    required
                                     min="140"
                                     max="220"
                                     placeholder="Enter height in cm"
@@ -165,9 +163,11 @@
                                             id="height-feet"
                                             name="height_feet"
                                             class="form-input number-input"
+                                            required
                                             min="4"
                                             max="7"
                                             placeholder="Feet"
+                                            aria-describedby="height-error"
                                         >
                                         <label for="height-feet" class="input-label-small">feet</label>
                                     </div>
@@ -177,9 +177,11 @@
                                             id="height-inches"
                                             name="height_inches"
                                             class="form-input number-input"
+                                            required
                                             min="0"
                                             max="11"
                                             placeholder="Inches"
+                                            aria-describedby="height-error"
                                         >
                                         <label for="height-inches" class="input-label-small">inches</label>
                                     </div>

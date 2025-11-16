@@ -194,11 +194,11 @@ p {
 }
 
 .indicator {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
-    background: var(--color-gray-3);
-    color: var(--bg-white);
+    background: #d1d5db;  /* Default gray for upcoming sections */
+    color: #6b7280;  /* Darker gray text for upcoming */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -208,13 +208,23 @@ p {
     cursor: pointer;
 }
 
+/* Completed sections - GREEN */
+.indicator.completed {
+    background-color: #10b981;  /* Green */
+    color: white;
+}
+
+/* Active/current section - BLUE */
 .indicator.active {
-    background: var(--brand-blue);
+    background-color: #2563eb;  /* Blue */
+    color: white;
     transform: scale(1.1);
 }
 
-.indicator.completed {
-    background: var(--color-success);
+/* Upcoming/future sections - GRAY */
+.indicator.upcoming {
+    background-color: #d1d5db;  /* Light gray */
+    color: #6b7280;  /* Darker gray text */
 }
 
 .indicator:hover {

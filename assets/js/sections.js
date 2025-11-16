@@ -177,27 +177,17 @@ function isQuestionComplete(questionElement) {
 // ==================== PROGRESS INDICATOR ====================
 
 /**
- * Update progress indicator (bar and percentage)
+ * Update progress indicator (section counter only - no percentage)
  */
 function updateProgressIndicator() {
     const { $ } = window.utils;
     const current = sectionState.currentSection;
     const total = sectionState.totalSections;
 
-    // Calculate progress based on current section (not completed sections)
-    // Section 1 = 0%, Section 2 = 17%, Section 3 = 33%, etc.
-    const percentage = Math.round(((current - 1) / total) * 100);
-
-    // Update progress bar
-    const progressFill = $('#progress-fill');
-    if (progressFill) {
-        progressFill.style.width = `${percentage}%`;
-    }
-
-    // Update progress text
+    // Update progress text (section counter only)
     const progressText = $('#progress-text');
     if (progressText) {
-        progressText.textContent = `Section ${current} of ${total} • ${percentage}% Complete`;
+        progressText.textContent = `Section ${current} of ${total}`;
     }
 
     // Update section indicators
@@ -213,13 +203,18 @@ function updateSectionIndicators() {
         const sectionNum = index + 1;
 
         // Remove all state classes
-        indicator.classList.remove('active', 'completed');
+        indicator.classList.remove('active', 'completed', 'upcoming');
 
-        // Add appropriate class
+        // Add appropriate class based on section status
         if (sectionState.completedSections.includes(sectionNum)) {
+            // Completed sections = GREEN
             indicator.classList.add('completed');
         } else if (sectionNum === sectionState.currentSection) {
+            // Current active section = BLUE
             indicator.classList.add('active');
+        } else {
+            // Future sections = GRAY
+            indicator.classList.add('upcoming');
         }
     });
 }

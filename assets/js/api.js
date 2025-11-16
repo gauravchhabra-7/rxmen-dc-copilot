@@ -378,7 +378,7 @@
                 <div class="divider">═══════════════════════════════════</div>
 
                 <div class="treatment-section">
-                    <h4 class="section-label">TREATMENT PLAN</h4>
+                    <h4 class="section-label">TREATMENT EXPLANATION</h4>
                     <p class="treatment-text">${escapeHtml(treatmentPlan)}</p>
                 </div>
             </div>

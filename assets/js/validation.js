@@ -23,7 +23,7 @@ const validationRules = {
     // Height validation (cm: 140-220)
     height_cm: (value) => {
         const height = parseFloat(value);
-        if (height < 140 || height > 220) {
+        if (isNaN(height) || height < 140 || height > 220) {
             return 'Height must be between 140-220 cm';
         }
         return null;
@@ -32,8 +32,8 @@ const validationRules = {
     // Height validation (feet: 4-7)
     height_feet: (value) => {
         const feet = parseInt(value);
-        if (feet < 4 || feet > 7) {
-            return 'Height must be between 4-7 feet';
+        if (isNaN(feet) || feet < 4 || feet > 7) {
+            return 'Feet must be between 4-7';
         }
         return null;
     },
@@ -41,7 +41,7 @@ const validationRules = {
     // Height validation (inches: 0-11)
     height_inches: (value) => {
         const inches = parseInt(value);
-        if (inches < 0 || inches > 11) {
+        if (isNaN(inches) || inches < 0 || inches > 11) {
             return 'Inches must be between 0-11';
         }
         return null;
@@ -74,6 +74,15 @@ function validateField(field) {
     const { $ } = window.utils;
     const fieldName = field.name;
     const value = field.value;
+
+    // Special handling for height fields - only validate visible field
+    if (fieldName === 'height_cm' || fieldName === 'height_feet' || fieldName === 'height_inches') {
+        const parentContainer = field.closest('.height-input-group');
+        // Skip validation if this height input is hidden
+        if (parentContainer && parentContainer.classList.contains('hidden')) {
+            return null;
+        }
+    }
 
     // Check if required
     if (field.hasAttribute('required') && (!value || value.trim() === '')) {
@@ -295,6 +304,8 @@ function setupRealTimeValidation() {
                 const sectionNum = parseInt(section.dataset.section);
                 if (sectionNum) updateSectionStatus(sectionNum);
             }
+            // Update error banner (auto-remove filled questions)
+            updateErrorBanner();
         });
     });
 
@@ -311,6 +322,8 @@ function setupRealTimeValidation() {
                 const sectionNum = parseInt(section.dataset.section);
                 if (sectionNum) updateSectionStatus(sectionNum);
             }
+            // Update error banner (auto-remove filled questions)
+            updateErrorBanner();
         });
     });
 
@@ -327,6 +340,8 @@ function setupRealTimeValidation() {
                 const sectionNum = parseInt(section.dataset.section);
                 if (sectionNum) updateSectionStatus(sectionNum);
             }
+            // Update error banner (auto-remove filled questions)
+            updateErrorBanner();
         });
     });
 
@@ -346,21 +361,46 @@ function showErrorBanner(errors) {
 
     if (!banner || !message) return;
 
+    // Store errors globally for auto-remove functionality
+    window.validationErrors = errors;
+
     // Set message
-    message.textContent = `${errors.length} required fields missing`;
+    message.textContent = `Please complete the following questions`;
+
+    // Create helper text
+    const helperText = document.createElement('div');
+    helperText.className = 'error-helper-text';
+    helperText.textContent = 'Click any question number to go directly to it';
+    helperText.style.fontSize = '0.9rem';
+    helperText.style.color = '#666';
+    helperText.style.marginBottom = '8px';
 
     // Create clickable field links
     fieldList.innerHTML = '';
+    fieldList.appendChild(helperText);
+
     errors.forEach(({ field }) => {
         const link = document.createElement('a');
         link.href = '#';
         link.className = 'error-field-link';
+        // Get question number from data-question attribute
         link.textContent = field.closest('.form-question')?.dataset.question || field.name;
 
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            window.utils.scrollTo(field);
-            field.focus();
+
+            // Find the section containing this field
+            const section = field.closest('.form-section');
+            if (section) {
+                // Expand the section first
+                window.sections.expandSection(section);
+            }
+
+            // Scroll to the field
+            setTimeout(() => {
+                window.utils.scrollTo(field);
+                field.focus();
+            }, 300);
         });
 
         fieldList.appendChild(link);
@@ -368,6 +408,54 @@ function showErrorBanner(errors) {
 
     // Show banner
     banner.style.display = 'block';
+}
+
+/**
+ * Update error banner - remove completed fields from the list
+ */
+function updateErrorBanner() {
+    const { $ } = window.utils;
+    const banner = $('#error-banner');
+
+    if (!banner || banner.style.display === 'none') return;
+    if (!window.validationErrors || window.validationErrors.length === 0) {
+        hideErrorBanner();
+        return;
+    }
+
+    // Re-validate all fields that were in the error list
+    const stillInvalid = window.validationErrors.filter(({ field }) => {
+        const fieldName = field.name;
+        const fieldType = field.type;
+
+        let isStillInvalid = false;
+
+        if (fieldType === 'radio') {
+            const error = validateRadioGroup(fieldName);
+            isStillInvalid = !!error;
+        } else if (fieldType === 'checkbox') {
+            const error = validateCheckboxGroup(fieldName);
+            isStillInvalid = !!error;
+        } else {
+            const error = validateField(field);
+            isStillInvalid = !!error && !error.startsWith('RED_FLAG');
+        }
+
+        return isStillInvalid;
+    });
+
+    // If no errors remain, hide banner
+    if (stillInvalid.length === 0) {
+        hideErrorBanner();
+        window.validationErrors = [];
+        return;
+    }
+
+    // Update the error list if errors changed
+    if (stillInvalid.length !== window.validationErrors.length) {
+        window.validationErrors = stillInvalid;
+        showErrorBanner(stillInvalid);
+    }
 }
 
 /**
@@ -379,6 +467,7 @@ function hideErrorBanner() {
     if (banner) {
         banner.style.display = 'none';
     }
+    window.validationErrors = [];
 }
 
 // ==================== EXPORT ====================
@@ -393,6 +482,7 @@ window.validation = {
     hideError,
     setupRealTimeValidation,
     showErrorBanner,
+    updateErrorBanner,
     hideErrorBanner
 };
 

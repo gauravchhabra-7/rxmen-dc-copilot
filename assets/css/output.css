@@ -860,10 +860,10 @@
 /* Agent script and treatment text */
 .script-text,
 .treatment-text {
-    font-size: 0.95rem;  /* 15.2px - slightly smaller than before */
-    font-weight: 400;
+    font-size: 1.05rem;  /* Increased for easy reading during live calls */
+    font-weight: 600;    /* Bold for better readability */
     color: #333;
-    line-height: 1.7;  /* Increased from 1.8 for better readability */
+    line-height: 1.6;
     white-space: pre-wrap;
     margin: 0;
 }
