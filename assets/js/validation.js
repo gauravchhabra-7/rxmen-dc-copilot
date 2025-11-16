@@ -144,12 +144,20 @@ function showError(field, message) {
     field.classList.add('error');
 
     // Find and show error message span
-    const errorId = `${field.id || field.name}-error`;
+    // Special handling for height fields - all share the same error span
+    let errorId;
+    if (field.name === 'height_cm' || field.name === 'height_feet' || field.name === 'height_inches') {
+        errorId = 'height-error';
+    } else {
+        errorId = `${field.id || field.name}-error`;
+    }
+
     const errorSpan = $(`#${errorId}`);
 
     if (errorSpan) {
         errorSpan.textContent = message;
         errorSpan.classList.add('visible');
+        errorSpan.style.display = 'block';
     }
 
     // Mark parent question as incomplete
@@ -167,12 +175,20 @@ function hideError(field) {
     field.classList.remove('error');
 
     // Find and hide error message span
-    const errorId = `${field.id || field.name}-error`;
+    // Special handling for height fields - all share the same error span
+    let errorId;
+    if (field.name === 'height_cm' || field.name === 'height_feet' || field.name === 'height_inches') {
+        errorId = 'height-error';
+    } else {
+        errorId = `${field.id || field.name}-error`;
+    }
+
     const errorSpan = $(`#${errorId}`);
 
     if (errorSpan) {
         errorSpan.textContent = '';
         errorSpan.classList.remove('visible');
+        errorSpan.style.display = 'none';
     }
 
     // Remove incomplete class from parent question

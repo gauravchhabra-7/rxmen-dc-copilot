@@ -138,15 +138,13 @@ function updateSectionStatus(sectionNumber) {
     // Skip if section 6 (optional)
     if (sectionNumber === 6) {
         statusSpan.textContent = 'Optional';
-        // Still update indicators even for optional section
-        updateSectionIndicators();
         return;
     }
 
     statusSpan.textContent = `${completed}/${questions.length} completed`;
 
-    // Update circle indicators when section status changes
-    updateSectionIndicators();
+    // DO NOT update circle indicators here - only update on section navigation
+    // Updating on every field change causes distracting animation
 }
 
 /**

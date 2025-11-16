@@ -204,8 +204,8 @@ p {
     justify-content: center;
     font-size: var(--font-size-small);
     font-weight: var(--font-semibold);
-    transition: all var(--transition-base);
     cursor: pointer;
+    /* NO transitions - circles should be completely static */
 }
 
 /* Completed sections - GREEN */
@@ -218,7 +218,7 @@ p {
 .indicator.active {
     background-color: #2563eb;  /* Blue */
     color: white;
-    transform: scale(1.1);
+    /* NO transform/scale - no size changes */
 }
 
 /* Upcoming/future sections - GRAY */
@@ -228,7 +228,8 @@ p {
 }
 
 .indicator:hover {
-    transform: scale(1.15);
+    /* NO transform - circles remain static on hover */
+    cursor: pointer;
 }
 
 /* ==================== ERROR BANNER ==================== */
@@ -297,6 +298,20 @@ p {
 .error-field-list {
     max-width: var(--form-max-width);
     margin: var(--spacing-xs) auto 0;
+    display: block; /* Changed from flex to block so children are on separate lines */
+}
+
+/* Helper text - on its own line */
+.error-helper-text {
+    display: block;
+    margin-bottom: 0.75rem;
+    color: #666;
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+/* Question numbers container - on separate line below helper */
+.error-question-numbers {
     display: flex;
     flex-wrap: wrap;
     gap: var(--spacing-xs);
