@@ -371,7 +371,7 @@
                 <div class="divider">═══════════════════════════════════</div>
 
                 <div class="script-section">
-                    <h4 class="section-label">AGENT SCRIPT</h4>
+                    <h4 class="section-label">ROOT CAUSE EXPLANATION</h4>
                     <p class="script-text">${escapeHtml(agentScript)}</p>
                 </div>
 

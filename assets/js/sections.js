@@ -138,10 +138,15 @@ function updateSectionStatus(sectionNumber) {
     // Skip if section 6 (optional)
     if (sectionNumber === 6) {
         statusSpan.textContent = 'Optional';
+        // Still update indicators even for optional section
+        updateSectionIndicators();
         return;
     }
 
     statusSpan.textContent = `${completed}/${questions.length} completed`;
+
+    // Update circle indicators when section status changes
+    updateSectionIndicators();
 }
 
 /**
@@ -168,6 +173,56 @@ function isQuestionComplete(questionElement) {
             else {
                 if (!input.value || input.value.trim() === '') return false;
             }
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Check if a section is complete (all visible required fields filled)
+ */
+function isSectionComplete(sectionNum) {
+    const { $ } = window.utils;
+    const section = $(`#section-${sectionNum}`);
+    if (!section) return false;
+
+    // Get all required inputs in this section
+    const requiredInputs = section.querySelectorAll('[required]');
+
+    // Track which field names we've checked (for radio/checkbox groups)
+    const checkedGroups = new Set();
+
+    for (let input of requiredInputs) {
+        // Skip hidden inputs (conditional logic)
+        if (!input.offsetParent) continue;
+
+        // Skip inputs in hidden parent containers
+        const parentContainer = input.closest('.height-input-group, .conditional-question, .conditional-branch');
+        if (parentContainer && parentContainer.classList.contains('hidden')) continue;
+
+        const fieldName = input.name;
+        const fieldType = input.type;
+
+        // Handle radio buttons (check once per group)
+        if (fieldType === 'radio') {
+            if (checkedGroups.has(fieldName)) continue;
+            checkedGroups.add(fieldName);
+
+            const checked = section.querySelector(`[name="${fieldName}"]:checked`);
+            if (!checked) return false;
+        }
+        // Handle checkboxes (check once per group)
+        else if (fieldType === 'checkbox') {
+            if (checkedGroups.has(fieldName)) continue;
+            checkedGroups.add(fieldName);
+
+            const checked = section.querySelectorAll(`[name="${fieldName}"]:checked`);
+            if (checked.length === 0) return false;
+        }
+        // Handle other inputs
+        else {
+            if (!input.value || input.value.trim() === '') return false;
         }
     }
 
@@ -205,15 +260,18 @@ function updateSectionIndicators() {
         // Remove all state classes
         indicator.classList.remove('active', 'completed', 'upcoming');
 
+        // Check if section is complete dynamically
+        const isComplete = isSectionComplete(sectionNum);
+
         // Add appropriate class based on section status
-        if (sectionState.completedSections.includes(sectionNum)) {
-            // Completed sections = GREEN
+        if (sectionNum < sectionState.currentSection && isComplete) {
+            // Past sections that are complete = GREEN
             indicator.classList.add('completed');
         } else if (sectionNum === sectionState.currentSection) {
-            // Current active section = BLUE
+            // Current section = BLUE
             indicator.classList.add('active');
         } else {
-            // Future sections = GRAY
+            // Future sections or incomplete past sections = GRAY
             indicator.classList.add('upcoming');
         }
     });

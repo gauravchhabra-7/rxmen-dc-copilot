@@ -847,21 +847,21 @@
     gap: var(--spacing-md);
 }
 
-/* Section labels for Agent Script and Treatment Plan */
+/* Section labels for Agent Script and Treatment Plan - Bold and bigger */
 .section-label {
-    font-size: 0.75rem;  /* 12px - smaller, more elegant */
-    font-weight: 600;
-    color: var(--brand-dark-blue);
+    font-size: 1rem;     /* Bigger for emphasis */
+    font-weight: 700;    /* Bold */
+    color: #666;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 1rem 0;
 }
 
-/* Agent script and treatment text */
+/* Agent script and treatment text - Normal size and weight */
 .script-text,
 .treatment-text {
-    font-size: 1.05rem;  /* Increased for easy reading during live calls */
-    font-weight: 600;    /* Bold for better readability */
+    font-size: 0.95rem;  /* Normal size */
+    font-weight: 400;    /* Normal weight (NOT bold) */
     color: #333;
     line-height: 1.6;
     white-space: pre-wrap;

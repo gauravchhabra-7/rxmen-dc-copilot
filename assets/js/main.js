@@ -75,7 +75,7 @@ function setupConditionalLogic() {
             handleFirstConsultationChange();
         }
 
-        // ED gateway question (triggers Q6A.2-Q6A.7 visibility)
+        // ED gateway question (triggers Q5A.2-Q5A.7 visibility)
         if (target.name === 'ed_gets_erections') {
             handleEDGatewayChange();
         }
@@ -201,8 +201,8 @@ function handleMainIssueChange() {
     }
 
     // Hide duplicate sexual activity question in PE branch when "both" is selected
-    // (ED branch Q6A.2 and PE branch Q6B.1 ask the same question)
-    const peFirstQuestion = peBranch.querySelector('[data-question="6b.1"]');
+    // (ED branch Q5A.2 and PE branch Q5B.1 ask the same question)
+    const peFirstQuestion = peBranch.querySelector('[data-question="5b.1"]');
     if (peFirstQuestion) {
         if (mainIssue === 'both') {
             hide(peFirstQuestion);
@@ -258,7 +258,7 @@ function handleFirstConsultationChange() {
 }
 
 /**
- * Handle ED gateway question (Q6A.1)
+ * Handle ED gateway question (Q5A.1)
  */
 function handleEDGatewayChange() {
     const { $, show, hide, getFieldValue } = window.utils;

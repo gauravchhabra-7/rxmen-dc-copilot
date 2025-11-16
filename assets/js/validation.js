@@ -367,18 +367,27 @@ function showErrorBanner(errors) {
     // Set message
     message.textContent = `Please complete the following questions`;
 
-    // Create helper text
+    // Clear field list
+    fieldList.innerHTML = '';
+
+    // Create helper text on its own line
     const helperText = document.createElement('div');
     helperText.className = 'error-helper-text';
     helperText.textContent = 'Click any question number to go directly to it';
     helperText.style.fontSize = '0.9rem';
     helperText.style.color = '#666';
     helperText.style.marginBottom = '8px';
-
-    // Create clickable field links
-    fieldList.innerHTML = '';
+    helperText.style.display = 'block';
     fieldList.appendChild(helperText);
 
+    // Create container for question numbers on a separate line
+    const questionNumbersContainer = document.createElement('div');
+    questionNumbersContainer.className = 'error-question-numbers';
+    questionNumbersContainer.style.display = 'flex';
+    questionNumbersContainer.style.flexWrap = 'wrap';
+    questionNumbersContainer.style.gap = '8px';
+
+    // Create clickable field links
     errors.forEach(({ field }) => {
         const link = document.createElement('a');
         link.href = '#';
@@ -403,8 +412,10 @@ function showErrorBanner(errors) {
             }, 300);
         });
 
-        fieldList.appendChild(link);
+        questionNumbersContainer.appendChild(link);
     });
+
+    fieldList.appendChild(questionNumbersContainer);
 
     // Show banner
     banner.style.display = 'block';
