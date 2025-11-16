@@ -101,6 +101,15 @@
         transformed.form_version = '2.2';
         transformed.submitted_at = new Date().toISOString();
 
+        // Add session tracking (from window.session)
+        transformed.session_id = window.session ? window.session.sessionId : null;
+        transformed.completion_time_seconds = window.session ? window.session.getCompletionTime() : null;
+
+        // Add tester name (if present in formData)
+        if (formData.tester_name) {
+            transformed.tester_name = formData.tester_name;
+        }
+
         return transformed;
     }
 
@@ -380,6 +389,10 @@
                 <div class="treatment-section">
                     <h4 class="section-label">TREATMENT EXPLANATION</h4>
                     <p class="treatment-text">${escapeHtml(treatmentPlan)}</p>
+                </div>
+
+                <div class="session-info">
+                    <p class="session-id-text">Session ID: ${escapeHtml(window.session ? window.session.sessionId : 'N/A')} (for doctor reference)</p>
                 </div>
             </div>
         `;

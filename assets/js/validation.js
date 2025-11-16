@@ -56,6 +56,20 @@ const validationRules = {
         return null;
     },
 
+    // Tester name validation (2-100 characters)
+    tester_name: (value) => {
+        if (!value || value.trim() === '') {
+            return 'Tester name is required';
+        }
+        if (value.trim().length < 2) {
+            return 'Tester name must be at least 2 characters';
+        }
+        if (value.length > 100) {
+            return 'Tester name must be less than 100 characters';
+        }
+        return null;
+    },
+
     // Required field validation
     required: (value, fieldName) => {
         if (!value || value.trim() === '') {
@@ -268,9 +282,23 @@ function validateSection(sectionNumber) {
  * Validate entire form
  */
 function validateForm() {
+    const { $ } = window.utils;
     let allValid = true;
     let firstInvalidSection = null;
     const allErrors = [];
+
+    // Validate tester name (standalone field, not in error banner)
+    const testerNameField = $('#tester-name');
+    if (testerNameField) {
+        const error = validateField(testerNameField);
+        if (error) {
+            showError(testerNameField, error);
+            allValid = false;
+            // Note: NOT added to allErrors (won't appear in error banner)
+        } else {
+            hideError(testerNameField);
+        }
+    }
 
     for (let i = 1; i <= 6; i++) {
         const result = validateSection(i);

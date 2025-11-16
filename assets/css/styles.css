@@ -352,6 +352,42 @@ p {
     box-shadow: var(--shadow-md);
 }
 
+/* ==================== TESTER NAME SECTION ==================== */
+.tester-name-section {
+    background: #E8F0FE;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.tester-name-label {
+    display: block;
+    font-size: 1rem;
+    font-weight: var(--font-bold);
+    color: var(--color-black);
+    margin-bottom: var(--spacing-sm);
+}
+
+.tester-name-input {
+    width: 100%;
+    height: var(--input-height);
+    padding: 0 var(--spacing-md);
+    border: 1px solid var(--color-gray-3);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-family);
+    font-size: var(--font-size-base);
+    transition: border-color var(--transition-fast);
+}
+
+.tester-name-input:focus {
+    outline: none;
+    border-color: var(--brand-blue);
+}
+
+.tester-name-input.error {
+    border-color: var(--color-error);
+}
+
 .output-panel {
     flex: 0 0 var(--output-panel-width);
     background: var(--bg-white);

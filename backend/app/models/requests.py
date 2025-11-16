@@ -70,6 +70,11 @@ class FormDataRequest(BaseModel):
     form_version: str = Field(default="2.2", description="Form version")
     submitted_at: Optional[str] = Field(None, description="Submission timestamp")
 
+    # Session Tracking (for Google Sheets logging)
+    session_id: Optional[str] = Field(None, description="Unique session identifier (UUID)")
+    completion_time_seconds: Optional[int] = Field(None, ge=0, le=900, description="Form completion time in seconds (capped at 900)")
+    tester_name: Optional[str] = Field(None, min_length=2, max_length=100, description="Name of the person testing the form")
+
     class Config:
         """Pydantic configuration."""
         json_schema_extra = {

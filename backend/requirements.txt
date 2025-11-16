@@ -9,6 +9,8 @@ python-multipart==0.0.6
 anthropic==0.18.1              # Claude API
 openai==1.12.0                 # OpenAI API (for embeddings)
 pinecone>=3.0.0                # Pinecone vector database
+gspread==6.0.0                 # Google Sheets API
+google-auth==2.27.0            # Google authentication
 
 # Data Validation & Settings
 pydantic==2.5.3

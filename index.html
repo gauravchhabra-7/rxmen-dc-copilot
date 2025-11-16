@@ -55,6 +55,25 @@
         <div class="form-panel">
             <form id="discovery-form" novalidate>
 
+                <!-- ==================== TESTER NAME (Required Field) ==================== -->
+                <div class="tester-name-section">
+                    <label for="tester-name" class="tester-name-label">
+                        Tester Name <span class="required">*</span>
+                    </label>
+                    <input
+                        type="text"
+                        id="tester-name"
+                        name="tester_name"
+                        class="tester-name-input"
+                        required
+                        minlength="2"
+                        maxlength="100"
+                        placeholder="Enter your name"
+                        aria-describedby="tester-name-error"
+                    >
+                    <span class="error-message" id="tester-name-error" role="alert"></span>
+                </div>
+
                 <!-- ==================== SECTION 1: CLIENT INFORMATION ==================== -->
                 <section class="form-section expanded" id="section-1" data-section="1">
                     <div class="section-header" data-section="1">

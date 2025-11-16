@@ -4,12 +4,13 @@ Analysis endpoint.
 Handles patient form data submission and returns AI-generated diagnosis.
 """
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, BackgroundTasks
 import time
 from app.models.requests import FormDataRequest
 from app.models.responses import AnalysisResponse, ErrorResponse
 from app.services.rag_service import rag_service
 from app.services.claude_service import claude_service
+from app.services.sheets_service import sheets_service
 import logging
 
 logger = logging.getLogger(__name__)
@@ -26,7 +27,7 @@ router = APIRouter()
     },
     tags=["Analysis"]
 )
-async def analyze_patient_case(form_data: FormDataRequest):
+async def analyze_patient_case(form_data: FormDataRequest, background_tasks: BackgroundTasks):
     """
     Analyze patient case and return root cause diagnosis.
 
@@ -36,9 +37,11 @@ async def analyze_patient_case(form_data: FormDataRequest):
     3. Loads system prompt (4 documents: red flags, analogies, wrong explanations, treatment)
     4. Sends data + context + system prompt to Claude API
     5. Returns structured diagnosis with 2 root causes + treatment recommendations
+    6. Logs submission to Google Sheets (async, doesn't block response)
 
     Args:
         form_data: Complete patient form data from frontend
+        background_tasks: FastAPI background tasks for async logging
 
     Returns:
         AnalysisResponse with root causes, explanations, and recommendations
@@ -107,6 +110,16 @@ async def analyze_patient_case(form_data: FormDataRequest):
         logger.info(f"  - Claude analysis: {claude_time:.2f}s")
         logger.info(f"  - Total time: {total_time:.2f}s")
         logger.info("="*80)
+
+        # Log to Google Sheets in background (doesn't block response)
+        processing_time_ms = total_time * 1000
+        background_tasks.add_task(
+            sheets_service.log_submission,
+            form_data=form_data.model_dump(),
+            analysis_result=analysis.model_dump() if analysis else None,
+            rag_result=rag_result,
+            processing_time_ms=processing_time_ms
+        )
 
         return analysis
 

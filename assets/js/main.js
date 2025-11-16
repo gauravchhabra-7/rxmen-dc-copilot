@@ -3,6 +3,32 @@
  * Conditional logic, form submission, and initialization
  */
 
+// ==================== SESSION TRACKING ====================
+
+/**
+ * Generate UUID v4
+ */
+function generateUUID() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
+
+// Global session tracking
+window.session = {
+    sessionId: generateUUID(),
+    startTime: Date.now(),
+    getCompletionTime: function() {
+        const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+        // Cap at 900 seconds (15 minutes)
+        return Math.min(elapsed, 900);
+    }
+};
+
+console.log('✅ Session ID generated:', window.session.sessionId);
+
 // ==================== INITIALIZATION ====================
 
 document.addEventListener('DOMContentLoaded', function() {
