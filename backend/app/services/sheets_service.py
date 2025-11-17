@@ -8,7 +8,7 @@ import gspread
 from google.oauth2.service_account import Credentials
 from typing import Dict, Any, Optional, List
 import logging
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import os
 import json
 from app.config import settings
@@ -156,6 +156,19 @@ VALUE_MAPPINGS = {
     "blood": "Blood in urine or semen",
     "priapism": "Erection lasting more than 4 hours (priapism)",
 }
+
+
+def get_ist_timestamp():
+    """
+    Get current timestamp in IST (Indian Standard Time, UTC+5:30).
+
+    Returns:
+        ISO format timestamp string in IST
+    """
+    utc_now = datetime.now(timezone.utc)
+    ist_offset = timedelta(hours=5, minutes=30)
+    ist_time = utc_now + ist_offset
+    return ist_time.isoformat()
 
 
 def map_value(value, field_name=None):
@@ -505,13 +518,16 @@ class SheetsService:
             value = get(form_data, key, '')
             return map_value(value) if value != '' else ''
 
+        # Get masturbation method for conditional logic
+        masturbation_method = str(get(form_data, 'masturbation_method', '')).lower()
+
         # Prepare row data (71 columns in EXACT order matching Google Sheet)
         row = [
             # ============================================================
             # SECTION A: Session Metadata (Columns 1-4)
             # ============================================================
             get(form_data, 'session_id'),                                           # 1. Session ID
-            get(form_data, 'submitted_at', datetime.utcnow().isoformat()),         # 2. Timestamp
+            get(form_data, 'submitted_at', get_ist_timestamp()),                   # 2. Timestamp (IST)
             get(form_data, 'tester_name'),                                         # 3. Tester/Agent Name
             get(form_data, 'completion_time_seconds'),                             # 4. Form Completion Time (sec)
 
@@ -541,8 +557,8 @@ class SheetsService:
             map_value(get(form_data, 'sleep_quality')),                            # 25. Sleep Quality
             map_value(get(form_data, 'physical_activity')),                        # 26. Physical Activity
             map_value(get(form_data, 'masturbation_method')),                      # 27. Masturbation Method
-            map_value(get(form_data, 'masturbation_grip')),                        # 28. Masturbation Grip
-            map_value(get(form_data, 'masturbation_frequency')),                   # 29. Masturbation Frequency
+            get_mapped_or_na('masturbation_grip', masturbation_method in ['hands', 'both']),  # 28. Masturbation Grip (N/A if not using hands)
+            get_mapped_or_na('masturbation_frequency', masturbation_method not in ['none', '']), # 29. Masturbation Frequency (N/A if none)
             map_value(get(form_data, 'porn_frequency')),                           # 30. Porn Usage Frequency
             get_mapped_or_na('partner_response', has_partner),                     # 31. Partner Response (N/A if single)
             get_mapped_or_na('ed_gets_erections', has_ed),                         # 32. ED - Gets Erections (N/A if PE only)
@@ -570,11 +586,14 @@ class SheetsService:
             # SECTION C: AI Output (Columns 52-59)
             # ============================================================
             get(primary_cause, 'category'),                                 # 52. Primary Root Cause - Medical Term
-            get(primary_cause, 'explanation'),                              # 53. Primary Root Cause - Explanation
+            get(primary_cause, 'simple_term'),                              # 53. Primary Root Cause - Simple Term (FIX: was explanation)
             get(secondary_cause, 'category'),                               # 54. Secondary Root Cause - Medical Term
-            get(secondary_cause, 'explanation'),                            # 55. Secondary Root Cause - Explanation
-            get(analysis_result, 'detailed_analysis') if analysis_result else "",  # 56. Agent Script
-            get(analysis_result, 'summary') if analysis_result else "",     # 57. Treatment Plan
+            get(secondary_cause, 'simple_term'),                            # 55. Secondary Root Cause - Simple Term (FIX: was explanation)
+            '\n\n'.join(filter(None, [                                      # 56. Root Cause Explanation (FIX: combined explanations)
+                get(primary_cause, 'explanation'),
+                get(secondary_cause, 'explanation')
+            ])),
+            get(analysis_result, 'detailed_analysis') if analysis_result else "",  # 57. Treatment Explanation (FIX: was summary)
             red_flags_count,                                                # 58. Red Flags Detected
             red_flags_details,                                              # 59. Red Flag Details
 
