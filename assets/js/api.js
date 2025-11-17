@@ -50,11 +50,8 @@
         const arrayFields = ['medical_conditions', 'current_medications', 'previous_treatments'];
 
         // Fields to exclude (not in backend schema)
-        const excludeFields = [
-            'full_name', 'city', 'occupation', 'issue_context', 'issue_duration',
-            'pe_partner_type', 'pe_partner_ejaculation_time', 'pe_partner_penile_sensitivity',
-            'medical_conditions_other', 'current_medications_other'
-        ];
+        // FIXED: All fields should now be sent to backend for complete Google Sheets logging
+        const excludeFields = [];
 
         // Process each field
         for (let [key, value] of Object.entries(formData)) {

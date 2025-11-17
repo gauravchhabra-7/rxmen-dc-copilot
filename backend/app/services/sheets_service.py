@@ -459,21 +459,29 @@ class SheetsService:
         height_in = get(form_data, 'height_in')
         height_ft_in = f"{height_ft}'{height_in}\"" if height_ft and height_in else ""
 
-        # Debug: Log if missing fields are in form_data
-        missing_fields_check = ['full_name', 'city', 'occupation']
-        for field in missing_fields_check:
-            if field not in form_data or not form_data.get(field):
-                logger.warning(f"⚠️ Field '{field}' is missing or empty in form_data")
-                # Try alternative key names
-                alt_keys = {
-                    'full_name': ['name', 'patient_name', 'client_name'],
-                    'city': ['location'],
-                    'occupation': ['job', 'work']
-                }
-                if field in alt_keys:
-                    for alt_key in alt_keys[field]:
-                        if alt_key in form_data and form_data.get(alt_key):
-                            logger.info(f"✓ Found alternative key '{alt_key}' for '{field}'")
+        # HEIGHT CONVERSION: Convert ft+in to cm if height_cm is not provided
+        height_cm = get(form_data, 'height_cm')
+        if not height_cm or height_cm == '':
+            if height_ft and height_in:
+                try:
+                    # Convert: 1 foot = 30.48 cm, 1 inch = 2.54 cm
+                    total_cm = (float(height_ft) * 30.48) + (float(height_in) * 2.54)
+                    height_cm = round(total_cm, 2)
+                    logger.info(f"✓ Converted height: {height_ft}ft {height_in}in = {height_cm}cm")
+                except (ValueError, TypeError) as e:
+                    logger.warning(f"⚠️ Could not convert height: {e}")
+                    height_cm = ''
+            else:
+                height_cm = ''
+
+        # Debug: Log if critical fields are missing from payload (not just empty)
+        # Note: After fix, all fields should be sent from frontend
+        if 'full_name' not in form_data:
+            logger.debug("Field 'full_name' not in form_data payload")
+        if 'city' not in form_data:
+            logger.debug("Field 'city' not in form_data payload")
+        if 'occupation' not in form_data:
+            logger.debug("Field 'occupation' not in form_data payload")
 
         # Determine conditional N/A logic
         main_issue = str(get(form_data, 'main_issue', '')).lower()
@@ -512,7 +520,7 @@ class SheetsService:
             # ============================================================
             get(form_data, 'full_name'),                                           # 5. Full Name (no mapping needed)
             map_value(get(form_data, 'age')),                                      # 6. Age
-            map_value(get(form_data, 'height_cm')),                                # 7. Height (cm)
+            map_value(height_cm),                                                  # 7. Height (cm) - USES CONVERTED VALUE
             map_value(get(form_data, 'weight')),                                   # 8. Weight (kg)
             get(form_data, 'city'),                                                # 9. City (no mapping needed)
             map_value(get(form_data, 'occupation')),                               # 10. Occupation
