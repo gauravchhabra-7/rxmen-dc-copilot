@@ -15,17 +15,14 @@ import json
 logger = logging.getLogger(__name__)
 
 # Google Sheets configuration
-SCOPES = [
-    'https://www.googleapis.com/auth/spreadsheets',
-    'https://www.googleapis.com/auth/drive'
-]
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 
 class SheetsService:
     """
     Service for logging form submissions to Google Sheets.
 
-    Uses gspread library with service account authentication.
+    Uses gspread library with service account authentication via environment variables.
     """
 
     def __init__(self):
@@ -45,48 +42,42 @@ class SheetsService:
             return
 
         try:
-            # Load service account credentials from environment
-            service_account_file = os.getenv('GOOGLE_SERVICE_ACCOUNT_FILE')
-            spreadsheet_id = os.getenv('GOOGLE_SPREADSHEET_ID')
-            worksheet_name = os.getenv('GOOGLE_WORKSHEET_NAME', 'Form Submissions')
+            # Load service account credentials from environment (JSON string)
+            creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
+            sheet_id = os.getenv('GOOGLE_SHEET_ID')
 
-            if not service_account_file:
-                logger.warning("⚠️ GOOGLE_SERVICE_ACCOUNT_FILE not set - Sheets logging disabled")
+            if not creds_json:
+                logger.warning("⚠️ GOOGLE_SHEETS_CREDENTIALS not set - Sheets logging disabled")
                 return
 
-            if not spreadsheet_id:
-                logger.warning("⚠️ GOOGLE_SPREADSHEET_ID not set - Sheets logging disabled")
+            if not sheet_id:
+                logger.warning("⚠️ GOOGLE_SHEET_ID not set - Sheets logging disabled")
                 return
+
+            # Parse JSON string to dictionary
+            creds_dict = json.loads(creds_json)
 
             # Authenticate with service account
-            credentials = Credentials.from_service_account_file(
-                service_account_file,
+            credentials = Credentials.from_service_account_info(
+                creds_dict,
                 scopes=SCOPES
             )
 
             self.client = gspread.authorize(credentials)
 
-            # Open spreadsheet and worksheet
-            self.spreadsheet = self.client.open_by_key(spreadsheet_id)
+            # Open spreadsheet by ID
+            self.spreadsheet = self.client.open_by_key(sheet_id)
 
-            # Get or create worksheet
-            try:
-                self.worksheet = self.spreadsheet.worksheet(worksheet_name)
-            except gspread.WorksheetNotFound:
-                logger.info(f"Creating new worksheet: {worksheet_name}")
-                self.worksheet = self.spreadsheet.add_worksheet(
-                    title=worksheet_name,
-                    rows=1000,
-                    cols=71
-                )
-                # Add header row
-                self._initialize_headers()
+            # Use first sheet (Testing Log)
+            self.worksheet = self.spreadsheet.sheet1
 
             self._initialized = True
             logger.info("✅ Google Sheets service initialized successfully")
 
+        except json.JSONDecodeError as e:
+            logger.error(f"❌ Invalid JSON in GOOGLE_SHEETS_CREDENTIALS: {str(e)}")
         except FileNotFoundError:
-            logger.error(f"❌ Service account file not found: {service_account_file}")
+            logger.error(f"❌ Service account credentials invalid")
         except Exception as e:
             logger.error(f"❌ Failed to initialize Google Sheets: {str(e)}")
 
