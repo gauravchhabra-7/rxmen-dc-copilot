@@ -48,6 +48,10 @@ class Settings(BaseSettings):
     pinecone_environment: Optional[str] = None
     pinecone_index_name: str = "rxmen-medical-knowledge"
 
+    # Google Sheets Settings (optional - for form submission logging)
+    google_sheet_id: Optional[str] = None
+    google_sheets_credentials: Optional[str] = None
+
     # RAG Settings
     rag_top_k: int = 8  # Number of chunks to retrieve (per handoff doc specification)
     rag_chunk_size: int = 800  # Target tokens per chunk (actual avg: 731 tokens)
