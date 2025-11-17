@@ -297,100 +297,98 @@ class SheetsService:
         height_in = get(form_data, 'height_in')
         height_ft_in = f"{height_ft}'{height_in}\"" if height_ft and height_in else ""
 
-        # Prepare row data (71 columns in order)
+        # Prepare row data (71 columns in EXACT order matching Google Sheet)
         row = [
-            # Session Metadata (3)
-            get(form_data, 'session_id'),
-            get(form_data, 'tester_name'),
-            get(form_data, 'completion_time_seconds'),
+            # ============================================================
+            # SECTION A: Session Metadata (Columns 1-4)
+            # ============================================================
+            get(form_data, 'session_id'),                                    # 1. Session ID
+            get(form_data, 'submitted_at', datetime.utcnow().isoformat()),  # 2. Timestamp
+            get(form_data, 'tester_name'),                                  # 3. Tester/Agent Name
+            get(form_data, 'completion_time_seconds'),                      # 4. Form Completion Time (sec)
 
-            # Submission Metadata (3)
-            get(form_data, 'submitted_at', datetime.utcnow().isoformat()),
-            get(form_data, 'form_version', '2.2'),
-            processing_time_ms if processing_time_ms else "",
+            # ============================================================
+            # SECTION B: Patient Input Data (Columns 5-51)
+            # ============================================================
+            get(form_data, 'full_name'),                                    # 5. Full Name
+            get(form_data, 'age'),                                          # 6. Age
+            get(form_data, 'height_cm'),                                    # 7. Height (cm)
+            get(form_data, 'weight'),                                       # 8. Weight (kg)
+            get(form_data, 'city'),                                         # 9. City
+            get(form_data, 'occupation'),                                   # 10. Occupation
+            get(form_data, 'relationship_status'),                          # 11. Relationship Status
+            get(form_data, 'first_consultation'),                           # 12. First Consultation
+            get(form_data, 'previous_treatments'),                          # 13. Previous Treatments
+            get(form_data, 'emergency_red_flags'),                          # 14. Emergency Red Flags
+            get(form_data, 'main_issue'),                                   # 15. Main Issue
+            get(form_data, 'issue_duration'),                               # 16. Issue Duration
+            get(form_data, 'issue_context'),                                # 17. Issue Context
+            get(form_data, 'medical_conditions'),                           # 18. Medical Conditions
+            get(form_data, 'medical_conditions_other'),                     # 19. Medical Conditions - Other
+            get(form_data, 'current_medications'),                          # 20. Current Medications
+            get(form_data, 'current_medications_other'),                    # 21. Current Medications - Other
+            get(form_data, 'spinal_genital_surgery'),                       # 22. Spinal/Genital Surgery
+            get(form_data, 'alcohol_consumption'),                          # 23. Alcohol Frequency
+            get(form_data, 'smoking_status'),                               # 24. Smoking Frequency
+            get(form_data, 'sleep_quality'),                                # 25. Sleep Quality
+            get(form_data, 'physical_activity'),                            # 26. Physical Activity
+            get(form_data, 'masturbation_method'),                          # 27. Masturbation Method
+            get(form_data, 'masturbation_grip'),                            # 28. Masturbation Grip
+            get(form_data, 'masturbation_frequency'),                       # 29. Masturbation Frequency
+            get(form_data, 'porn_frequency'),                               # 30. Porn Usage Frequency
+            get(form_data, 'partner_response'),                             # 31. Partner Response
+            get(form_data, 'ed_gets_erections'),                            # 32. ED - Gets Erections
+            get(form_data, 'ed_sexual_activity_status'),                    # 33. ED - Sexual Activity Status
+            get(form_data, 'ed_partner_arousal_speed'),                     # 34. ED - Arousal Speed (Partner)
+            get(form_data, 'ed_partner_maintenance'),                       # 35. ED - Maintenance (Partner)
+            get(form_data, 'ed_partner_hardness'),                          # 36. ED - Hardness (Partner)
+            get(form_data, 'ed_morning_erections'),                         # 37. ED - Morning Erections
+            get(form_data, 'ed_masturbation_imagination'),                  # 38. ED - Masturbation/Imagination
+            "",                                                              # 39. ED - Morning Erections (Solo)
+            "",                                                              # 40. ED - Masturbation/Imagination (Solo)
+            "",                                                              # 41. ED - Arousal Speed (Solo)
+            get(form_data, 'pe_sexual_activity_status'),                    # 42. PE - Sexual Activity Status
+            get(form_data, 'pe_partner_time_to_ejaculation'),               # 43. PE - Ejaculation Time (Partner)
+            "",                                                              # 44. PE - Lifelong/Acquired (Partner)
+            "",                                                              # 45. PE - Penile Sensitivity (Partner)
+            get(form_data, 'pe_partner_masturbation_control'),              # 46. PE - Masturbation Control (Partner)
+            "",                                                              # 47. PE - Ejaculation Time (Solo)
+            "",                                                              # 48. PE - Lifelong/Acquired (Solo)
+            "",                                                              # 49. PE - Penile Sensitivity (Solo)
+            get(form_data, 'pe_partner_control'),                           # 50. PE - Masturbation Control (Solo)
+            get(form_data, 'additional_info'),                              # 51. Other Information
 
-            # Patient Input - Section 1 (4)
-            get(form_data, 'age'),
-            get(form_data, 'height_cm'),
-            height_ft_in,
-            get(form_data, 'weight'),
+            # ============================================================
+            # SECTION C: AI Output (Columns 52-59)
+            # ============================================================
+            get(primary_cause, 'category'),                                 # 52. Primary Root Cause - Medical Term
+            get(primary_cause, 'explanation'),                              # 53. Primary Root Cause - Explanation
+            get(secondary_cause, 'category'),                               # 54. Secondary Root Cause - Medical Term
+            get(secondary_cause, 'explanation'),                            # 55. Secondary Root Cause - Explanation
+            get(analysis_result, 'detailed_analysis') if analysis_result else "",  # 56. Agent Script
+            get(analysis_result, 'summary') if analysis_result else "",     # 57. Treatment Plan
+            red_flags_count,                                                # 58. Red Flags Detected
+            red_flags_details,                                              # 59. Red Flag Details
 
-            # Patient Input - Section 2 (2)
-            get(form_data, 'main_issue'),
-            get(form_data, 'emergency_red_flags'),
+            # ============================================================
+            # SECTION D: Doctor Review (Columns 60-65)
+            # ============================================================
+            "Pending",                                                      # 60. Review Status
+            "",                                                             # 61. Doctor Name
+            "",                                                             # 62. Review Date
+            "",                                                             # 63. Doctor Comments
+            "",                                                             # 64. Correct Primary Diagnosis
+            "",                                                             # 65. Correct Secondary Diagnosis
 
-            # Patient Input - Section 3 (8)
-            get(form_data, 'medical_conditions'),
-            get(form_data, 'current_medications'),
-            get(form_data, 'spinal_genital_surgery'),
-            get(form_data, 'alcohol_consumption'),
-            get(form_data, 'smoking_status'),
-            get(form_data, 'substance_consumption'),
-            get(form_data, 'sleep_quality'),
-            get(form_data, 'physical_activity'),
-
-            # Patient Input - Section 4 (6)
-            get(form_data, 'relationship_status'),
-            get(form_data, 'masturbation_method'),
-            get(form_data, 'masturbation_grip'),
-            get(form_data, 'masturbation_frequency'),
-            get(form_data, 'porn_frequency'),
-            get(form_data, 'partner_response'),
-
-            # Patient Input - Section 5: ED Branch (7)
-            get(form_data, 'ed_gets_erections'),
-            get(form_data, 'ed_sexual_activity_status'),
-            get(form_data, 'ed_partner_arousal_speed'),
-            get(form_data, 'ed_partner_maintenance'),
-            get(form_data, 'ed_partner_hardness'),
-            get(form_data, 'ed_morning_erections'),
-            get(form_data, 'ed_masturbation_imagination'),
-
-            # Patient Input - Section 5: PE Branch (5)
-            get(form_data, 'pe_sexual_activity_status'),
-            get(form_data, 'pe_partner_time_to_ejaculation'),
-            get(form_data, 'pe_partner_control'),
-            get(form_data, 'pe_partner_satisfaction'),
-            get(form_data, 'pe_partner_masturbation_control'),
-
-            # Patient Input - Section 6 (3)
-            get(form_data, 'first_consultation'),
-            get(form_data, 'previous_treatments'),
-            get(form_data, 'additional_info'),
-
-            # AI Analysis Output - Root Causes (10)
-            get(primary_cause, 'category'),
-            get(primary_cause, 'simple_term'),
-            get(primary_cause, 'confidence'),
-            get(primary_cause, 'explanation'),
-            get(primary_cause, 'analogy'),
-            get(secondary_cause, 'category'),
-            get(secondary_cause, 'simple_term'),
-            get(secondary_cause, 'confidence'),
-            get(secondary_cause, 'explanation'),
-            get(secondary_cause, 'analogy'),
-
-            # AI Analysis Output - Diagnosis (5)
-            get(analysis_result, 'primary_diagnosis') if analysis_result else "",
-            get(analysis_result, 'detailed_analysis') if analysis_result else "",
-            get(analysis_result, 'summary') if analysis_result else "",
-            red_flags_count,
-            red_flags_details,
-
-            # AI Analysis Output - Treatment (3)
-            get(analysis_result, 'doctor_recommendation') if analysis_result else "",
-            get(analysis_result, 'treatment_confidence') if analysis_result else "",
-            get(analysis_result, 'treatment_notes') if analysis_result else "",
-
-            # RAG Context (3)
-            get(rag_result, 'chunks_retrieved') if rag_result else "",
-            self._get_rag_chunk_field(rag_result, 'chunk_id'),
-            self._get_rag_chunk_field(rag_result, 'relevance_score'),
-
-            # Doctor Review (3) - empty for manual input
-            "",
-            "",
-            ""
+            # ============================================================
+            # SECTION E: System Metadata (Columns 66-71)
+            # ============================================================
+            self._get_rag_sources(rag_result),                              # 66. RAG Sources Used
+            get(primary_cause, 'confidence'),                               # 67. Primary Confidence (%)
+            get(secondary_cause, 'confidence'),                             # 68. Secondary Confidence (%)
+            round(processing_time_ms / 1000, 2) if processing_time_ms else "",  # 69. Processing Time (sec)
+            "hinglish",                                                     # 70. Language Used
+            self._format_complete_json(form_data)                           # 71. Complete Form Data (JSON)
         ]
 
         return row
@@ -418,6 +416,51 @@ class SheetsService:
             return ""
 
         return str(first_chunk.get(field_name, ""))
+
+    def _get_rag_sources(self, rag_result: Optional[Dict[str, Any]]) -> str:
+        """
+        Extract RAG source chunk IDs.
+
+        Args:
+            rag_result: RAG result dictionary
+
+        Returns:
+            Comma-separated list of chunk IDs, or empty string
+        """
+        if not rag_result or not isinstance(rag_result, dict):
+            return ""
+
+        chunks = rag_result.get('chunks', [])
+        if not chunks or not isinstance(chunks, list):
+            return ""
+
+        chunk_ids = []
+        for chunk in chunks:
+            if isinstance(chunk, dict) and 'chunk_id' in chunk:
+                chunk_ids.append(str(chunk['chunk_id']))
+
+        return ", ".join(chunk_ids) if chunk_ids else ""
+
+    def _format_complete_json(self, form_data: Any) -> str:
+        """
+        Format complete form data as JSON string.
+
+        Args:
+            form_data: Form data (dict or object)
+
+        Returns:
+            JSON string of form data
+        """
+        try:
+            if isinstance(form_data, dict):
+                return json.dumps(form_data, ensure_ascii=False)
+            elif hasattr(form_data, '__dict__'):
+                return json.dumps(form_data.__dict__, ensure_ascii=False)
+            else:
+                return str(form_data)
+        except Exception as e:
+            logger.warning(f"Failed to format form data as JSON: {str(e)}")
+            return ""
 
 
 # Singleton instance
