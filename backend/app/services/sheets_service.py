@@ -239,27 +239,58 @@ class SheetsService:
             List of 71 values corresponding to the header columns
         """
         # Helper function to safely get values
-        def get(data: Optional[Dict], key: str, default: Any = "") -> Any:
+        def get(data: Any, key: str, default: Any = "") -> Any:
             if data is None:
                 return default
-            value = data.get(key, default)
+            # Handle dict-like objects
+            if isinstance(data, dict):
+                value = data.get(key, default)
+            # Handle Pydantic models or objects with __dict__
+            elif hasattr(data, key):
+                value = getattr(data, key, default)
+            elif hasattr(data, '__dict__') and key in data.__dict__:
+                value = data.__dict__[key]
+            else:
+                return default
+
             # Convert lists to comma-separated strings
             if isinstance(value, list):
+                # Handle list of dicts/objects
+                if value and isinstance(value[0], dict):
+                    return ", ".join(str(v) for v in value)
                 return ", ".join(str(v) for v in value)
             return value if value is not None else default
 
-        # Extract root causes from analysis
-        root_causes = analysis_result.get('root_causes', []) if analysis_result else []
-        primary_cause = root_causes[0] if len(root_causes) > 0 else {}
-        secondary_cause = root_causes[1] if len(root_causes) > 1 else {}
+        # Extract root causes from analysis (with defensive checks)
+        root_causes = []
+        if analysis_result and isinstance(analysis_result, dict):
+            root_causes = analysis_result.get('root_causes', [])
 
-        # Extract red flags
-        red_flags = analysis_result.get('red_flags', []) if analysis_result else []
-        red_flags_count = len(red_flags)
-        red_flags_details = "; ".join([
-            f"{rf.get('category', 'Unknown')}: {rf.get('action', 'No action')}"
-            for rf in red_flags
-        ]) if red_flags else ""
+        # Ensure we have dict objects for root causes
+        primary_cause = {}
+        secondary_cause = {}
+        if len(root_causes) > 0:
+            primary_cause = root_causes[0] if isinstance(root_causes[0], dict) else {}
+        if len(root_causes) > 1:
+            secondary_cause = root_causes[1] if isinstance(root_causes[1], dict) else {}
+
+        # Extract red flags (with defensive checks)
+        red_flags = []
+        if analysis_result and isinstance(analysis_result, dict):
+            red_flags = analysis_result.get('red_flags', [])
+
+        red_flags_count = len(red_flags) if isinstance(red_flags, list) else 0
+
+        # Safely extract red flag details
+        red_flags_details = ""
+        if red_flags and isinstance(red_flags, list):
+            details = []
+            for rf in red_flags:
+                if isinstance(rf, dict):
+                    category = rf.get('category', 'Unknown')
+                    action = rf.get('action', 'No action')
+                    details.append(f"{category}: {action}")
+            red_flags_details = "; ".join(details)
 
         # Format height (combine ft and inches if available)
         height_ft = get(form_data, 'height_ft')
@@ -353,8 +384,8 @@ class SheetsService:
 
             # RAG Context (3)
             get(rag_result, 'chunks_retrieved') if rag_result else "",
-            get(rag_result, 'chunks', [{}])[0].get('chunk_id', '') if rag_result and rag_result.get('chunks') else "",
-            get(rag_result, 'chunks', [{}])[0].get('relevance_score', '') if rag_result and rag_result.get('chunks') else "",
+            self._get_rag_chunk_field(rag_result, 'chunk_id'),
+            self._get_rag_chunk_field(rag_result, 'relevance_score'),
 
             # Doctor Review (3) - empty for manual input
             "",
@@ -363,6 +394,30 @@ class SheetsService:
         ]
 
         return row
+
+    def _get_rag_chunk_field(self, rag_result: Optional[Dict[str, Any]], field_name: str) -> str:
+        """
+        Safely extract a field from the first RAG chunk.
+
+        Args:
+            rag_result: RAG result dictionary
+            field_name: Field name to extract from first chunk
+
+        Returns:
+            Field value as string, or empty string if not found
+        """
+        if not rag_result or not isinstance(rag_result, dict):
+            return ""
+
+        chunks = rag_result.get('chunks', [])
+        if not chunks or not isinstance(chunks, list) or len(chunks) == 0:
+            return ""
+
+        first_chunk = chunks[0]
+        if not isinstance(first_chunk, dict):
+            return ""
+
+        return str(first_chunk.get(field_name, ""))
 
 
 # Singleton instance
