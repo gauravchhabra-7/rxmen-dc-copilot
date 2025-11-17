@@ -22,13 +22,22 @@ class FormDataRequest(BaseModel):
     height_in: Optional[int] = Field(None, description="Height in inches")
     weight: float = Field(..., gt=0, description="Weight in kg")
 
+    # Additional client information fields (for Google Sheets logging)
+    full_name: Optional[str] = Field(None, description="Patient full name (for logging only)")
+    city: Optional[str] = Field(None, description="Patient city (for logging only)")
+    occupation: Optional[str] = Field(None, description="Patient occupation (for logging only)")
+
     # Section 2: Main Concern
     main_issue: str = Field(..., description="Primary concern: ed, pe, or both")
     emergency_red_flags: str = Field(..., description="Emergency red flag selection")
+    issue_duration: Optional[str] = Field(None, description="When issue started (for logging only)")
+    issue_context: Optional[str] = Field(None, description="Context where issue occurs (for logging only)")
 
     # Section 3: Medical & Lifestyle
     medical_conditions: list[str] = Field(default_factory=list, description="Medical conditions")
+    medical_conditions_other: Optional[str] = Field(None, description="Other medical conditions text")
     current_medications: list[str] = Field(default_factory=list, description="Current medications")
+    current_medications_other: Optional[str] = Field(None, description="Other medications text")
     spinal_genital_surgery: str = Field(..., description="Surgery/injury history")
     alcohol_consumption: str = Field(..., description="Alcohol frequency")
     smoking_status: str = Field(..., description="Smoking status")
@@ -57,6 +66,9 @@ class FormDataRequest(BaseModel):
     # PE Branch (5B)
     pe_sexual_activity_status: Optional[str] = Field(None, description="PE sexual activity status")
     pe_partner_time_to_ejaculation: Optional[str] = Field(None, description="Time to ejaculation with partner")
+    pe_partner_ejaculation_time: Optional[str] = Field(None, description="Alias for time to ejaculation")
+    pe_partner_type: Optional[str] = Field(None, description="Lifelong vs acquired PE")
+    pe_partner_penile_sensitivity: Optional[str] = Field(None, description="Penis tip sensitivity")
     pe_partner_control: Optional[str] = Field(None, description="Control during partnered sex")
     pe_partner_satisfaction: Optional[str] = Field(None, description="Partner satisfaction")
     pe_partner_masturbation_control: Optional[str] = Field(None, description="Control during masturbation")

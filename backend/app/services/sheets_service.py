@@ -496,7 +496,7 @@ class SheetsService:
         if 'occupation' not in form_data:
             logger.debug("Field 'occupation' not in form_data payload")
 
-        # Determine conditional N/A logic
+        # Determine conditional N/A logic with proper error handling
         main_issue = str(get(form_data, 'main_issue', '')).lower()
         has_ed = main_issue in ['ed', 'both']
         has_pe = main_issue in ['pe', 'both']
@@ -504,11 +504,35 @@ class SheetsService:
         relationship_status = str(get(form_data, 'relationship_status', '')).lower()
         has_partner = relationship_status in ['married', 'in_relationship']
 
+        # ED pathway logic
+        # Partner pathway: User has partner AND gets erections (even if rarely)
+        # Solo pathway: User is single OR doesn't get erections at all
+        ed_gets_erections = str(get(form_data, 'ed_gets_erections', '')).lower()
         ed_sexual_activity = str(get(form_data, 'ed_sexual_activity_status', '')).lower()
-        ed_has_partner_data = ed_sexual_activity in ['yes_active', 'avoiding_due_to_fear']
 
+        # User follows partner pathway if:
+        # 1. They have a partner (married/in_relationship) AND
+        # 2. They get some erections (even if "rarely") AND
+        # 3. They are sexually active or avoiding due to fear
+        # If ed_gets_erections = "no", then solo pathway regardless of relationship
+        ed_has_partner_data = (
+            has_partner and
+            ed_gets_erections == 'yes' and
+            ed_sexual_activity in ['yes_active', 'avoiding_due_to_fear', '']
+        )
+
+        # PE pathway logic
+        # Partner pathway: User has partner AND sexually active
+        # Solo pathway: Not collected in form (always N/A)
         pe_sexual_activity = str(get(form_data, 'pe_sexual_activity_status', '')).lower()
-        pe_has_partner_data = pe_sexual_activity in ['yes_active', 'avoiding_due_to_fear']
+        pe_has_partner_data = (
+            has_partner and
+            pe_sexual_activity in ['yes_active', 'avoiding_due_to_fear']
+        )
+
+        # Masturbation-specific fields (only show if user masturbates)
+        masturbation_method = str(get(form_data, 'masturbation_method', '')).lower()
+        does_masturbate = masturbation_method not in ['', 'none', 'no_masturbation']
 
         # Helper function to get value with mapping or N/A
         def get_mapped_or_na(key, condition=True):
@@ -517,9 +541,6 @@ class SheetsService:
                 return 'N/A'
             value = get(form_data, key, '')
             return map_value(value) if value != '' else ''
-
-        # Get masturbation method for conditional logic
-        masturbation_method = str(get(form_data, 'masturbation_method', '')).lower()
 
         # Prepare row data (71 columns in EXACT order matching Google Sheet)
         row = [
@@ -557,8 +578,8 @@ class SheetsService:
             map_value(get(form_data, 'sleep_quality')),                            # 25. Sleep Quality
             map_value(get(form_data, 'physical_activity')),                        # 26. Physical Activity
             map_value(get(form_data, 'masturbation_method')),                      # 27. Masturbation Method
-            get_mapped_or_na('masturbation_grip', masturbation_method in ['hands', 'both']),  # 28. Masturbation Grip (N/A if not using hands)
-            get_mapped_or_na('masturbation_frequency', masturbation_method not in ['none', '']), # 29. Masturbation Frequency (N/A if none)
+            get_mapped_or_na('masturbation_grip', does_masturbate and masturbation_method in ['hands', 'both']),  # 28. Masturbation Grip (N/A if doesn't masturbate or not using hands)
+            get_mapped_or_na('masturbation_frequency', does_masturbate),           # 29. Masturbation Frequency (N/A if doesn't masturbate)
             map_value(get(form_data, 'porn_frequency')),                           # 30. Porn Usage Frequency
             get_mapped_or_na('partner_response', has_partner),                     # 31. Partner Response (N/A if single)
             get_mapped_or_na('ed_gets_erections', has_ed),                         # 32. ED - Gets Erections (N/A if PE only)
@@ -566,20 +587,20 @@ class SheetsService:
             get_mapped_or_na('ed_partner_arousal_speed', has_ed and ed_has_partner_data),  # 34. ED - Arousal Speed (Partner)
             get_mapped_or_na('ed_partner_maintenance', has_ed and ed_has_partner_data),    # 35. ED - Maintenance (Partner)
             get_mapped_or_na('ed_partner_hardness', has_ed and ed_has_partner_data),       # 36. ED - Hardness (Partner)
-            get_mapped_or_na('ed_morning_erections', has_ed and ed_has_partner_data),      # 37. ED - Morning Erections
-            get_mapped_or_na('ed_masturbation_imagination', has_ed and ed_has_partner_data), # 38. ED - Masturbation/Imagination
-            get_mapped_or_na('ed_solo_morning_erections', has_ed and not ed_has_partner_data), # 39. ED - Morning Erections (Solo)
-            get_mapped_or_na('ed_solo_masturbation_imagination', has_ed and not ed_has_partner_data), # 40. ED - Masturbation/Imagination (Solo)
-            get_mapped_or_na('ed_solo_arousal_speed', has_ed and not ed_has_partner_data),   # 41. ED - Arousal Speed (Solo)
+            get_mapped_or_na('ed_morning_erections', has_ed and ed_has_partner_data),      # 37. ED - Morning Erections (Partner)
+            get_mapped_or_na('ed_masturbation_imagination', has_ed and ed_has_partner_data), # 38. ED - Masturbation/Imagination (Partner)
+            get_mapped_or_na('ed_morning_erections', has_ed and not ed_has_partner_data),   # 39. ED - Morning Erections (Solo) - same field as partner
+            get_mapped_or_na('ed_masturbation_imagination', has_ed and not ed_has_partner_data), # 40. ED - Masturbation/Imagination (Solo) - same field as partner
+            'N/A' if has_ed and not ed_has_partner_data else 'N/A',                        # 41. ED - Arousal Speed (Solo) - not collected
             get_mapped_or_na('pe_sexual_activity_status', has_pe),                 # 42. PE - Sexual Activity Status (N/A if ED only)
             get_mapped_or_na('pe_partner_time_to_ejaculation', has_pe and pe_has_partner_data),  # 43. PE - Ejaculation Time (Partner)
             get_mapped_or_na('pe_partner_type', has_pe and pe_has_partner_data),             # 44. PE - Lifelong/Acquired (Partner)
             get_mapped_or_na('pe_partner_penile_sensitivity', has_pe and pe_has_partner_data), # 45. PE - Penile Sensitivity (Partner)
             get_mapped_or_na('pe_partner_masturbation_control', has_pe and pe_has_partner_data), # 46. PE - Masturbation Control (Partner)
-            get_mapped_or_na('pe_solo_time_to_ejaculation', has_pe and not pe_has_partner_data), # 47. PE - Ejaculation Time (Solo)
-            get_mapped_or_na('pe_solo_type', has_pe and not pe_has_partner_data),               # 48. PE - Lifelong/Acquired (Solo)
-            get_mapped_or_na('pe_solo_penile_sensitivity', has_pe and not pe_has_partner_data),  # 49. PE - Penile Sensitivity (Solo)
-            get_mapped_or_na('pe_partner_control', has_pe and not pe_has_partner_data),          # 50. PE - Masturbation Control (Solo)
+            'N/A' if has_pe and not pe_has_partner_data else 'N/A',                     # 47. PE - Ejaculation Time (Solo) - not collected
+            'N/A' if has_pe and not pe_has_partner_data else 'N/A',                     # 48. PE - Lifelong/Acquired (Solo) - not collected
+            'N/A' if has_pe and not pe_has_partner_data else 'N/A',                     # 49. PE - Penile Sensitivity (Solo) - not collected
+            get_mapped_or_na('pe_partner_masturbation_control', has_pe),                 # 50. PE - Masturbation Control (available for all PE)
             get(form_data, 'additional_info'),                                     # 51. Other Information
 
             # ============================================================
