@@ -11,6 +11,7 @@ import logging
 from datetime import datetime
 import os
 import json
+from app.config import settings
 
 logger = logging.getLogger(__name__)
 
@@ -42,9 +43,9 @@ class SheetsService:
             return
 
         try:
-            # Load service account credentials from environment (JSON string)
-            creds_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS')
-            sheet_id = os.getenv('GOOGLE_SHEET_ID')
+            # Load service account credentials from settings (loads from .env file)
+            creds_json = settings.google_sheets_credentials
+            sheet_id = settings.google_sheet_id
 
             if not creds_json:
                 logger.warning("⚠️ GOOGLE_SHEETS_CREDENTIALS not set - Sheets logging disabled")
