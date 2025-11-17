@@ -18,6 +18,168 @@ logger = logging.getLogger(__name__)
 # Google Sheets configuration
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
+# Value mapping dictionary - converts backend codes to user-friendly form text
+VALUE_MAPPINGS = {
+    # Yes/No mappings
+    "yes": "Yes",
+    "no": "No",
+    "true": "Yes",
+    "false": "No",
+
+    # Main Issue
+    "ed": "Erectile Dysfunction (ED)",
+    "pe": "Early Ejaculation (PE)",
+    "both": "Both ED and PE",
+
+    # Duration
+    "lifelong": "Since my first sexual experience (Lifelong)",
+    "less_1_month": "Less than 1 month ago",
+    "1_to_6_months": "1-6 months ago",
+    "6_to_12_months": "6-12 months ago",
+    "1_to_3_years": "1-3 years ago",
+    "more_3_years": "More than 3 years ago",
+
+    # Context
+    "sex_with_partner": "During sex with partner",
+    "masturbation": "During masturbation",
+    "both_contexts": "Both (during sex and masturbation)",
+
+    # Occupation
+    "corporate": "Corporate Employee",
+    "business_owner": "Business Owner / Self-employed",
+    "freelancer": "Freelancer",
+    "student": "Student",
+    "retired": "Retired",
+    "unemployed": "Unemployed",
+
+    # Relationship Status
+    "married": "Married",
+    "in_relationship": "In a relationship",
+    "single": "Single",
+    "divorced_widowed": "Divorced / Widowed",
+
+    # Alcohol Frequency
+    "none": "No alcohol",
+    "monthly": "Once a month or less",
+    "biweekly": "Once every 2 weeks",
+    "weekly": "Once a week",
+    "2_3_per_week": "2-3 times per week",
+    "daily": "Daily",
+
+    # Smoking Frequency
+    "never": "No smoking",
+    "occasional": "Occasionally (only while drinking or social events)",
+    "few_per_week": "Few times per week",
+    "daily_smoking": "Daily",
+
+    # Sleep Quality
+    "good": "Good",
+    "average": "Average",
+    "poor": "Poor",
+
+    # Physical Activity
+    "active": "Active",
+    "somewhat_active": "Somewhat active",
+    "not_active": "Not active",
+
+    # Masturbation Method
+    "none": "No masturbation",
+    "hands": "Using hands",
+    "prone": "Rubbing against surface (prone)",
+    "both": "Both hands and rubbing surface",
+
+    # Masturbation Grip
+    "normal": "Normal",
+    "tight": "Tight",
+
+    # Masturbation Frequency
+    "less_than_3": "Less than 3 times per week",
+    "3_to_7": "3-7 times per week",
+    "8_plus": "8 or more times per week",
+
+    # Porn Frequency
+    "less_than_2": "Less than 2 times per week",
+    "3_to_5": "3-5 times per week",
+    "daily_or_more": "Daily or more",
+
+    # Partner Response
+    "supportive": "Supportive",
+    "neutral": "Neutral",
+    "non_supportive": "Non-supportive",
+    "unaware": "Unaware (haven't told them)",
+
+    # ED - Sexual Activity Status
+    "yes_active": "Yes, I have sex with a partner",
+    "avoiding_due_to_fear": "I have a partner but avoid sex due to worry/fear",
+    "no_partner": "No, I don't have a partner",
+
+    # ED - Arousal Speed
+    "always": "Always",
+    "sometimes": "Sometimes",
+    "rarely": "Rarely",
+
+    # ED - Maintenance
+    "loses_before_penetration": "Loses hardness before penetration",
+    "loses_during_sex": "Stays hard till penetration, then loses it",
+    "stays_till_completion": "Stays hard till completion",
+
+    # ED - Hardness
+    "always_hard": "Yes, always hard enough",
+    "sometimes_hard": "Sometimes hard enough",
+    "rarely_hard": "Rarely hard enough",
+    "never_hard": "Never hard enough",
+
+    # ED - Morning Erections
+    "regular": "Regular (most mornings)",
+    "occasional": "Occasional (sometimes)",
+    "absent": "Absent (rarely or never)",
+
+    # ED - Masturbation/Imagination
+    "both_work": "Yes, during both masturbation and imagination",
+    "masturbation_only": "Yes, during masturbation only",
+    "imagination_only": "Yes, with imagination/fantasies only",
+    "neither": "No, neither works",
+
+    # PE - Ejaculation Time
+    "before_penetration": "Before penetration",
+    "less_than_1_min": "Less than 1 minute after penetration",
+    "1_to_3_min": "1-3 minutes after penetration",
+    "more_than_3_min": "More than 3 minutes",
+
+    # PE - Control
+    "always_control": "Always can control",
+    "sometimes_control": "Sometimes can control",
+    "rarely_control": "Rarely can control",
+
+    # Emergency Red Flags
+    "severe_pain": "Severe pain in penis/testicles (unbearable, can't touch)",
+    "blood": "Blood in urine or semen",
+    "priapism": "Erection lasting more than 4 hours (priapism)",
+}
+
+
+def map_value(value, field_name=None):
+    """
+    Convert backend code to user-friendly text.
+    Returns original value if no mapping exists.
+    """
+    if value is None or value == '':
+        return ''
+
+    # Handle lists (multi-select fields)
+    if isinstance(value, list):
+        if not value:
+            return ''
+        # Special handling for "none" in lists
+        if len(value) == 1 and str(value[0]).lower() == 'none':
+            return 'None'
+        mapped = [VALUE_MAPPINGS.get(str(v).lower(), str(v)) for v in value]
+        return ', '.join(mapped)
+
+    # Convert to string and check mapping
+    value_str = str(value).lower()
+    return VALUE_MAPPINGS.get(value_str, str(value))
+
 
 class SheetsService:
     """
@@ -297,66 +459,104 @@ class SheetsService:
         height_in = get(form_data, 'height_in')
         height_ft_in = f"{height_ft}'{height_in}\"" if height_ft and height_in else ""
 
+        # Debug: Log if missing fields are in form_data
+        missing_fields_check = ['full_name', 'city', 'occupation']
+        for field in missing_fields_check:
+            if field not in form_data or not form_data.get(field):
+                logger.warning(f"⚠️ Field '{field}' is missing or empty in form_data")
+                # Try alternative key names
+                alt_keys = {
+                    'full_name': ['name', 'patient_name', 'client_name'],
+                    'city': ['location'],
+                    'occupation': ['job', 'work']
+                }
+                if field in alt_keys:
+                    for alt_key in alt_keys[field]:
+                        if alt_key in form_data and form_data.get(alt_key):
+                            logger.info(f"✓ Found alternative key '{alt_key}' for '{field}'")
+
+        # Determine conditional N/A logic
+        main_issue = str(get(form_data, 'main_issue', '')).lower()
+        has_ed = main_issue in ['ed', 'both']
+        has_pe = main_issue in ['pe', 'both']
+
+        relationship_status = str(get(form_data, 'relationship_status', '')).lower()
+        has_partner = relationship_status in ['married', 'in_relationship']
+
+        ed_sexual_activity = str(get(form_data, 'ed_sexual_activity_status', '')).lower()
+        ed_has_partner_data = ed_sexual_activity in ['yes_active', 'avoiding_due_to_fear']
+
+        pe_sexual_activity = str(get(form_data, 'pe_sexual_activity_status', '')).lower()
+        pe_has_partner_data = pe_sexual_activity in ['yes_active', 'avoiding_due_to_fear']
+
+        # Helper function to get value with mapping or N/A
+        def get_mapped_or_na(key, condition=True):
+            """Get field value, apply mapping, or return N/A if condition not met."""
+            if not condition:
+                return 'N/A'
+            value = get(form_data, key, '')
+            return map_value(value) if value != '' else ''
+
         # Prepare row data (71 columns in EXACT order matching Google Sheet)
         row = [
             # ============================================================
             # SECTION A: Session Metadata (Columns 1-4)
             # ============================================================
-            get(form_data, 'session_id'),                                    # 1. Session ID
-            get(form_data, 'submitted_at', datetime.utcnow().isoformat()),  # 2. Timestamp
-            get(form_data, 'tester_name'),                                  # 3. Tester/Agent Name
-            get(form_data, 'completion_time_seconds'),                      # 4. Form Completion Time (sec)
+            get(form_data, 'session_id'),                                           # 1. Session ID
+            get(form_data, 'submitted_at', datetime.utcnow().isoformat()),         # 2. Timestamp
+            get(form_data, 'tester_name'),                                         # 3. Tester/Agent Name
+            get(form_data, 'completion_time_seconds'),                             # 4. Form Completion Time (sec)
 
             # ============================================================
             # SECTION B: Patient Input Data (Columns 5-51)
             # ============================================================
-            get(form_data, 'full_name'),                                    # 5. Full Name
-            get(form_data, 'age'),                                          # 6. Age
-            get(form_data, 'height_cm'),                                    # 7. Height (cm)
-            get(form_data, 'weight'),                                       # 8. Weight (kg)
-            get(form_data, 'city'),                                         # 9. City
-            get(form_data, 'occupation'),                                   # 10. Occupation
-            get(form_data, 'relationship_status'),                          # 11. Relationship Status
-            get(form_data, 'first_consultation'),                           # 12. First Consultation
-            get(form_data, 'previous_treatments'),                          # 13. Previous Treatments
-            get(form_data, 'emergency_red_flags'),                          # 14. Emergency Red Flags
-            get(form_data, 'main_issue'),                                   # 15. Main Issue
-            get(form_data, 'issue_duration'),                               # 16. Issue Duration
-            get(form_data, 'issue_context'),                                # 17. Issue Context
-            get(form_data, 'medical_conditions'),                           # 18. Medical Conditions
-            get(form_data, 'medical_conditions_other'),                     # 19. Medical Conditions - Other
-            get(form_data, 'current_medications'),                          # 20. Current Medications
-            get(form_data, 'current_medications_other'),                    # 21. Current Medications - Other
-            get(form_data, 'spinal_genital_surgery'),                       # 22. Spinal/Genital Surgery
-            get(form_data, 'alcohol_consumption'),                          # 23. Alcohol Frequency
-            get(form_data, 'smoking_status'),                               # 24. Smoking Frequency
-            get(form_data, 'sleep_quality'),                                # 25. Sleep Quality
-            get(form_data, 'physical_activity'),                            # 26. Physical Activity
-            get(form_data, 'masturbation_method'),                          # 27. Masturbation Method
-            get(form_data, 'masturbation_grip'),                            # 28. Masturbation Grip
-            get(form_data, 'masturbation_frequency'),                       # 29. Masturbation Frequency
-            get(form_data, 'porn_frequency'),                               # 30. Porn Usage Frequency
-            get(form_data, 'partner_response'),                             # 31. Partner Response
-            get(form_data, 'ed_gets_erections'),                            # 32. ED - Gets Erections
-            get(form_data, 'ed_sexual_activity_status'),                    # 33. ED - Sexual Activity Status
-            get(form_data, 'ed_partner_arousal_speed'),                     # 34. ED - Arousal Speed (Partner)
-            get(form_data, 'ed_partner_maintenance'),                       # 35. ED - Maintenance (Partner)
-            get(form_data, 'ed_partner_hardness'),                          # 36. ED - Hardness (Partner)
-            get(form_data, 'ed_morning_erections'),                         # 37. ED - Morning Erections
-            get(form_data, 'ed_masturbation_imagination'),                  # 38. ED - Masturbation/Imagination
-            "",                                                              # 39. ED - Morning Erections (Solo)
-            "",                                                              # 40. ED - Masturbation/Imagination (Solo)
-            "",                                                              # 41. ED - Arousal Speed (Solo)
-            get(form_data, 'pe_sexual_activity_status'),                    # 42. PE - Sexual Activity Status
-            get(form_data, 'pe_partner_time_to_ejaculation'),               # 43. PE - Ejaculation Time (Partner)
-            "",                                                              # 44. PE - Lifelong/Acquired (Partner)
-            "",                                                              # 45. PE - Penile Sensitivity (Partner)
-            get(form_data, 'pe_partner_masturbation_control'),              # 46. PE - Masturbation Control (Partner)
-            "",                                                              # 47. PE - Ejaculation Time (Solo)
-            "",                                                              # 48. PE - Lifelong/Acquired (Solo)
-            "",                                                              # 49. PE - Penile Sensitivity (Solo)
-            get(form_data, 'pe_partner_control'),                           # 50. PE - Masturbation Control (Solo)
-            get(form_data, 'additional_info'),                              # 51. Other Information
+            get(form_data, 'full_name'),                                           # 5. Full Name (no mapping needed)
+            map_value(get(form_data, 'age')),                                      # 6. Age
+            map_value(get(form_data, 'height_cm')),                                # 7. Height (cm)
+            map_value(get(form_data, 'weight')),                                   # 8. Weight (kg)
+            get(form_data, 'city'),                                                # 9. City (no mapping needed)
+            map_value(get(form_data, 'occupation')),                               # 10. Occupation
+            map_value(get(form_data, 'relationship_status')),                      # 11. Relationship Status
+            map_value(get(form_data, 'first_consultation')),                       # 12. First Consultation
+            map_value(get(form_data, 'previous_treatments')),                      # 13. Previous Treatments
+            map_value(get(form_data, 'emergency_red_flags')),                      # 14. Emergency Red Flags
+            map_value(get(form_data, 'main_issue')),                               # 15. Main Issue
+            map_value(get(form_data, 'issue_duration')),                           # 16. Issue Duration
+            map_value(get(form_data, 'issue_context')),                            # 17. Issue Context
+            map_value(get(form_data, 'medical_conditions')),                       # 18. Medical Conditions
+            get(form_data, 'medical_conditions_other'),                            # 19. Medical Conditions - Other
+            map_value(get(form_data, 'current_medications')),                      # 20. Current Medications
+            get(form_data, 'current_medications_other'),                           # 21. Current Medications - Other
+            map_value(get(form_data, 'spinal_genital_surgery')),                   # 22. Spinal/Genital Surgery
+            map_value(get(form_data, 'alcohol_consumption')),                      # 23. Alcohol Frequency
+            map_value(get(form_data, 'smoking_status')),                           # 24. Smoking Frequency
+            map_value(get(form_data, 'sleep_quality')),                            # 25. Sleep Quality
+            map_value(get(form_data, 'physical_activity')),                        # 26. Physical Activity
+            map_value(get(form_data, 'masturbation_method')),                      # 27. Masturbation Method
+            map_value(get(form_data, 'masturbation_grip')),                        # 28. Masturbation Grip
+            map_value(get(form_data, 'masturbation_frequency')),                   # 29. Masturbation Frequency
+            map_value(get(form_data, 'porn_frequency')),                           # 30. Porn Usage Frequency
+            get_mapped_or_na('partner_response', has_partner),                     # 31. Partner Response (N/A if single)
+            get_mapped_or_na('ed_gets_erections', has_ed),                         # 32. ED - Gets Erections (N/A if PE only)
+            get_mapped_or_na('ed_sexual_activity_status', has_ed),                 # 33. ED - Sexual Activity Status
+            get_mapped_or_na('ed_partner_arousal_speed', has_ed and ed_has_partner_data),  # 34. ED - Arousal Speed (Partner)
+            get_mapped_or_na('ed_partner_maintenance', has_ed and ed_has_partner_data),    # 35. ED - Maintenance (Partner)
+            get_mapped_or_na('ed_partner_hardness', has_ed and ed_has_partner_data),       # 36. ED - Hardness (Partner)
+            get_mapped_or_na('ed_morning_erections', has_ed and ed_has_partner_data),      # 37. ED - Morning Erections
+            get_mapped_or_na('ed_masturbation_imagination', has_ed and ed_has_partner_data), # 38. ED - Masturbation/Imagination
+            get_mapped_or_na('ed_solo_morning_erections', has_ed and not ed_has_partner_data), # 39. ED - Morning Erections (Solo)
+            get_mapped_or_na('ed_solo_masturbation_imagination', has_ed and not ed_has_partner_data), # 40. ED - Masturbation/Imagination (Solo)
+            get_mapped_or_na('ed_solo_arousal_speed', has_ed and not ed_has_partner_data),   # 41. ED - Arousal Speed (Solo)
+            get_mapped_or_na('pe_sexual_activity_status', has_pe),                 # 42. PE - Sexual Activity Status (N/A if ED only)
+            get_mapped_or_na('pe_partner_time_to_ejaculation', has_pe and pe_has_partner_data),  # 43. PE - Ejaculation Time (Partner)
+            get_mapped_or_na('pe_partner_type', has_pe and pe_has_partner_data),             # 44. PE - Lifelong/Acquired (Partner)
+            get_mapped_or_na('pe_partner_penile_sensitivity', has_pe and pe_has_partner_data), # 45. PE - Penile Sensitivity (Partner)
+            get_mapped_or_na('pe_partner_masturbation_control', has_pe and pe_has_partner_data), # 46. PE - Masturbation Control (Partner)
+            get_mapped_or_na('pe_solo_time_to_ejaculation', has_pe and not pe_has_partner_data), # 47. PE - Ejaculation Time (Solo)
+            get_mapped_or_na('pe_solo_type', has_pe and not pe_has_partner_data),               # 48. PE - Lifelong/Acquired (Solo)
+            get_mapped_or_na('pe_solo_penile_sensitivity', has_pe and not pe_has_partner_data),  # 49. PE - Penile Sensitivity (Solo)
+            get_mapped_or_na('pe_partner_control', has_pe and not pe_has_partner_data),          # 50. PE - Masturbation Control (Solo)
+            get(form_data, 'additional_info'),                                     # 51. Other Information
 
             # ============================================================
             # SECTION C: AI Output (Columns 52-59)
