@@ -396,11 +396,11 @@ class SheetsService:
             # AI Analysis Output (Columns 46-53) - 8 columns
             # ============================================================
             "Primary Root Cause - Medical Term",
-            "Primary Root Cause - Explanation",
+            "Primary Root Cause - Simple Term",
             "Secondary Root Cause - Medical Term",
-            "Secondary Root Cause - Explanation",
-            "Agent Script",
-            "Treatment Plan",
+            "Secondary Root Cause - Simple Term",
+            "Root Cause Explanation",
+            "Treatment Explanation",
             "Red Flags Detected",
             "Red Flag Details",
 
@@ -689,14 +689,14 @@ class SheetsService:
             # ============================================================
             # SECTION C: AI Output (Columns 46-53) - 8 columns
             # ============================================================
-            get(primary_cause, 'category'),                                        # 46. Primary Root Cause - Medical Term
-            get(primary_cause, 'explanation'),                                     # 47. Primary Root Cause - Explanation
-            get(secondary_cause, 'category'),                                      # 48. Secondary Root Cause - Medical Term
-            get(secondary_cause, 'explanation'),                                   # 49. Secondary Root Cause - Explanation
-            get(analysis_result, 'detailed_analysis') if analysis_result else "",  # 50. Agent Script
-            get(analysis_result, 'summary') if analysis_result else "",            # 51. Treatment Plan
-            red_flags_count,                                                       # 52. Red Flags Detected
-            red_flags_details,                                                     # 53. Red Flag Details
+            get(primary_cause, 'category'),                                            # 46. Primary Root Cause - Medical Term
+            get(primary_cause, 'simple_term'),                                         # 47. Primary Root Cause - Simple Term
+            get(secondary_cause, 'category'),                                          # 48. Secondary Root Cause - Medical Term
+            get(secondary_cause, 'simple_term'),                                       # 49. Secondary Root Cause - Simple Term
+            get(analysis_result, 'root_cause_explanation') if analysis_result else "", # 50. Root Cause Explanation
+            get(analysis_result, 'treatment_explanation') if analysis_result else "",  # 51. Treatment Explanation
+            red_flags_count,                                                           # 52. Red Flags Detected
+            red_flags_details,                                                         # 53. Red Flag Details
 
             # ============================================================
             # SECTION D: Doctor Review (Columns 54-59) - 6 columns
