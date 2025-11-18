@@ -19,30 +19,13 @@ logger = logging.getLogger(__name__)
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 # Value mapping dictionary - converts backend codes to user-friendly form text
+# Updated to match exact option labels from questions.json
 VALUE_MAPPINGS = {
     # Yes/No mappings
     "yes": "Yes",
     "no": "No",
     "true": "Yes",
     "false": "No",
-
-    # Main Issue
-    "ed": "Erectile Dysfunction (ED)",
-    "pe": "Early Ejaculation (PE)",
-    "both": "Both ED and PE",
-
-    # Duration
-    "lifelong": "Since my first sexual experience (Lifelong)",
-    "less_1_month": "Less than 1 month ago",
-    "1_to_6_months": "1-6 months ago",
-    "6_to_12_months": "6-12 months ago",
-    "1_to_3_years": "1-3 years ago",
-    "more_3_years": "More than 3 years ago",
-
-    # Context
-    "sex_with_partner": "During sex with partner",
-    "masturbation": "During masturbation",
-    "both_contexts": "Both (during sex and masturbation)",
 
     # Occupation
     "corporate": "Corporate Employee",
@@ -58,49 +41,112 @@ VALUE_MAPPINGS = {
     "single": "Single",
     "divorced_widowed": "Divorced / Widowed",
 
-    # Alcohol Frequency
-    "none": "No alcohol",
-    "monthly": "Once a month or less",
-    "biweekly": "Once every 2 weeks",
-    "weekly": "Once a week",
-    "2_3_per_week": "2-3 times per week",
-    "daily": "Daily",
+    # First Consultation
+    "yes_first_time": "Yes (first time seeking treatment)",
+    "no_tried_before": "No (has tried treatment before)",
 
-    # Smoking Frequency
-    "never": "No smoking",
-    "occasional": "Occasionally (only while drinking or social events)",
-    "few_per_week": "Few times per week",
-    "daily_smoking": "Daily",
+    # Previous Treatments
+    "tablets": "Tablets (oral medication)",
+    "gels_sprays": "Gels / Sprays (topical)",
+    "ayurvedic_homeopathy": "Ayurvedic / Homeopathy",
+    "therapy": "Therapy / Counseling",
+    "none": "None",
+
+    # Emergency Red Flags
+    "severe_pain": "Severe pain in penis/testicles",
+    "blood": "Blood in urine or semen",
+    "priapism": "Erection lasting more than 4 hours",
+    "none": "None of these symptoms",
+
+    # Main Issue
+    "ed": "Erectile Dysfunction (ED)",
+    "pe": "Premature Ejaculation (PE)",
+    "both": "Both ED and PE",
+
+    # Issue Duration
+    "lifelong": "Since my first sexual experience (Lifelong)",
+    "less_1_month": "Less than 1 month ago",
+    "1_to_6_months": "1-6 months ago",
+    "6_to_12_months": "6-12 months ago",
+    "1_to_3_years": "1-3 years ago",
+    "more_3_years": "More than 3 years ago",
+
+    # Issue Context
+    "sex_with_partner": "During sex with partner",
+    "masturbation": "During masturbation",
+    "both_contexts": "Both (during sex and masturbation)",
+    "both": "Both (during sex and masturbation)",
+
+    # Medical Conditions
+    "diabetes": "Diabetes",
+    "hypertension": "High Blood Pressure",
+    "high_blood_pressure": "High Blood Pressure",
+    "thyroid": "Thyroid disorder",
+    "heart_disease": "Heart disease",
+    "depression": "Depression",
+    "other": "Other (please specify)",
+
+    # Current Medications
+    "psychiatric": "Psychiatric medications",
+    "blood_pressure": "Blood pressure medications",
+    "diabetes_meds": "Diabetes medications",
+    "blood_thinners": "Blood thinners",
+
+    # Spinal/Genital Surgery
+    "yes": "Yes",
+    "no": "No",
+
+    # Alcohol Consumption
+    "no_alcohol": "No alcohol",
+    "monthly": "Monthly or less",
+    "monthly_or_less": "Monthly or less",
+    "2_4_monthly": "2-4 times per month",
+    "2_3_weekly": "2-3 times per week",
+    "4_plus_weekly": "4+ times per week",
+
+    # Smoking Status
+    "never": "Never",
+    "rarely": "Rarely (social occasions)",
+    "rarely_social": "Rarely (social occasions)",
+    "sometimes": "Sometimes (few times a month)",
+    "sometimes_monthly": "Sometimes (few times a month)",
+    "regularly": "Regularly (daily or almost daily)",
+    "regularly_daily": "Regularly (daily or almost daily)",
 
     # Sleep Quality
-    "good": "Good",
-    "average": "Average",
+    "very_poor": "Very poor",
     "poor": "Poor",
-
-    # Physical Activity
-    "active": "Active",
-    "somewhat_active": "Somewhat active",
-    "not_active": "Not active",
+    "average": "Average",
+    "good": "Good",
+    "excellent": "Excellent",
 
     # Masturbation Method
+    "hands": "Hands (normal grip)",
+    "hands_normal": "Hands (normal grip)",
+    "tight_grip": "Hands (tight/death grip)",
+    "hands_tight": "Hands (tight/death grip)",
+    "pillow": "Pillow/object rubbing",
+    "pillow_rubbing": "Pillow/object rubbing",
+    "prone": "Prone (lying face down)",
+    "no_masturbation": "No masturbation",
     "none": "No masturbation",
-    "hands": "Using hands",
-    "prone": "Rubbing against surface (prone)",
-    "both": "Both hands and rubbing surface",
-
-    # Masturbation Grip
-    "normal": "Normal",
-    "tight": "Tight",
 
     # Masturbation Frequency
-    "less_than_3": "Less than 3 times per week",
-    "3_to_7": "3-7 times per week",
-    "8_plus": "8 or more times per week",
+    "never": "Never",
+    "1_2_weekly": "1-2 times per week",
+    "3_7_weekly": "3-7 times per week",
+    "multiple_daily": "Multiple times per day",
 
     # Porn Frequency
-    "less_than_2": "Less than 2 times per week",
-    "3_to_5": "3-5 times per week",
-    "daily_or_more": "Daily or more",
+    "never": "Never",
+    "rarely": "Rarely (once a month or less)",
+    "rarely_monthly": "Rarely (once a month or less)",
+    "sometimes": "Sometimes (2-3 times a month)",
+    "sometimes_monthly": "Sometimes (2-3 times a month)",
+    "regularly": "Regularly (3-5 times a week)",
+    "regularly_weekly": "Regularly (3-5 times a week)",
+    "daily": "Daily or multiple times per day",
+    "daily_or_more": "Daily or multiple times per day",
 
     # Partner Response
     "supportive": "Supportive",
@@ -108,10 +154,16 @@ VALUE_MAPPINGS = {
     "non_supportive": "Non-supportive",
     "unaware": "Unaware (haven't told them)",
 
+    # ED - Gets Erections
+    "yes": "Yes",
+    "no": "No",
+
     # ED - Sexual Activity Status
     "yes_active": "Yes, I have sex with a partner",
+    "yes_has_sex": "Yes, I have sex with a partner",
     "avoiding_due_to_fear": "I have a partner but avoid sex due to worry/fear",
-    "no_partner": "No, I don't have a partner",
+    "avoids_due_to_fear": "I have a partner but avoid sex due to worry/fear",
+    "no_partner": "No, I do not have a partner",
 
     # ED - Arousal Speed
     "always": "Always",
@@ -120,14 +172,16 @@ VALUE_MAPPINGS = {
 
     # ED - Maintenance
     "loses_before_penetration": "Loses hardness before penetration",
-    "loses_during_sex": "Stays hard till penetration, then loses it",
+    "loses_during_sex": "Stays hard till penetration then loses it",
     "stays_till_completion": "Stays hard till completion",
 
     # ED - Hardness
-    "always_hard": "Yes, always hard enough",
-    "sometimes_hard": "Sometimes hard enough",
-    "rarely_hard": "Rarely hard enough",
-    "never_hard": "Never hard enough",
+    "always_hard": "Always",
+    "always": "Always",
+    "sometimes_hard": "Sometimes",
+    "rarely_hard": "Rarely",
+    "never_hard": "Never",
+    "never": "Never",
 
     # ED - Morning Erections
     "regular": "Regular (most mornings)",
@@ -135,10 +189,18 @@ VALUE_MAPPINGS = {
     "absent": "Absent (rarely or never)",
 
     # ED - Masturbation/Imagination
+    "both": "Yes, during both masturbation and imagination",
     "both_work": "Yes, during both masturbation and imagination",
     "masturbation_only": "Yes, during masturbation only",
     "imagination_only": "Yes, with imagination/fantasies only",
     "neither": "No, neither works",
+
+    # PE - Sexual Activity Status (same as ED)
+    "yes_active": "Yes, I have sex with a partner",
+    "yes_has_sex": "Yes, I have sex with a partner",
+    "avoiding_due_to_fear": "I have a partner but avoid sex due to worry/fear",
+    "avoids_due_to_fear": "I have a partner but avoid sex due to worry/fear",
+    "no_partner": "No, I do not have a partner",
 
     # PE - Ejaculation Time
     "before_penetration": "Before penetration",
@@ -146,15 +208,21 @@ VALUE_MAPPINGS = {
     "1_to_3_min": "1-3 minutes after penetration",
     "more_than_3_min": "More than 3 minutes",
 
-    # PE - Control
-    "always_control": "Always can control",
-    "sometimes_control": "Sometimes can control",
-    "rarely_control": "Rarely can control",
+    # PE - Type (Lifelong vs Acquired)
+    "lifelong": "Since first time (lifelong)",
+    "acquired": "Started later (acquired)",
 
-    # Emergency Red Flags
-    "severe_pain": "Severe pain in penis/testicles (unbearable, can't touch)",
-    "blood": "Blood in urine or semen",
-    "priapism": "Erection lasting more than 4 hours (priapism)",
+    # PE - Penile Sensitivity
+    "yes": "Yes",
+    "no": "No",
+
+    # PE - Masturbation Control
+    "always": "Always",
+    "sometimes": "Sometimes",
+    "rarely": "Rarely",
+    "always_control": "Always",
+    "sometimes_control": "Sometimes",
+    "rarely_control": "Rarely",
 }
 
 
@@ -258,104 +326,107 @@ class SheetsService:
             logger.error(f"❌ Failed to initialize Google Sheets: {str(e)}")
 
     def _initialize_headers(self):
-        """Initialize spreadsheet headers (71 columns)."""
+        """Initialize spreadsheet headers (65 columns)."""
         headers = [
-            # Session Metadata (3 columns)
+            # ============================================================
+            # Session Metadata (Columns 1-4)
+            # ============================================================
             "Session ID",
-            "Tester Name",
+            "Submission Timestamp",
+            "Tester/Agent Name",
             "Form Completion Time (seconds)",
 
-            # Submission Metadata (3 columns)
-            "Submission Timestamp",
-            "Form Version",
-            "Backend Processing Time (ms)",
+            # ============================================================
+            # Patient Input Data (Columns 5-45) - 41 columns
+            # ============================================================
 
-            # Patient Input - Section 1: Client Information (4 columns)
+            # Section 1: Client Information (10 columns)
+            "Full Name",
             "Age",
-            "Height (cm)",
-            "Height (ft-in)",
+            "Height",
             "Weight (kg)",
+            "City",
+            "User's occupation",
+            "User's relationship status",
+            "First consultation for this issue?",
+            "What was tried earlier?",
+            "Does user have any of these right now?",
 
-            # Patient Input - Section 2: Main Concern (2 columns)
-            "Main Issue",
-            "Emergency Red Flags",
+            # Section 2: Main Concern (3 columns)
+            "What is the main issue?",
+            "Since when are you facing this?",
+            "When is the problem faced?",
 
-            # Patient Input - Section 3: Medical & Lifestyle (8 columns)
-            "Medical Conditions",
-            "Current Medications",
-            "Spinal/Genital Surgery",
-            "Alcohol Consumption",
-            "Smoking Status",
-            "Substance Consumption",
-            "Sleep Quality",
-            "Physical Activity",
+            # Section 3: Medical & Lifestyle (8 columns)
+            "Do you have any chronic medical conditions?",
+            "Other chronic medical conditions (specify)",
+            "Are you currently taking any medications?",
+            "Other current medications (specify)",
+            "Any previous spinal or genital surgery or injury?",
+            "How often do you drink alcohol?",
+            "How often do you smoke?",
+            "How would you rate your sleep quality?",
 
-            # Patient Input - Section 4: Masturbation & Behavioral History (6 columns)
-            "Relationship Status",
-            "Masturbation Method",
-            "Masturbation Grip",
-            "Masturbation Frequency",
-            "Porn Frequency",
-            "Partner Response",
+            # Section 4: Masturbation & Behavioral History (4 columns)
+            "What is your usual masturbation method?",
+            "How often do you masturbate?",
+            "How often do you watch porn?",
+            "How does your partner respond to the issue?",
 
-            # Patient Input - Section 5: ED Branch (7 columns)
-            "ED: Gets Erections",
-            "ED: Sexual Activity Status",
-            "ED: Partner Arousal Speed",
-            "ED: Partner Maintenance",
-            "ED: Partner Hardness",
-            "ED: Morning Erections",
-            "ED: Masturbation/Imagination",
+            # Section 5: ED Branch (7 columns)
+            "Do you get erections at all?",
+            "Do you currently have sex with a partner? (ED)",
+            "Does it take a long time to get erections?",
+            "Does it stay hard till penetration or completion?",
+            "Is the erection hard enough for penetration?",
+            "Are morning erections regular, occasional, or absent?",
+            "Do you get erections during masturbation or with imagination/fantasies?",
 
-            # Patient Input - Section 5: PE Branch (5 columns)
-            "PE: Sexual Activity Status",
-            "PE: Time to Ejaculation",
-            "PE: Control",
-            "PE: Partner Satisfaction",
-            "PE: Masturbation Control",
+            # Section 5: PE Branch (5 columns)
+            "Do you currently have sex with a partner? (PE)",
+            "What is your ejaculation time during sex?",
+            "Has this been since your first sexual encounter or started later?",
+            "Do you feel the penis tip is very sensitive?",
+            "Can you delay or control ejaculation during masturbation?",
 
-            # Patient Input - Section 6: Other Information (3 columns)
-            "First Consultation",
-            "Previous Treatments",
-            "Additional Info",
+            # Section 6: Other Information (1 column)
+            "Other Information",
 
-            # AI Analysis Output - Root Causes (10 columns)
-            "Primary Root Cause (Category)",
-            "Primary Root Cause (Simple Term)",
-            "Primary Root Cause (Confidence)",
-            "Primary Root Cause (Explanation)",
-            "Primary Root Cause (Analogy)",
-            "Secondary Root Cause (Category)",
-            "Secondary Root Cause (Simple Term)",
-            "Secondary Root Cause (Confidence)",
-            "Secondary Root Cause (Explanation)",
-            "Secondary Root Cause (Analogy)",
+            # ============================================================
+            # AI Analysis Output (Columns 46-53) - 8 columns
+            # ============================================================
+            "Primary Root Cause - Medical Term",
+            "Primary Root Cause - Explanation",
+            "Secondary Root Cause - Medical Term",
+            "Secondary Root Cause - Explanation",
+            "Agent Script",
+            "Treatment Plan",
+            "Red Flags Detected",
+            "Red Flag Details",
 
-            # AI Analysis Output - Diagnosis (5 columns)
-            "Primary Diagnosis",
-            "Detailed Analysis",
-            "Summary",
-            "Red Flags (Count)",
-            "Red Flags (Details)",
-
-            # AI Analysis Output - Treatment (3 columns)
-            "Doctor Recommendation",
-            "Treatment Confidence",
-            "Treatment Notes",
-
-            # RAG Context (3 columns)
-            "RAG Chunks Retrieved",
-            "RAG Top Match ID",
-            "RAG Top Match Score",
-
-            # Doctor Review (3 columns - empty for manual input)
-            "Doctor Review Status",
+            # ============================================================
+            # Doctor Review (Columns 54-59) - 6 columns
+            # ============================================================
+            "Review Status",
+            "Doctor Name",
+            "Review Date",
             "Doctor Comments",
-            "Doctor Reviewed At"
+            "Correct Primary Diagnosis",
+            "Correct Secondary Diagnosis",
+
+            # ============================================================
+            # System Metadata (Columns 60-65) - 6 columns
+            # ============================================================
+            "RAG Sources Used",
+            "Primary Confidence (%)",
+            "Secondary Confidence (%)",
+            "Processing Time (sec)",
+            "Language Used",
+            "Complete Form Data (JSON)"
         ]
 
         try:
-            self.worksheet.update('A1:BS1', [headers])
+            self.worksheet.update('A1:BM1', [headers])  # 65 columns = BM
             logger.info(f"✅ Initialized {len(headers)} column headers")
         except Exception as e:
             logger.error(f"❌ Failed to initialize headers: {str(e)}")
@@ -387,7 +458,7 @@ class SheetsService:
                 logger.debug("Sheets logging skipped - not initialized")
                 return
 
-            # Prepare row data (71 columns)
+            # Prepare row data (65 columns)
             row = self._prepare_row(form_data, analysis_result, rag_result, processing_time_ms)
 
             # Append row to spreadsheet
@@ -408,10 +479,17 @@ class SheetsService:
         processing_time_ms: Optional[float]
     ) -> List[Any]:
         """
-        Prepare a row of data for Google Sheets (71 columns).
+        Prepare a row of data for Google Sheets (65 columns).
+
+        Column structure:
+        - Columns 1-4: Session metadata
+        - Columns 5-45: Patient input (41 questions from questions.json)
+        - Columns 46-53: AI output (8 columns)
+        - Columns 54-59: Doctor review (6 columns)
+        - Columns 60-65: System metadata (6 columns)
 
         Returns:
-            List of 71 values corresponding to the header columns
+            List of 65 values corresponding to the header columns
         """
         # Helper function to safely get values
         def get(data: Any, key: str, default: Any = "") -> Any:
@@ -542,101 +620,103 @@ class SheetsService:
             value = get(form_data, key, '')
             return map_value(value) if value != '' else ''
 
-        # Prepare row data (71 columns in EXACT order matching Google Sheet)
+        # Prepare row data (65 columns in EXACT order matching Google Sheet)
         row = [
             # ============================================================
             # SECTION A: Session Metadata (Columns 1-4)
             # ============================================================
             get(form_data, 'session_id'),                                           # 1. Session ID
-            get(form_data, 'submitted_at', get_ist_timestamp()),                   # 2. Timestamp (IST)
+            get(form_data, 'submitted_at', get_ist_timestamp()),                   # 2. Submission Timestamp
             get(form_data, 'tester_name'),                                         # 3. Tester/Agent Name
             get(form_data, 'completion_time_seconds'),                             # 4. Form Completion Time (sec)
 
             # ============================================================
-            # SECTION B: Patient Input Data (Columns 5-51)
+            # SECTION B: Patient Input Data (Columns 5-45) - 41 columns
             # ============================================================
-            get(form_data, 'full_name'),                                           # 5. Full Name (no mapping needed)
+
+            # Section 1: Client Information (10 columns)
+            get(form_data, 'full_name'),                                           # 5. Full Name
             map_value(get(form_data, 'age')),                                      # 6. Age
-            map_value(height_cm),                                                  # 7. Height (cm) - USES CONVERTED VALUE
-            map_value(get(form_data, 'weight')),                                   # 8. Weight (kg)
-            get(form_data, 'city'),                                                # 9. City (no mapping needed)
-            map_value(get(form_data, 'occupation')),                               # 10. Occupation
-            map_value(get(form_data, 'relationship_status')),                      # 11. Relationship Status
-            map_value(get(form_data, 'first_consultation')),                       # 12. First Consultation
-            map_value(get(form_data, 'previous_treatments')),                      # 13. Previous Treatments
-            map_value(get(form_data, 'emergency_red_flags')),                      # 14. Emergency Red Flags
-            map_value(get(form_data, 'main_issue')),                               # 15. Main Issue
-            map_value(get(form_data, 'issue_duration')),                           # 16. Issue Duration
-            map_value(get(form_data, 'issue_context')),                            # 17. Issue Context
-            map_value(get(form_data, 'medical_conditions')),                       # 18. Medical Conditions
-            get(form_data, 'medical_conditions_other'),                            # 19. Medical Conditions - Other
-            map_value(get(form_data, 'current_medications')),                      # 20. Current Medications
-            get(form_data, 'current_medications_other'),                           # 21. Current Medications - Other
-            map_value(get(form_data, 'spinal_genital_surgery')),                   # 22. Spinal/Genital Surgery
-            map_value(get(form_data, 'alcohol_consumption')),                      # 23. Alcohol Frequency
-            map_value(get(form_data, 'smoking_status')),                           # 24. Smoking Frequency
-            map_value(get(form_data, 'sleep_quality')),                            # 25. Sleep Quality
-            map_value(get(form_data, 'physical_activity')),                        # 26. Physical Activity
-            map_value(get(form_data, 'masturbation_method')),                      # 27. Masturbation Method
-            get_mapped_or_na('masturbation_grip', does_masturbate and masturbation_method in ['hands', 'both']),  # 28. Masturbation Grip (N/A if doesn't masturbate or not using hands)
-            get_mapped_or_na('masturbation_frequency', does_masturbate),           # 29. Masturbation Frequency (N/A if doesn't masturbate)
-            map_value(get(form_data, 'porn_frequency')),                           # 30. Porn Usage Frequency
-            get_mapped_or_na('partner_response', has_partner),                     # 31. Partner Response (N/A if single)
-            get_mapped_or_na('ed_gets_erections', has_ed),                         # 32. ED - Gets Erections (N/A if PE only)
-            get_mapped_or_na('ed_sexual_activity_status', has_ed),                 # 33. ED - Sexual Activity Status
-            get_mapped_or_na('ed_partner_arousal_speed', has_ed and ed_has_partner_data),  # 34. ED - Arousal Speed (Partner)
-            get_mapped_or_na('ed_partner_maintenance', has_ed and ed_has_partner_data),    # 35. ED - Maintenance (Partner)
-            get_mapped_or_na('ed_partner_hardness', has_ed and ed_has_partner_data),       # 36. ED - Hardness (Partner)
-            get_mapped_or_na('ed_morning_erections', has_ed and ed_has_partner_data),      # 37. ED - Morning Erections (Partner)
-            get_mapped_or_na('ed_masturbation_imagination', has_ed and ed_has_partner_data), # 38. ED - Masturbation/Imagination (Partner)
-            get_mapped_or_na('ed_morning_erections', has_ed and not ed_has_partner_data),   # 39. ED - Morning Erections (Solo) - same field as partner
-            get_mapped_or_na('ed_masturbation_imagination', has_ed and not ed_has_partner_data), # 40. ED - Masturbation/Imagination (Solo) - same field as partner
-            'N/A' if has_ed and not ed_has_partner_data else 'N/A',                        # 41. ED - Arousal Speed (Solo) - not collected
-            get_mapped_or_na('pe_sexual_activity_status', has_pe),                 # 42. PE - Sexual Activity Status (N/A if ED only)
-            get_mapped_or_na('pe_partner_time_to_ejaculation', has_pe and pe_has_partner_data),  # 43. PE - Ejaculation Time (Partner)
-            get_mapped_or_na('pe_partner_type', has_pe and pe_has_partner_data),             # 44. PE - Lifelong/Acquired (Partner)
-            get_mapped_or_na('pe_partner_penile_sensitivity', has_pe and pe_has_partner_data), # 45. PE - Penile Sensitivity (Partner)
-            get_mapped_or_na('pe_partner_masturbation_control', has_pe and pe_has_partner_data), # 46. PE - Masturbation Control (Partner)
-            'N/A' if has_pe and not pe_has_partner_data else 'N/A',                     # 47. PE - Ejaculation Time (Solo) - not collected
-            'N/A' if has_pe and not pe_has_partner_data else 'N/A',                     # 48. PE - Lifelong/Acquired (Solo) - not collected
-            'N/A' if has_pe and not pe_has_partner_data else 'N/A',                     # 49. PE - Penile Sensitivity (Solo) - not collected
-            get_mapped_or_na('pe_partner_masturbation_control', has_pe),                 # 50. PE - Masturbation Control (available for all PE)
-            get(form_data, 'additional_info'),                                     # 51. Other Information
+            map_value(height_cm),                                                  # 7. Height (converted to cm)
+            map_value(get(form_data, 'weight_kg')),                                # 8. Weight (kg)
+            get(form_data, 'city'),                                                # 9. City
+            map_value(get(form_data, 'occupation')),                               # 10. User's occupation
+            map_value(get(form_data, 'relationship_status')),                      # 11. User's relationship status
+            map_value(get(form_data, 'first_consultation')),                       # 12. First consultation for this issue?
+            map_value(get(form_data, 'previous_treatments')),                      # 13. What was tried earlier?
+            map_value(get(form_data, 'emergency_red_flags')),                      # 14. Does user have any of these right now?
+
+            # Section 2: Main Concern (3 columns)
+            map_value(get(form_data, 'main_issue')),                               # 15. What is the main issue?
+            map_value(get(form_data, 'issue_duration')),                           # 16. Since when are you facing this?
+            map_value(get(form_data, 'issue_context')),                            # 17. When is the problem faced?
+
+            # Section 3: Medical & Lifestyle (8 columns)
+            map_value(get(form_data, 'medical_conditions')),                       # 18. Do you have any chronic medical conditions?
+            get(form_data, 'medical_conditions_other'),                            # 19. Other chronic medical conditions (specify)
+            map_value(get(form_data, 'current_medications')),                      # 20. Are you currently taking any medications?
+            get(form_data, 'current_medications_other'),                           # 21. Other current medications (specify)
+            map_value(get(form_data, 'spinal_genital_surgery')),                   # 22. Any previous spinal or genital surgery or injury?
+            map_value(get(form_data, 'alcohol_consumption')),                      # 23. How often do you drink alcohol?
+            map_value(get(form_data, 'smoking_status')),                           # 24. How often do you smoke?
+            map_value(get(form_data, 'sleep_quality')),                            # 25. How would you rate your sleep quality?
+
+            # Section 4: Masturbation & Behavioral History (4 columns)
+            map_value(get(form_data, 'masturbation_method')),                      # 26. What is your usual masturbation method?
+            map_value(get(form_data, 'masturbation_frequency')),                   # 27. How often do you masturbate?
+            map_value(get(form_data, 'porn_frequency')),                           # 28. How often do you watch porn?
+            get_mapped_or_na('partner_response', has_partner),                     # 29. How does your partner respond to the issue? (N/A if single)
+
+            # Section 5: ED Branch (7 columns)
+            get_mapped_or_na('ed_gets_erections', has_ed),                         # 30. Do you get erections at all? (N/A if PE only)
+            get_mapped_or_na('ed_sexual_activity_status', has_ed),                 # 31. Do you currently have sex with a partner? (ED)
+            get_mapped_or_na('ed_partner_arousal_speed', has_ed and ed_has_partner_data),  # 32. Does it take a long time to get erections?
+            get_mapped_or_na('ed_partner_maintenance', has_ed and ed_has_partner_data),    # 33. Does it stay hard till penetration or completion?
+            get_mapped_or_na('ed_partner_hardness', has_ed and ed_has_partner_data),       # 34. Is the erection hard enough for penetration?
+            get_mapped_or_na('ed_morning_erections', has_ed),                      # 35. Are morning erections regular, occasional, or absent?
+            get_mapped_or_na('ed_masturbation_imagination', has_ed),               # 36. Do you get erections during masturbation or with imagination/fantasies?
+
+            # Section 5: PE Branch (5 columns)
+            get_mapped_or_na('pe_sexual_activity_status', has_pe),                 # 37. Do you currently have sex with a partner? (PE)
+            get_mapped_or_na('pe_partner_ejaculation_time', has_pe),               # 38. What is your ejaculation time during sex?
+            get_mapped_or_na('pe_partner_type', has_pe),                           # 39. Has this been since your first sexual encounter or started later?
+            get_mapped_or_na('pe_partner_penile_sensitivity', has_pe),             # 40. Do you feel the penis tip is very sensitive?
+            get_mapped_or_na('pe_partner_masturbation_control', has_pe),           # 41. Can you delay or control ejaculation during masturbation?
+
+            # Section 6: Other Information (1 column)
+            get(form_data, 'additional_information'),                              # 42. Other Information
 
             # ============================================================
-            # SECTION C: AI Output (Columns 52-59)
+            # SECTION C: AI Output (Columns 46-53) - 8 columns
             # ============================================================
-            get(primary_cause, 'category'),                                 # 52. Primary Root Cause - Medical Term
-            get(primary_cause, 'simple_term'),                              # 53. Primary Root Cause - Simple Term (FIX: was explanation)
-            get(secondary_cause, 'category'),                               # 54. Secondary Root Cause - Medical Term
-            get(secondary_cause, 'simple_term'),                            # 55. Secondary Root Cause - Simple Term (FIX: was explanation)
-            '\n\n'.join(filter(None, [                                      # 56. Root Cause Explanation (FIX: combined explanations)
-                get(primary_cause, 'explanation'),
-                get(secondary_cause, 'explanation')
-            ])),
-            get(analysis_result, 'detailed_analysis') if analysis_result else "",  # 57. Treatment Explanation (FIX: was summary)
-            red_flags_count,                                                # 58. Red Flags Detected
-            red_flags_details,                                              # 59. Red Flag Details
+            get(primary_cause, 'category'),                                        # 46. Primary Root Cause - Medical Term
+            get(primary_cause, 'explanation'),                                     # 47. Primary Root Cause - Explanation
+            get(secondary_cause, 'category'),                                      # 48. Secondary Root Cause - Medical Term
+            get(secondary_cause, 'explanation'),                                   # 49. Secondary Root Cause - Explanation
+            get(analysis_result, 'detailed_analysis') if analysis_result else "",  # 50. Agent Script
+            get(analysis_result, 'summary') if analysis_result else "",            # 51. Treatment Plan
+            red_flags_count,                                                       # 52. Red Flags Detected
+            red_flags_details,                                                     # 53. Red Flag Details
 
             # ============================================================
-            # SECTION D: Doctor Review (Columns 60-65)
+            # SECTION D: Doctor Review (Columns 54-59) - 6 columns
             # ============================================================
-            "Pending",                                                      # 60. Review Status
-            "",                                                             # 61. Doctor Name
-            "",                                                             # 62. Review Date
-            "",                                                             # 63. Doctor Comments
-            "",                                                             # 64. Correct Primary Diagnosis
-            "",                                                             # 65. Correct Secondary Diagnosis
+            "Pending",                                                             # 54. Review Status
+            "",                                                                    # 55. Doctor Name
+            "",                                                                    # 56. Review Date
+            "",                                                                    # 57. Doctor Comments
+            "",                                                                    # 58. Correct Primary Diagnosis
+            "",                                                                    # 59. Correct Secondary Diagnosis
 
             # ============================================================
-            # SECTION E: System Metadata (Columns 66-71)
+            # SECTION E: System Metadata (Columns 60-65) - 6 columns
             # ============================================================
-            self._get_rag_sources(rag_result),                              # 66. RAG Sources Used
-            get(primary_cause, 'confidence'),                               # 67. Primary Confidence (%)
-            get(secondary_cause, 'confidence'),                             # 68. Secondary Confidence (%)
-            round(processing_time_ms / 1000, 2) if processing_time_ms else "",  # 69. Processing Time (sec)
-            "hinglish",                                                     # 70. Language Used
-            self._format_complete_json(form_data)                           # 71. Complete Form Data (JSON)
+            self._get_rag_sources(rag_result),                                     # 60. RAG Sources Used
+            get(primary_cause, 'confidence'),                                      # 61. Primary Confidence (%)
+            get(secondary_cause, 'confidence'),                                    # 62. Secondary Confidence (%)
+            round(processing_time_ms / 1000, 2) if processing_time_ms else "",     # 63. Processing Time (sec)
+            "hinglish",                                                            # 64. Language Used
+            self._format_complete_json(form_data)                                  # 65. Complete Form Data (JSON)
         ]
 
         return row
