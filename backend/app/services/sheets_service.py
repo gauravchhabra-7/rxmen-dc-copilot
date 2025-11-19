@@ -794,9 +794,9 @@ class SheetsService:
             # Section 5: ED Branch (7 columns)
             get_mapped_or_na('ed_gets_erections', has_ed),                         # 30. Do you get erections at all? (N/A if PE only)
             get_mapped_or_na('ed_sexual_activity_status', ed_gets_any_erections),  # 31. Do you currently have sex with a partner? (ED)
-            get_mapped_or_na('ed_partner_arousal_speed', has_ed and ed_has_partner_data),  # 32. Does it take a long time to get erections?
-            get_mapped_or_na('ed_partner_maintenance', has_ed and ed_has_partner_data),    # 33. Does it stay hard till penetration or completion?
-            get_mapped_or_na('ed_partner_hardness', has_ed and ed_has_partner_data),       # 34. Is the erection hard enough for penetration?
+            get_mapped_or_na('ed_partner_arousal_speed', ed_gets_any_erections),   # 32. Does it take a long time to get erections?
+            get_mapped_or_na('ed_partner_maintenance', ed_gets_any_erections),     # 33. Does it stay hard till penetration or completion?
+            get_mapped_or_na('ed_partner_hardness', ed_gets_any_erections),        # 34. Is the erection hard enough for penetration?
             get_mapped_or_na('ed_morning_erections', ed_gets_any_erections),       # 35. Are morning erections regular, occasional, or absent?
             get_mapped_or_na('ed_masturbation_imagination', ed_gets_any_erections, 'ed_masturbation_imagination'),# 36. Do you get erections during masturbation or with imagination/fantasies?
 
