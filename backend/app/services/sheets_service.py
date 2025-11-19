@@ -337,6 +337,28 @@ def map_value(value, field_name=None):
     if value_str == 'never' and field_name == 'porn_frequency':
         return 'None'
 
+    # Context-aware handling for "both" (4 different meanings)
+    if value_str == 'both':
+        if field_name == 'main_issue':
+            return 'Both ED and PE'
+        elif field_name == 'issue_context':
+            return 'Both'
+        elif field_name == 'masturbation_method':
+            return 'Both hands and rubbing surface'
+        elif field_name == 'ed_masturbation_imagination':
+            return 'Yes, during both masturbation and imagination'
+
+    # Context-aware handling for "lifelong" (2 different meanings)
+    if value_str == 'lifelong':
+        if field_name == 'issue_duration':
+            return 'Since my first sexual experience'
+        elif field_name == 'pe_partner_type':
+            return 'Since first time'
+
+    # Context-aware handling for "acquired"
+    if value_str == 'acquired' and field_name == 'pe_partner_type':
+        return 'Started later'
+
     return VALUE_MAPPINGS.get(value_str, str(value))
 
 
@@ -749,9 +771,9 @@ class SheetsService:
             map_value(get(form_data, 'emergency_red_flags'), 'emergency_red_flags'),  # 14. Does user have any of these right now?
 
             # Section 2: Main Concern (3 columns)
-            map_value(get(form_data, 'main_issue')),                               # 15. What is the main issue?
-            map_value(get(form_data, 'issue_duration')),                           # 16. Since when are you facing this?
-            map_value(get(form_data, 'issue_context')),                            # 17. When is the problem faced?
+            map_value(get(form_data, 'main_issue'), 'main_issue'),                 # 15. What is the main issue?
+            map_value(get(form_data, 'issue_duration'), 'issue_duration'),         # 16. Since when are you facing this?
+            map_value(get(form_data, 'issue_context'), 'issue_context'),           # 17. When is the problem faced?
 
             # Section 3: Medical & Lifestyle (8 columns)
             map_value(get(form_data, 'medical_conditions'), 'medical_conditions'),     # 18. Do you have any chronic medical conditions?
@@ -776,17 +798,17 @@ class SheetsService:
             get_mapped_or_na('ed_partner_maintenance', has_ed and ed_has_partner_data),    # 33. Does it stay hard till penetration or completion?
             get_mapped_or_na('ed_partner_hardness', has_ed and ed_has_partner_data),       # 34. Is the erection hard enough for penetration?
             get_mapped_or_na('ed_morning_erections', ed_gets_any_erections),       # 35. Are morning erections regular, occasional, or absent?
-            get_mapped_or_na('ed_masturbation_imagination', ed_gets_any_erections),# 36. Do you get erections during masturbation or with imagination/fantasies?
+            get_mapped_or_na('ed_masturbation_imagination', ed_gets_any_erections, 'ed_masturbation_imagination'),# 36. Do you get erections during masturbation or with imagination/fantasies?
 
             # Section 5: PE Branch (5 columns)
             get_mapped_or_na('pe_sexual_activity_status', has_pe),                 # 37. Do you currently have sex with a partner? (PE)
-            get_mapped_or_na('pe_partner_ejaculation_time', has_pe),               # 38. What is your ejaculation time during sex?
-            get_mapped_or_na('pe_partner_type', has_pe),                           # 39. Has this been since your first sexual encounter or started later?
+            get_mapped_or_na('pe_partner_time_to_ejaculation', has_pe),            # 38. What is your ejaculation time during sex?
+            get_mapped_or_na('pe_partner_type', has_pe, 'pe_partner_type'),        # 39. Has this been since your first sexual encounter or started later?
             get_mapped_or_na('pe_partner_penile_sensitivity', has_pe),             # 40. Do you feel the penis tip is very sensitive?
             get_mapped_or_na('pe_partner_masturbation_control', has_pe),           # 41. Can you delay or control ejaculation during masturbation?
 
             # Section 6: Other Information (1 column)
-            get(form_data, 'additional_information'),                              # 42. Other Information
+            get(form_data, 'additional_info'),                                     # 42. Other Information
 
             # ============================================================
             # SECTION C: AI Output (Columns 46-53) - 8 columns
