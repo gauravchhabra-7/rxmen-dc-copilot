@@ -102,6 +102,8 @@ VALUE_MAPPINGS = {
     "monthly_or_less": "Monthly or less",
     "2_4_monthly": "2-4 times per month",
     "2_3_weekly": "2-3 times per week",
+    "2_3_per_week": "2-3 times per week",
+    "few_per_week": "Few times per week",
     "4_plus_weekly": "4+ times per week",
 
     # Smoking Status
@@ -135,6 +137,7 @@ VALUE_MAPPINGS = {
     "never": "Never",
     "1_2_weekly": "1-2 times per week",
     "3_7_weekly": "3-7 times per week",
+    "3_to_7": "3-7 times per week",
     "multiple_daily": "Multiple times per day",
 
     # Porn Frequency
@@ -145,6 +148,7 @@ VALUE_MAPPINGS = {
     "sometimes_monthly": "Sometimes (2-3 times a month)",
     "regularly": "Regularly (3-5 times a week)",
     "regularly_weekly": "Regularly (3-5 times a week)",
+    "3_to_5": "3-5 times per week",
     "daily": "Daily or multiple times per day",
     "daily_or_more": "Daily or multiple times per day",
 
@@ -231,12 +235,12 @@ def get_ist_timestamp():
     Get current timestamp in IST (Indian Standard Time, UTC+5:30).
 
     Returns:
-        ISO format timestamp string in IST
+        Formatted timestamp string in IST (DD-MM-YYYY HH:MM AM/PM)
     """
     utc_now = datetime.now(timezone.utc)
     ist_offset = timedelta(hours=5, minutes=30)
     ist_time = utc_now + ist_offset
-    return ist_time.isoformat()
+    return ist_time.strftime("%d-%m-%Y %I:%M %p")
 
 
 def map_value(value, field_name=None):
@@ -251,14 +255,28 @@ def map_value(value, field_name=None):
     if isinstance(value, list):
         if not value:
             return ''
-        # Special handling for "none" in lists
+        # Context-aware handling for "none" in lists
         if len(value) == 1 and str(value[0]).lower() == 'none':
+            # For emergency_red_flags, return the full text
+            if field_name == 'emergency_red_flags':
+                return 'None of these symptoms'
+            # For medical_conditions and current_medications, return "None"
             return 'None'
         mapped = [VALUE_MAPPINGS.get(str(v).lower(), str(v)) for v in value]
         return ', '.join(mapped)
 
     # Convert to string and check mapping
     value_str = str(value).lower()
+
+    # Context-aware handling for "none" as string
+    if value_str == 'none':
+        if field_name == 'emergency_red_flags':
+            return 'None of these symptoms'
+        elif field_name in ['medical_conditions', 'current_medications']:
+            return 'None'
+        elif field_name == 'masturbation_method':
+            return 'No masturbation'
+
     return VALUE_MAPPINGS.get(value_str, str(value))
 
 
@@ -545,25 +563,35 @@ class SheetsService:
                     details.append(f"{category}: {action}")
             red_flags_details = "; ".join(details)
 
-        # Format height (combine ft and inches if available)
-        height_ft = get(form_data, 'height_ft')
-        height_in = get(form_data, 'height_in')
-        height_ft_in = f"{height_ft}'{height_in}\"" if height_ft and height_in else ""
+        # WEIGHT: Try both 'weight' and 'weight_kg'
+        weight_value = get(form_data, 'weight_kg') or get(form_data, 'weight', '')
 
         # HEIGHT CONVERSION: Convert ft+in to cm if height_cm is not provided
         height_cm = get(form_data, 'height_cm')
-        if not height_cm or height_cm == '':
-            if height_ft and height_in:
-                try:
+        height_ft = get(form_data, 'height_ft')
+        height_in = get(form_data, 'height_in')
+
+        # If height_cm is not provided or is empty/zero, try to convert from ft+in
+        if (not height_cm or height_cm == '' or height_cm == 0) and height_ft and height_in:
+            try:
+                # Convert to float and ensure valid values
+                ft_val = float(height_ft) if height_ft else 0
+                in_val = float(height_in) if height_in else 0
+
+                if ft_val > 0 or in_val > 0:
                     # Convert: 1 foot = 30.48 cm, 1 inch = 2.54 cm
-                    total_cm = (float(height_ft) * 30.48) + (float(height_in) * 2.54)
+                    total_cm = (ft_val * 30.48) + (in_val * 2.54)
                     height_cm = round(total_cm, 2)
-                    logger.info(f"✓ Converted height: {height_ft}ft {height_in}in = {height_cm}cm")
-                except (ValueError, TypeError) as e:
-                    logger.warning(f"⚠️ Could not convert height: {e}")
+                    logger.info(f"✓ Converted height: {ft_val}ft {in_val}in = {height_cm}cm")
+                else:
                     height_cm = ''
-            else:
+            except (ValueError, TypeError) as e:
+                logger.warning(f"⚠️ Could not convert height: {e}")
                 height_cm = ''
+
+        # Ensure height_cm is not zero
+        if height_cm == 0:
+            height_cm = ''
 
         # Debug: Log if critical fields are missing from payload (not just empty)
         # Note: After fix, all fields should be sent from frontend
@@ -612,13 +640,23 @@ class SheetsService:
         masturbation_method = str(get(form_data, 'masturbation_method', '')).lower()
         does_masturbate = masturbation_method not in ['', 'none', 'no_masturbation']
 
+        # First consultation logic
+        first_consultation_value = str(get(form_data, 'first_consultation', '')).lower()
+        is_first_time = first_consultation_value in ['yes', 'yes_first_time']
+
         # Helper function to get value with mapping or N/A
-        def get_mapped_or_na(key, condition=True):
+        def get_mapped_or_na(key, condition=True, field_name=None):
             """Get field value, apply mapping, or return N/A if condition not met."""
             if not condition:
                 return 'N/A'
             value = get(form_data, key, '')
-            return map_value(value) if value != '' else ''
+            return map_value(value, field_name) if value != '' else ''
+
+        # Helper to get "other" specify fields with N/A for empty values
+        def get_other_or_na(key):
+            """Get 'other' specify field value or N/A if empty."""
+            value = get(form_data, key, '')
+            return value if value else 'N/A'
 
         # Prepare row data (65 columns in EXACT order matching Google Sheet)
         row = [
@@ -638,13 +676,13 @@ class SheetsService:
             get(form_data, 'full_name'),                                           # 5. Full Name
             map_value(get(form_data, 'age')),                                      # 6. Age
             map_value(height_cm),                                                  # 7. Height (converted to cm)
-            map_value(get(form_data, 'weight_kg')),                                # 8. Weight (kg)
+            map_value(weight_value),                                               # 8. Weight (kg) - uses weight or weight_kg
             get(form_data, 'city'),                                                # 9. City
             map_value(get(form_data, 'occupation')),                               # 10. User's occupation
             map_value(get(form_data, 'relationship_status')),                      # 11. User's relationship status
             map_value(get(form_data, 'first_consultation')),                       # 12. First consultation for this issue?
-            map_value(get(form_data, 'previous_treatments')),                      # 13. What was tried earlier?
-            map_value(get(form_data, 'emergency_red_flags')),                      # 14. Does user have any of these right now?
+            get_mapped_or_na('previous_treatments', not is_first_time),            # 13. What was tried earlier? (N/A if first time)
+            map_value(get(form_data, 'emergency_red_flags'), 'emergency_red_flags'),  # 14. Does user have any of these right now?
 
             # Section 2: Main Concern (3 columns)
             map_value(get(form_data, 'main_issue')),                               # 15. What is the main issue?
@@ -652,20 +690,20 @@ class SheetsService:
             map_value(get(form_data, 'issue_context')),                            # 17. When is the problem faced?
 
             # Section 3: Medical & Lifestyle (8 columns)
-            map_value(get(form_data, 'medical_conditions')),                       # 18. Do you have any chronic medical conditions?
-            get(form_data, 'medical_conditions_other'),                            # 19. Other chronic medical conditions (specify)
-            map_value(get(form_data, 'current_medications')),                      # 20. Are you currently taking any medications?
-            get(form_data, 'current_medications_other'),                           # 21. Other current medications (specify)
-            map_value(get(form_data, 'spinal_genital_surgery')),                   # 22. Any previous spinal or genital surgery or injury?
-            map_value(get(form_data, 'alcohol_consumption')),                      # 23. How often do you drink alcohol?
-            map_value(get(form_data, 'smoking_status')),                           # 24. How often do you smoke?
-            map_value(get(form_data, 'sleep_quality')),                            # 25. How would you rate your sleep quality?
+            map_value(get(form_data, 'medical_conditions'), 'medical_conditions'),     # 18. Do you have any chronic medical conditions?
+            get_other_or_na('medical_conditions_other'),                               # 19. Other chronic medical conditions (specify) - N/A if empty
+            map_value(get(form_data, 'current_medications'), 'current_medications'),   # 20. Are you currently taking any medications?
+            get_other_or_na('current_medications_other'),                              # 21. Other current medications (specify) - N/A if empty
+            map_value(get(form_data, 'spinal_genital_surgery')),                       # 22. Any previous spinal or genital surgery or injury?
+            map_value(get(form_data, 'alcohol_consumption')),                          # 23. How often do you drink alcohol?
+            map_value(get(form_data, 'smoking_status')),                               # 24. How often do you smoke?
+            map_value(get(form_data, 'sleep_quality')),                                # 25. How would you rate your sleep quality?
 
             # Section 4: Masturbation & Behavioral History (4 columns)
-            map_value(get(form_data, 'masturbation_method')),                      # 26. What is your usual masturbation method?
-            map_value(get(form_data, 'masturbation_frequency')),                   # 27. How often do you masturbate?
-            map_value(get(form_data, 'porn_frequency')),                           # 28. How often do you watch porn?
-            get_mapped_or_na('partner_response', has_partner),                     # 29. How does your partner respond to the issue? (N/A if single)
+            map_value(get(form_data, 'masturbation_method'), 'masturbation_method'),   # 26. What is your usual masturbation method?
+            map_value(get(form_data, 'masturbation_frequency')),                       # 27. How often do you masturbate?
+            map_value(get(form_data, 'porn_frequency')),                               # 28. How often do you watch porn?
+            get_mapped_or_na('partner_response', has_partner),                         # 29. How does your partner respond to the issue? (N/A if single)
 
             # Section 5: ED Branch (7 columns)
             get_mapped_or_na('ed_gets_erections', has_ed),                         # 30. Do you get erections at all? (N/A if PE only)
