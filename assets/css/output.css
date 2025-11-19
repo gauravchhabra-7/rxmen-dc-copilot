@@ -1,0 +1,920 @@
+/*
+ * RxMen Discovery Call Form - Output Panel Styles
+ * Styles for the AI analysis output panel (right side, 40%)
+ */
+
+/* ==================== OUTPUT CONTAINER ==================== */
+.output-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.output-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--color-gray-3);
+    margin-bottom: var(--spacing-md);
+}
+
+.output-title {
+    font-size: var(--font-size-h3);
+    font-weight: var(--font-semibold);
+    color: var(--brand-dark-blue);
+    margin: 0;
+}
+
+.output-status {
+    font-size: var(--font-size-small);
+    color: var(--color-gray-2);
+    padding: 4px var(--spacing-sm);
+    background: var(--bg-light-blue);
+    border-radius: var(--radius-sm);
+}
+
+.output-status.loading {
+    color: var(--brand-blue);
+    animation: pulse-status 1.5s ease-in-out infinite;
+}
+
+.output-status.success {
+    color: var(--color-success);
+    background: rgba(40, 167, 69, 0.1);
+}
+
+.output-status.error {
+    color: var(--color-error);
+    background: rgba(255, 0, 0, 0.1);
+}
+
+@keyframes pulse-status {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* ==================== OUTPUT CONTENT ==================== */
+.output-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-sm) 0;
+}
+
+/* Custom Scrollbar */
+.output-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.output-content::-webkit-scrollbar-track {
+    background: var(--bg-light-blue);
+    border-radius: var(--radius-sm);
+}
+
+.output-content::-webkit-scrollbar-thumb {
+    background: var(--color-gray-3);
+    border-radius: var(--radius-sm);
+}
+
+.output-content::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gray-2);
+}
+
+/* ==================== PLACEHOLDER STATE ==================== */
+.output-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: 300px;
+    text-align: center;
+    padding: var(--spacing-xl);
+}
+
+.placeholder-icon {
+    font-size: 64px;
+    margin-bottom: var(--spacing-md);
+    opacity: 0.3;
+}
+
+.placeholder-text {
+    font-size: var(--font-size-base);
+    color: var(--color-gray-2);
+    max-width: 300px;
+    line-height: 1.6;
+}
+
+/* ==================== LOADING STATE ==================== */
+.output-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+    min-height: 300px;
+}
+
+.loading-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid var(--bg-light-blue);
+    border-top-color: var(--brand-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-md);
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-text {
+    font-size: var(--font-size-base);
+    color: var(--brand-blue);
+    font-weight: var(--font-medium);
+}
+
+.loading-subtext {
+    font-size: var(--font-size-small);
+    color: var(--color-gray-2);
+    margin-top: var(--spacing-xs);
+}
+
+/* ==================== AI OUTPUT DISPLAY ==================== */
+.ai-output {
+    padding: var(--spacing-md);
+    background: var(--bg-white);
+    border-radius: var(--radius-md);
+}
+
+.output-section {
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-gray-3);
+}
+
+.output-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.output-section-title {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-semibold);
+    color: var(--brand-dark-blue);
+    margin-bottom: var(--spacing-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.output-section-content {
+    font-size: var(--font-size-base);
+    color: var(--color-black);
+    line-height: 1.6;
+}
+
+/* Primary Root Cause */
+.primary-cause {
+    font-size: var(--font-size-body);
+    font-weight: var(--font-semibold);
+    color: var(--brand-blue);
+    padding: var(--spacing-sm);
+    background: var(--bg-light-blue);
+    border-left: 4px solid var(--brand-blue);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Secondary Root Cause */
+.secondary-cause {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-medium);
+    color: var(--color-gray-1);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background: var(--bg-light-blue);
+    border-left: 3px solid var(--color-gray-2);
+    border-radius: var(--radius-sm);
+}
+
+/* Explanation (Hinglish) */
+.explanation-text {
+    font-size: var(--font-size-base);
+    color: var(--color-black);
+    line-height: 1.8;
+    padding: var(--spacing-sm);
+    background: rgba(239, 245, 255, 0.3);
+    border-radius: var(--radius-sm);
+}
+
+/* Doctor Recommendation */
+.doctor-recommendation {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-medium);
+    color: var(--brand-dark-blue);
+    padding: var(--spacing-sm);
+    background: var(--bg-light-blue);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.doctor-icon {
+    font-size: 20px;
+}
+
+/* Red Flags in Output */
+.red-flags-section {
+    background: var(--bg-warning);
+    border: 2px solid var(--color-warning);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.red-flags-section .output-section-title {
+    color: var(--color-warning);
+}
+
+.red-flag-item {
+    padding: var(--spacing-sm);
+    background: var(--bg-white);
+    border-left: 4px solid var(--color-error);
+    border-radius: var(--radius-sm);
+    margin-bottom: var(--spacing-sm);
+}
+
+.red-flag-item:last-child {
+    margin-bottom: 0;
+}
+
+.red-flag-title {
+    font-weight: var(--font-semibold);
+    color: var(--color-error);
+    margin-bottom: 4px;
+}
+
+.red-flag-action {
+    font-size: var(--font-size-small);
+    color: var(--color-gray-1);
+}
+
+/* ==================== OUTPUT ACTIONS ==================== */
+.output-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-md);
+    border-top: 2px solid var(--color-gray-3);
+    margin-top: var(--spacing-md);
+}
+
+.output-actions .btn-primary,
+.output-actions .btn-secondary {
+    width: 100%;
+    justify-content: center;
+}
+
+/* ==================== ERROR STATE ==================== */
+.output-error {
+    padding: var(--spacing-md);
+    background: rgba(255, 0, 0, 0.05);
+    border: 2px solid var(--color-error);
+    border-radius: var(--radius-md);
+    text-align: center;
+}
+
+.error-icon-large {
+    font-size: 48px;
+    margin-bottom: var(--spacing-sm);
+}
+
+.error-title {
+    font-size: var(--font-size-body);
+    font-weight: var(--font-semibold);
+    color: var(--color-error);
+    margin-bottom: var(--spacing-xs);
+}
+
+.error-description {
+    font-size: var(--font-size-small);
+    color: var(--color-gray-1);
+    margin-bottom: var(--spacing-md);
+}
+
+.retry-button {
+    margin-top: var(--spacing-sm);
+}
+
+/* ==================== RESPONSE TIME INDICATOR ==================== */
+.response-time {
+    font-size: var(--font-size-tiny);
+    color: var(--color-gray-2);
+    text-align: right;
+    padding-top: var(--spacing-xs);
+}
+
+/* ==================== COPY SUCCESS NOTIFICATION ==================== */
+.copy-success {
+    position: fixed;
+    bottom: var(--spacing-lg);
+    right: var(--spacing-lg);
+    background: var(--color-success);
+    color: var(--bg-white);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-small);
+    font-weight: var(--font-medium);
+    box-shadow: var(--shadow-lg);
+    animation: slideUpFade 2s ease-in-out;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+@keyframes slideUpFade {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    10%, 80% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+/* ==================== RESPONSIVE ADJUSTMENTS ==================== */
+@media (max-width: 768px) {
+    .output-title {
+        font-size: var(--font-size-body);
+    }
+
+    .output-section-title {
+        font-size: var(--font-size-small);
+    }
+
+    .primary-cause {
+        font-size: var(--font-size-base);
+    }
+
+    .output-actions {
+        flex-direction: column;
+    }
+}
+/* ==================== NEW STYLES FOR BACKEND INTEGRATION ==================== */
+
+/* Loading State with Steps */
+.loading-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    min-height: 300px;
+}
+
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--brand-blue, #0066CC);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.loading-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--brand-dark-blue, #003366);
+    margin-bottom: 8px;
+}
+
+.loading-subtext {
+    font-size: 14px;
+    color: var(--color-gray-2, #666);
+    margin-bottom: 24px;
+}
+
+.loading-steps {
+    width: 100%;
+    max-width: 300px;
+    margin-top: 16px;
+}
+
+.loading-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    opacity: 0.4;
+    transition: opacity 0.3s ease;
+}
+
+.loading-step.active {
+    opacity: 1;
+    background: rgba(0, 102, 204, 0.1);
+}
+
+.step-icon {
+    font-size: 20px;
+}
+
+.step-text {
+    font-size: 14px;
+    color: var(--color-gray-1, #333);
+}
+
+/* Diagnosis Result */
+.diagnosis-result {
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+}
+
+.diagnosis-header {
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #eee;
+}
+
+.diagnosis-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--brand-dark-blue, #003366);
+    margin-bottom: 12px;
+}
+
+.diagnosis-meta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-gray-2, #666);
+}
+
+.meta-icon {
+    font-size: 16px;
+}
+
+/* Root Causes */
+.root-causes {
+    margin-bottom: 24px;
+}
+
+.root-cause {
+    padding: 20px;
+    margin-bottom: 16px;
+    border-radius: 10px;
+    background: #f8f9fa;
+}
+
+.root-cause.primary {
+    border-left: 5px solid #28a745;
+    background: rgba(40, 167, 69, 0.05);
+}
+
+.root-cause.secondary {
+    border-left: 5px solid #0066CC;
+    background: rgba(0, 102, 204, 0.05);
+}
+
+.root-cause-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.root-cause-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-gray-1, #333);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-primary {
+    background: #28a745;
+    color: white;
+}
+
+.badge-secondary {
+    background: #0066CC;
+    color: white;
+}
+
+.confidence-badge {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.confidence-badge.high {
+    background: rgba(40, 167, 69, 0.15);
+    color: #28a745;
+}
+
+.confidence-badge.medium {
+    background: rgba(0, 102, 204, 0.15);
+    color: #0066CC;
+}
+
+.medical-term {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--brand-dark-blue, #003366);
+    margin: 12px 0;
+}
+
+.simple-explanation {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-gray-1, #333);
+    margin: 12px 0;
+}
+
+.analogy-box {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px;
+    margin-top: 12px;
+    background: rgba(255, 193, 7, 0.1);
+    border-left: 3px solid #ffc107;
+    border-radius: 6px;
+}
+
+.analogy-icon {
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.analogy-text {
+    font-size: 14px;
+    font-style: italic;
+    color: var(--color-gray-1, #333);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Treatment Section */
+.treatment-section {
+    padding: 20px;
+    background: rgba(0, 102, 204, 0.05);
+    border-radius: 10px;
+    margin-bottom: 16px;
+}
+
+.treatment-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--brand-dark-blue, #003366);
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.treatment-icon {
+    font-size: 22px;
+}
+
+.treatment-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-gray-1, #333);
+    margin: 0;
+}
+
+/* Diagnosis Footer */
+.diagnosis-footer {
+    display: flex;
+    gap: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+    flex-wrap: wrap;
+}
+
+.footer-item {
+    font-size: 12px;
+    color: var(--color-gray-2, #666);
+}
+
+/* Red Flag Alert */
+.red-flag-alert {
+    padding: 24px;
+    background: #fff4f4;
+    border: 3px solid #dc3545;
+    border-radius: 12px;
+    margin-bottom: 16px;
+}
+
+.red-flag-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.red-flag-icon {
+    font-size: 32px;
+}
+
+.red-flag-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #dc3545;
+    margin: 0;
+}
+
+.red-flag-content {
+    background: white;
+    padding: 16px;
+    border-radius: 8px;
+}
+
+.red-flag-message {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--color-gray-1, #333);
+    margin-bottom: 16px;
+    line-height: 1.6;
+}
+
+.red-flag-action {
+    padding: 12px;
+    background: rgba(220, 53, 69, 0.1);
+    border-radius: 6px;
+    margin-bottom: 12px;
+}
+
+.red-flag-action strong {
+    display: block;
+    font-size: 14px;
+    color: #dc3545;
+    margin-bottom: 8px;
+}
+
+.red-flag-action p {
+    font-size: 14px;
+    color: var(--color-gray-1, #333);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.red-flag-severity {
+    font-size: 13px;
+}
+
+.severity-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.severity-badge.high {
+    background: #dc3545;
+    color: white;
+}
+
+.severity-badge.critical {
+    background: #c82333;
+    color: white;
+}
+
+/* Error State */
+.error-state {
+    padding: 30px 20px;
+    text-align: center;
+}
+
+.error-icon {
+    font-size: 56px;
+    margin-bottom: 16px;
+}
+
+.error-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #dc3545;
+    margin-bottom: 12px;
+}
+
+.error-message {
+    font-size: 15px;
+    color: var(--color-gray-1, #333);
+    margin-bottom: 24px;
+    line-height: 1.6;
+}
+
+.btn-retry {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--brand-blue, #0066CC);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-retry:hover {
+    background: #0052a3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 102, 204, 0.2);
+}
+
+.error-help {
+    margin-top: 24px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.error-help-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--color-gray-1, #333);
+    margin-bottom: 12px;
+}
+
+.error-help-list {
+    margin: 0;
+    padding-left: 24px;
+    font-size: 13px;
+    color: var(--color-gray-2, #666);
+    line-height: 1.7;
+}
+
+.error-help-list li {
+    margin-bottom: 6px;
+}
+
+.error-help-list code {
+    background: #e9ecef;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+}
+
+/* ==================== CLEAN DIAGNOSIS RESULT (Agent-Optimized) ==================== */
+
+.clean-diagnosis-result {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xl);
+}
+
+.cause-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+/* Section headers - smaller, more elegant */
+.cause-label {
+    font-size: 0.75rem;  /* 12px - more elegant than 13px */
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 0.5rem 0;
+}
+
+/* Root cause display - main text */
+.cause-section .medical-term {
+    font-size: 1rem;  /* 16px - reduced from 20px for elegance */
+    font-weight: 500;  /* Slightly lighter weight */
+    color: #1a1a1a;
+    line-height: 1.5;  /* Increased for better readability */
+    margin: 0;
+}
+
+.divider {
+    width: 100%;
+    text-align: center;
+    color: var(--color-gray-3);
+    font-size: 0.75rem;  /* 12px */
+    letter-spacing: 2px;
+    margin: var(--spacing-md) 0;
+}
+
+.script-section,
+.treatment-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+/* Section labels for Agent Script and Treatment Plan - Bold and bigger */
+.section-label {
+    font-size: 1rem;     /* Bigger for emphasis */
+    font-weight: 700;    /* Bold */
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0 0 1rem 0;
+}
+
+/* Agent script and treatment text - Normal size and weight */
+.script-text,
+.treatment-text {
+    font-size: 0.95rem;  /* Normal size */
+    font-weight: 400;    /* Normal weight (NOT bold) */
+    color: #333;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    margin: 0;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .diagnosis-title {
+        font-size: 20px;
+    }
+
+    .medical-term {
+        font-size: 18px;
+    }
+
+    .root-cause-header {
+        flex-direction: column;
+    }
+
+    .diagnosis-meta {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* Mobile font adjustments for clean diagnosis */
+    .cause-section .medical-term {
+        font-size: 0.95rem;  /* 15.2px on mobile */
+    }
+
+    .script-text,
+    .treatment-text {
+        font-size: 0.9rem;  /* 14.4px on mobile */
+        line-height: 1.6;
+    }
+
+    .cause-label,
+    .section-label {
+        font-size: 0.7rem;  /* 11.2px on mobile */
+    }
+}
+
+/* ==================== SESSION INFO ==================== */
+.session-info {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid var(--color-gray-3);
+}
+
+.session-id-text {
+    font-size: 0.75rem;  /* 12px - small and subtle */
+    color: var(--color-gray-2);  /* Gray text */
+    text-align: center;
+    margin: 0;
+    font-weight: 400;  /* Normal weight */
+}
