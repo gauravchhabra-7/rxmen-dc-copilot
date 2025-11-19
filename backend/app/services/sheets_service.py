@@ -688,6 +688,9 @@ class SheetsService:
             ed_sexual_activity in ['yes_active', 'avoiding_due_to_fear', '']
         )
 
+        # ED follow-up questions only apply if user gets any erections
+        ed_gets_any_erections = has_ed and ed_gets_erections == 'yes'
+
         # PE pathway logic
         # Partner pathway: User has partner AND sexually active
         # Solo pathway: Not collected in form (always N/A)
@@ -768,12 +771,12 @@ class SheetsService:
 
             # Section 5: ED Branch (7 columns)
             get_mapped_or_na('ed_gets_erections', has_ed),                         # 30. Do you get erections at all? (N/A if PE only)
-            get_mapped_or_na('ed_sexual_activity_status', has_ed),                 # 31. Do you currently have sex with a partner? (ED)
+            get_mapped_or_na('ed_sexual_activity_status', ed_gets_any_erections),  # 31. Do you currently have sex with a partner? (ED)
             get_mapped_or_na('ed_partner_arousal_speed', has_ed and ed_has_partner_data),  # 32. Does it take a long time to get erections?
             get_mapped_or_na('ed_partner_maintenance', has_ed and ed_has_partner_data),    # 33. Does it stay hard till penetration or completion?
             get_mapped_or_na('ed_partner_hardness', has_ed and ed_has_partner_data),       # 34. Is the erection hard enough for penetration?
-            get_mapped_or_na('ed_morning_erections', has_ed),                      # 35. Are morning erections regular, occasional, or absent?
-            get_mapped_or_na('ed_masturbation_imagination', has_ed),               # 36. Do you get erections during masturbation or with imagination/fantasies?
+            get_mapped_or_na('ed_morning_erections', ed_gets_any_erections),       # 35. Are morning erections regular, occasional, or absent?
+            get_mapped_or_na('ed_masturbation_imagination', ed_gets_any_erections),# 36. Do you get erections during masturbation or with imagination/fantasies?
 
             # Section 5: PE Branch (5 columns)
             get_mapped_or_na('pe_sexual_activity_status', has_pe),                 # 37. Do you currently have sex with a partner? (PE)
