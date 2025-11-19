@@ -103,6 +103,7 @@ VALUE_MAPPINGS = {
     "2_4_monthly": "2-4 times per month",
     "2_3_weekly": "2-3 times per week",
     "2_3_per_week": "2-3 times per week",
+    "biweekly": "Twice per week",
     "few_per_week": "Few times per week",
     "4_plus_weekly": "4+ times per week",
 
@@ -130,8 +131,7 @@ VALUE_MAPPINGS = {
     "pillow": "Pillow/object rubbing",
     "pillow_rubbing": "Pillow/object rubbing",
     "prone": "Prone (lying face down)",
-    "no_masturbation": "No masturbation",
-    "none": "No masturbation",
+    "no_masturbation": "Does not masturbate",
 
     # Masturbation Frequency
     "never": "Never",
@@ -243,6 +243,43 @@ def get_ist_timestamp():
     return ist_time.strftime("%d-%m-%Y %I:%M %p")
 
 
+def convert_to_ist_timestamp(utc_timestamp_str):
+    """
+    Convert UTC timestamp string to IST format (DD-MM-YYYY HH:MM AM/PM).
+
+    Args:
+        utc_timestamp_str: UTC timestamp string (ISO format like "2025-11-19T06:22:25.179Z")
+
+    Returns:
+        Formatted timestamp string in IST (DD-MM-YYYY HH:MM AM/PM)
+    """
+    if not utc_timestamp_str:
+        return get_ist_timestamp()
+
+    try:
+        # Parse UTC timestamp (handles various ISO formats)
+        if isinstance(utc_timestamp_str, str):
+            # Remove 'Z' suffix if present and parse
+            utc_str = utc_timestamp_str.replace('Z', '+00:00')
+            utc_time = datetime.fromisoformat(utc_str)
+        else:
+            # If it's already a datetime object
+            utc_time = utc_timestamp_str
+
+        # Ensure it's timezone-aware
+        if utc_time.tzinfo is None:
+            utc_time = utc_time.replace(tzinfo=timezone.utc)
+
+        # Convert to IST
+        ist_offset = timedelta(hours=5, minutes=30)
+        ist_time = utc_time + ist_offset
+
+        return ist_time.strftime("%d-%m-%Y %I:%M %p")
+    except (ValueError, AttributeError) as e:
+        logger.warning(f"⚠️ Could not convert timestamp '{utc_timestamp_str}': {e}")
+        return get_ist_timestamp()
+
+
 def map_value(value, field_name=None):
     """
     Convert backend code to user-friendly text.
@@ -275,7 +312,12 @@ def map_value(value, field_name=None):
         elif field_name in ['medical_conditions', 'current_medications']:
             return 'None'
         elif field_name == 'masturbation_method':
-            return 'No masturbation'
+            return 'Does not masturbate'
+        elif field_name == 'smoking_status':
+            return 'Does not smoke'
+        else:
+            # Generic fallback for other 'none' values
+            return 'None'
 
     return VALUE_MAPPINGS.get(value_str, str(value))
 
@@ -571,12 +613,13 @@ class SheetsService:
         height_ft = get(form_data, 'height_ft')
         height_in = get(form_data, 'height_in')
 
-        # If height_cm is not provided or is empty/zero, try to convert from ft+in
-        if (not height_cm or height_cm == '' or height_cm == 0) and height_ft and height_in:
+        # If height_cm is not provided or is empty/zero/null, try to convert from ft+in
+        # Note: height_in can be 0 (zero inches), so check explicitly for None
+        if (not height_cm or height_cm == '' or height_cm == 0) and height_ft is not None and height_in is not None:
             try:
                 # Convert to float and ensure valid values
-                ft_val = float(height_ft) if height_ft else 0
-                in_val = float(height_in) if height_in else 0
+                ft_val = float(height_ft) if height_ft not in [None, ''] else 0
+                in_val = float(height_in) if height_in not in [None, ''] else 0
 
                 if ft_val > 0 or in_val > 0:
                     # Convert: 1 foot = 30.48 cm, 1 inch = 2.54 cm
@@ -664,7 +707,7 @@ class SheetsService:
             # SECTION A: Session Metadata (Columns 1-4)
             # ============================================================
             get(form_data, 'session_id'),                                           # 1. Session ID
-            get(form_data, 'submitted_at', get_ist_timestamp()),                   # 2. Submission Timestamp
+            convert_to_ist_timestamp(get(form_data, 'submitted_at')),              # 2. Submission Timestamp (converted to IST)
             get(form_data, 'tester_name'),                                         # 3. Tester/Agent Name
             get(form_data, 'completion_time_seconds'),                             # 4. Form Completion Time (sec)
 
@@ -696,7 +739,7 @@ class SheetsService:
             get_other_or_na('current_medications_other'),                              # 21. Other current medications (specify) - N/A if empty
             map_value(get(form_data, 'spinal_genital_surgery')),                       # 22. Any previous spinal or genital surgery or injury?
             map_value(get(form_data, 'alcohol_consumption')),                          # 23. How often do you drink alcohol?
-            map_value(get(form_data, 'smoking_status')),                               # 24. How often do you smoke?
+            map_value(get(form_data, 'smoking_status'), 'smoking_status'),             # 24. How often do you smoke?
             map_value(get(form_data, 'sleep_quality')),                                # 25. How would you rate your sleep quality?
 
             # Section 4: Masturbation & Behavioral History (4 columns)
