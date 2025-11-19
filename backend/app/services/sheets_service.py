@@ -118,13 +118,10 @@ VALUE_MAPPINGS = {
     "rarely": "Rarely",
 
     # Smoking Status
-    "never": "Never",
-    "rarely": "Rarely (social occasions)",
-    "rarely_social": "Rarely (social occasions)",
-    "sometimes": "Sometimes (few times a month)",
-    "sometimes_monthly": "Sometimes (few times a month)",
-    "regularly": "Regularly (daily or almost daily)",
-    "regularly_daily": "Regularly (daily or almost daily)",
+    "none": "No smoking",
+    "occasional": "Occasionally (only while drinking or social events)",
+    "few_per_week": "Few times per week",
+    "daily": "Daily",
 
     # Sleep Quality
     "very_poor": "Very poor",
@@ -134,21 +131,18 @@ VALUE_MAPPINGS = {
     "excellent": "Excellent",
 
     # Masturbation Method
-    "hands": "Hands (normal grip)",
-    "hands_normal": "Hands (normal grip)",
-    "tight_grip": "Hands (tight/death grip)",
-    "hands_tight": "Hands (tight/death grip)",
-    "pillow": "Pillow/object rubbing",
-    "pillow_rubbing": "Pillow/object rubbing",
-    "prone": "Prone (lying face down)",
-    "no_masturbation": "Does not masturbate",
+    "hands": "Using hands",
+    "prone": "Rubbing against surface (prone)",
+    "both": "Both hands and rubbing surface",
 
     # Masturbation Frequency
-    "never": "Never",
-    "1_2_weekly": "1-2 times per week",
-    "3_7_weekly": "3-7 times per week",
+    "less_than_3": "Less than 3 times per week",
     "3_to_7": "3-7 times per week",
-    "multiple_daily": "Multiple times per day",
+    "8_plus": "8 or more times per week",
+
+    # Masturbation Grip
+    "normal": "Normal",
+    "tight": "Tight",
 
     # Porn Frequency
     "rarely": "Rarely (once a month or less)",
@@ -321,9 +315,11 @@ def map_value(value, field_name=None):
         elif field_name in ['medical_conditions', 'current_medications']:
             return 'None'
         elif field_name == 'masturbation_method':
-            return 'Does not masturbate'
+            return 'I don\'t masturbate'
+        elif field_name == 'masturbation_frequency':
+            return 'None'
         elif field_name == 'smoking_status':
-            return 'Does not smoke'
+            return 'No smoking'
         elif field_name == 'porn_frequency':
             return 'None'
         elif field_name == 'alcohol_consumption':
