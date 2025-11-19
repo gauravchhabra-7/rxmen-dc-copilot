@@ -66,7 +66,7 @@ VALUE_MAPPINGS = {
     "both": "Both ED and PE",
 
     # Issue Duration
-    "lifelong": "Since my first sexual experience (Lifelong)",
+    "lifelong": "Since my first sexual experience",
     "less_1_month": "Less than 1 month ago",
     "1_to_6_months": "1-6 months ago",
     "6_to_12_months": "6-12 months ago",
@@ -76,8 +76,8 @@ VALUE_MAPPINGS = {
     # Issue Context
     "sex_with_partner": "During sex with partner",
     "masturbation": "During masturbation",
-    "both_contexts": "Both (during sex and masturbation)",
-    "both": "Both (during sex and masturbation)",
+    "both_contexts": "Both",
+    "both": "Both",
 
     # Medical Conditions
     "diabetes": "Diabetes",
@@ -130,9 +130,14 @@ VALUE_MAPPINGS = {
     "good": "Good",
     "excellent": "Excellent",
 
+    # Physical Activity
+    "active": "Active",
+    "somewhat_active": "Somewhat active",
+    "not_active": "Not active",
+
     # Masturbation Method
     "hands": "Using hands",
-    "prone": "Rubbing against surface (prone)",
+    "prone": "Rubbing against surface",
     "both": "Both hands and rubbing surface",
 
     # Masturbation Frequency
@@ -216,8 +221,8 @@ VALUE_MAPPINGS = {
     "more_than_3_min": "More than 3 minutes",
 
     # PE - Type (Lifelong vs Acquired)
-    "lifelong": "Since first time (lifelong)",
-    "acquired": "Started later (acquired)",
+    "lifelong": "Since first time",
+    "acquired": "Started later",
 
     # PE - Penile Sensitivity
     "yes": "Yes",
@@ -315,7 +320,7 @@ def map_value(value, field_name=None):
         elif field_name in ['medical_conditions', 'current_medications']:
             return 'None'
         elif field_name == 'masturbation_method':
-            return 'I don\'t masturbate'
+            return 'No masturbation'
         elif field_name == 'masturbation_frequency':
             return 'None'
         elif field_name == 'smoking_status':
