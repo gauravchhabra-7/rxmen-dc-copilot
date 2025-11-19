@@ -105,16 +105,16 @@ VALUE_MAPPINGS = {
     # Alcohol Consumption
     "no_alcohol": "No alcohol",
     "none": "Does not drink",
-    "monthly": "Monthly or less",
-    "monthly_or_less": "Monthly or less",
+    "monthly": "Once a month or less",
+    "monthly_or_less": "Once a month or less",
     "2_4_monthly": "2-4 times per month",
     "2_3_weekly": "2-3 times per week",
     "2_3_per_week": "2-3 times per week",
-    "biweekly": "Twice per week",
+    "biweekly": "Once every 2 weeks",
     "few_per_week": "Few times per week",
     "4_plus_weekly": "4+ times per week",
     "daily": "Daily",
-    "weekly": "Once per week",
+    "weekly": "Once a week",
     "occasional": "Occasionally",
     "rarely": "Rarely",
 
@@ -152,7 +152,6 @@ VALUE_MAPPINGS = {
     "multiple_daily": "Multiple times per day",
 
     # Porn Frequency
-    "never": "Never",
     "rarely": "Rarely (once a month or less)",
     "rarely_monthly": "Rarely (once a month or less)",
     "sometimes": "Sometimes (2-3 times a month)",
@@ -161,8 +160,7 @@ VALUE_MAPPINGS = {
     "regularly_weekly": "Regularly (3-5 times a week)",
     "3_to_5": "3-5 times per week",
     "less_than_2": "Less than 2 times per week",
-    "daily": "Daily or multiple times per day",
-    "daily_or_more": "Daily or multiple times per day",
+    "daily_or_more": "Daily or more",
 
     # Partner Response
     "supportive": "Supportive",
@@ -327,9 +325,15 @@ def map_value(value, field_name=None):
             return 'Does not masturbate'
         elif field_name == 'smoking_status':
             return 'Does not smoke'
+        elif field_name == 'porn_frequency':
+            return 'None'
         else:
             # Generic fallback for other 'none' values
             return 'None'
+
+    # Context-aware handling for "never" in porn_frequency
+    if value_str == 'never' and field_name == 'porn_frequency':
+        return 'None'
 
     return VALUE_MAPPINGS.get(value_str, str(value))
 
@@ -757,7 +761,7 @@ class SheetsService:
             # Section 4: Masturbation & Behavioral History (4 columns)
             map_value(get(form_data, 'masturbation_method'), 'masturbation_method'),   # 26. What is your usual masturbation method?
             map_value(get(form_data, 'masturbation_frequency')),                       # 27. How often do you masturbate?
-            map_value(get(form_data, 'porn_frequency')),                               # 28. How often do you watch porn?
+            map_value(get(form_data, 'porn_frequency'), 'porn_frequency'),             # 28. How often do you watch porn?
             get_mapped_or_na('partner_response', has_partner),                         # 29. How does your partner respond to the issue? (N/A if single)
 
             # Section 5: ED Branch (7 columns)
