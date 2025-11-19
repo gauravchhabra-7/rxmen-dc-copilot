@@ -104,7 +104,6 @@ VALUE_MAPPINGS = {
 
     # Alcohol Consumption
     "no_alcohol": "No alcohol",
-    "none": "Does not drink",
     "monthly": "Once a month or less",
     "monthly_or_less": "Once a month or less",
     "2_4_monthly": "2-4 times per month",
@@ -327,6 +326,8 @@ def map_value(value, field_name=None):
             return 'Does not smoke'
         elif field_name == 'porn_frequency':
             return 'None'
+        elif field_name == 'alcohol_consumption':
+            return 'No alcohol'
         else:
             # Generic fallback for other 'none' values
             return 'None'
@@ -754,7 +755,7 @@ class SheetsService:
             map_value(get(form_data, 'current_medications'), 'current_medications'),   # 20. Are you currently taking any medications?
             get_other_or_na('current_medications_other'),                              # 21. Other current medications (specify) - N/A if empty
             map_value(get(form_data, 'spinal_genital_surgery')),                       # 22. Any previous spinal or genital surgery or injury?
-            map_value(get(form_data, 'alcohol_consumption')),                          # 23. How often do you drink alcohol?
+            map_value(get(form_data, 'alcohol_consumption'), 'alcohol_consumption'),   # 23. How often do you drink alcohol?
             map_value(get(form_data, 'smoking_status'), 'smoking_status'),             # 24. How often do you smoke?
             map_value(get(form_data, 'sleep_quality')),                                # 25. How would you rate your sleep quality?
 
