@@ -7,6 +7,7 @@ Handles interaction with Anthropic's Claude API for diagnosis generation.
 from typing import Dict, Any, Optional
 import json
 import logging
+import time
 from anthropic import Anthropic
 from app.config import settings
 from app.models.responses import AnalysisResponse, RootCause, RecommendedAction
@@ -46,6 +47,95 @@ class ClaudeService:
         else:
             logger.warning("Anthropic API key not configured")
 
+    def _call_claude_with_retry(
+        self,
+        system_prompt: str,
+        user_prompt: str,
+        max_retries: int = 3
+    ):
+        """
+        Call Claude API with automatic retry on overload/rate limit errors.
+
+        Args:
+            system_prompt: System prompt for Claude
+            user_prompt: User prompt for Claude
+            max_retries: Maximum number of retry attempts (default: 3)
+
+        Returns:
+            Claude API response
+
+        Raises:
+            Exception: If max retries exceeded or non-retryable error occurs
+        """
+        for attempt in range(max_retries):
+            try:
+                response = self.client.messages.create(
+                    model=self.model,
+                    max_tokens=self.max_tokens,
+                    temperature=self.temperature,
+                    system=system_prompt,
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": user_prompt
+                        }
+                    ]
+                )
+
+                # Success - return response
+                if attempt > 0:
+                    logger.info(f"✓ Claude API call succeeded on attempt {attempt + 1}")
+                return response
+
+            except Exception as e:
+                error_str = str(e).lower()
+                error_code = str(getattr(e, 'status_code', ''))
+
+                # Check if it's a retryable error
+                is_overloaded = (
+                    "529" in error_code or
+                    "529" in error_str or
+                    "overloaded" in error_str or
+                    "overloaded_error" in error_str
+                )
+                is_rate_limit = (
+                    "429" in error_code or
+                    "429" in error_str or
+                    "rate_limit" in error_str
+                )
+
+                # Retry if it's a retryable error and we haven't exhausted attempts
+                if (is_overloaded or is_rate_limit) and attempt < max_retries - 1:
+                    # Calculate wait time with exponential backoff: 2s, 4s, 8s
+                    wait_time = (2 ** attempt) * 2
+
+                    error_type = "overloaded" if is_overloaded else "rate limited"
+                    logger.warning(
+                        f"⚠ Claude API {error_type} (attempt {attempt + 1}/{max_retries}). "
+                        f"Retrying in {wait_time}s... Error: {str(e)[:100]}"
+                    )
+
+                    time.sleep(wait_time)
+                    continue
+
+                # Either max retries reached or non-retryable error
+                if attempt >= max_retries - 1 and (is_overloaded or is_rate_limit):
+                    logger.error(
+                        f"✗ Claude API failed after {max_retries} attempts. "
+                        f"Final error: {str(e)}"
+                    )
+                    raise Exception(
+                        "The AI service is temporarily overloaded. "
+                        "Please try submitting the form again in 1-2 minutes."
+                    )
+                else:
+                    # Re-raise the original error for non-retryable errors
+                    logger.error(f"✗ Claude API error (non-retryable): {str(e)}")
+                    raise e
+
+        # Should never reach here but just in case
+        raise Exception("Max retries exceeded")
+
     async def analyze_case(
         self,
         form_data: Dict[str, Any],
@@ -83,19 +173,12 @@ class ClaudeService:
                 qa_section = user_prompt.split("PATIENT QUESTION-ANSWER CONTEXT")[1][:500]
                 logger.info(f"Q&A Context Preview: {qa_section}...")
 
-            # Call Claude API
-            logger.info("Calling Claude API...")
-            response = self.client.messages.create(
-                model=self.model,
-                max_tokens=self.max_tokens,
-                temperature=self.temperature,
-                system=system_prompt,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": user_prompt
-                    }
-                ]
+            # Call Claude API with retry logic
+            logger.info("Calling Claude API with retry logic...")
+            response = self._call_claude_with_retry(
+                system_prompt=system_prompt,
+                user_prompt=user_prompt,
+                max_retries=3
             )
 
             # Parse response
