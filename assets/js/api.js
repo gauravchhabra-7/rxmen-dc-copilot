@@ -229,6 +229,27 @@
             return `Unexpected error: ${error.message}`;
         }
 
+        // Check for specific error types from backend
+        if (error.details?.detail) {
+            const detail = error.details.detail;
+
+            // API Overload Error - return the specific message from backend
+            if (detail.error === 'APIOverloadError' && detail.message) {
+                return detail.message;
+            }
+
+            // Validation Error - return the specific message
+            if (detail.error === 'ValidationError' && detail.message) {
+                return detail.message;
+            }
+
+            // Server Error - check if there's a specific message
+            if (detail.message && typeof detail.message === 'string') {
+                return detail.message;
+            }
+        }
+
+        // Fallback to status code based messages
         switch (error.statusCode) {
             case 0:
                 return 'Cannot connect to backend server. Please ensure the server is running.';
@@ -447,6 +468,9 @@
         const outputPanel = document.getElementById('output-content');
         const outputStatus = document.getElementById('output-status');
 
+        // Check if it's an API overload error
+        const isOverloadError = message.toLowerCase().includes('temporarily overloaded');
+
         if (outputStatus) {
             outputStatus.textContent = 'Analysis Failed';
             outputStatus.className = 'output-status error';
@@ -462,12 +486,19 @@
                         = Retry Analysis
                     </button>
                     <div class="error-help">
-                        <p class="error-help-title">Troubleshooting:</p>
+                        <p class="error-help-title">${isOverloadError ? 'What to do:' : 'Troubleshooting:'}</p>
                         <ul class="error-help-list">
-                            <li>Ensure the backend server is running at <code>http://localhost:8000</code></li>
-                            <li>Check your internet connection</li>
-                            <li>Verify all required form fields are filled</li>
-                            <li>Try refreshing the page and submitting again</li>
+                            ${isOverloadError ? `
+                                <li><strong>Wait 1-2 minutes</strong> and click "Retry Analysis" below</li>
+                                <li>The AI service is experiencing high demand</li>
+                                <li>Your form data is saved - you won't lose any information</li>
+                                <li>Retrying will automatically work when service is available</li>
+                            ` : `
+                                <li>Ensure the backend server is running at <code>http://localhost:8000</code></li>
+                                <li>Check your internet connection</li>
+                                <li>Verify all required form fields are filled</li>
+                                <li>Try refreshing the page and submitting again</li>
+                            `}
                         </ul>
                     </div>
                 </div>

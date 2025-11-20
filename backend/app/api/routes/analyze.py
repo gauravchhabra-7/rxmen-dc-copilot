@@ -135,7 +135,23 @@ async def analyze_patient_case(form_data: FormDataRequest, background_tasks: Bac
         )
 
     except Exception as e:
-        logger.error(f"❌ Unexpected error during analysis: {str(e)}", exc_info=True)
+        error_message = str(e)
+
+        # Check if it's an API overload error from retry logic
+        if "temporarily overloaded" in error_message.lower() or "try submitting" in error_message.lower():
+            logger.error(f"❌ API Overload error: {error_message}")
+            raise HTTPException(
+                status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+                detail={
+                    "success": False,
+                    "error": "APIOverloadError",
+                    "message": error_message,
+                    "retry_recommended": True
+                }
+            )
+
+        # Generic error for all other cases
+        logger.error(f"❌ Unexpected error during analysis: {error_message}", exc_info=True)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail={
